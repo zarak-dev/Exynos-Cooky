@@ -1,5 +1,6 @@
 // src/components/layout/footer.tsx
 import React from 'react';
+import logoSvg from '../../assets/images/exynos-cooky.svg';
 import {
   StyledFooter,
   FooterGrid,
@@ -17,9 +18,9 @@ const Footer: React.FC = () => {
       <FooterGrid>
         {/* Column 1: Brand details */}
         <FooterColumn>
-          <FooterBrand>Exynos Cooky 🍪</FooterBrand>
+          <FooterBrand> <img src={logoSvg} alt="logo" style={{width:'225px'}} /> </FooterBrand>
           <FooterText>
-            Bringing premium, freshly baked replicas directly to your screen. The ultimate cookie experience.
+            Bringing premium, freshly baked cookies directly to your screen. The ultimate cookie experience.
           </FooterText>
         </FooterColumn>
 

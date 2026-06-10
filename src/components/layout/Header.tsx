@@ -7,29 +7,36 @@ import logoSvg from '../../assets/images/exynos-cooky.svg';
 import { SearchOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
 
 const StyledHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 24px 40px;
   background-color: #ffffff;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid rgba(240, 240, 240, 0.3); 
+  background-color: rgba(255, 255, 255, 0.55);       
+  backdrop-filter: blur(12px);                       
+  -webkit-backdrop-filter: blur(12px);
 `;
 
 const LogoContainer = styled(NavLink)`
   font-size: 1.8rem;
   font-weight: 800;
-  color: #00009c; /* Pristine navy blue from image_4549dd.png */
+  color: #00009c;
   text-decoration: none;
-  font-family:   -apple-system, sans-serif; /* Modern, clean, stylish font stack */
+  font-family:   -apple-system, sans-serif; 
   letter-spacing: -0.5px;
   display: flex;
   align-items: center;
-  gap: 8px; /* Perfectly spaces the text from the emoji */
+  gap: 8px; 
   transition: transform 0.2s ease;
 
   &:hover {
-    color: #000066; /* Darkens slightly on hover */
-    transform: scale(1.02); /* Subtle stylish bounce on hover */
+    color: #000066; 
+    transform: scale(1.02); 
   }
 
   span, &::after {
@@ -45,10 +52,11 @@ const NavMenu = styled.nav`
 const NavigationLink = styled(NavLink)`
   font-size: 0.9rem;
   font-weight: 700;
-  color: #00009c; /* Bold Navy links */
+  color: #00009c;
   text-decoration: none;
-  text-transform: uppercase; /* Match the capitalization in image_4549dd.png */
+  text-transform: uppercase; 
   letter-spacing: 0.5px;
+  font-family: 'Poppins', sans-serif;
   transition: opacity 0.2s ease;
   padding-bottom: 4px;
 
@@ -57,7 +65,7 @@ const NavigationLink = styled(NavLink)`
   }
 
   &.active {
-    border-bottom: 2px solid #00009c; /* Clean solid accent underline */
+    border-bottom: 2px solid #00009c; 
   }
 `;
 

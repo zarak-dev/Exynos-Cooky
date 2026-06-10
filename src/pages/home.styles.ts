@@ -15,6 +15,7 @@ export const PageTitle = styled.h1`
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif;
   color: #00009c; /* Signature Navy */
   margin-bottom: 50px;
 `;
