@@ -1,0 +1,1 @@
+export const AboutUs = () => <div>About Exynos Cooky</div>;

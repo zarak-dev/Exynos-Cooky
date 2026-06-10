@@ -1,0 +1,1 @@
+export const Contact = () => <div>Contact Us</div>;
