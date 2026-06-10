@@ -1,4 +1,3 @@
-// src/utils/mockData.ts
 import chilledSugar from '../assets/images/chilled-sugar.jpg';
 import chocolateChip from '../assets/images/chocolate_chip.jpg';
 import darkDoubleChocolate from '../assets/images/Dark-Double-Chocolate.jpg';

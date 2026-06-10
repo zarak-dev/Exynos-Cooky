@@ -1,15 +1,14 @@
-// src/components/layout/MainLayout.tsx
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
-import Header from './header';
-//import Footer from './Footer';
+import Header from './Header';
+import Footer from './Footer';
 
 const LayoutWrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #fffafb;
+  background-color: #ffffff;
 `;
 
 const ContentArea = styled.main`
@@ -22,9 +21,9 @@ const MainLayout: React.FC = () => {
     <LayoutWrapper>
       <Header />
       <ContentArea>
-        <Outlet /> {/* This dynamically renders whatever page you are currently on! */}
+        <Outlet /> {/* dynamically renders whatever page you are currently on! */}
       </ContentArea>
-      
+      <Footer />
     </LayoutWrapper>
   );
 };
