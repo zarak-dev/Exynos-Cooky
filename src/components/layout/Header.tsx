@@ -2,6 +2,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import logoSvg from '../../assets/images/exynos-cooky.svg';
 // If you want to use Ant Design Icons for the right side elements:
 import { SearchOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
 
@@ -19,7 +20,7 @@ const LogoContainer = styled(NavLink)`
   font-weight: 800;
   color: #00009c; /* Pristine navy blue from image_4549dd.png */
   text-decoration: none;
-  font-family: 'Poppins', 'Inter', -apple-system, sans-serif; /* Modern, clean, stylish font stack */
+  font-family:   -apple-system, sans-serif; /* Modern, clean, stylish font stack */
   letter-spacing: -0.5px;
   display: flex;
   align-items: center;
@@ -76,7 +77,7 @@ const Header: React.FC = () => {
   return (
     <StyledHeader>
       <LogoContainer to="/">
-        Exynos Cooky 🍪
+       <img src={logoSvg} alt="logo" style={{ width: '190px', height: '40px', display: 'block', objectFit: 'contain' }} />
       </LogoContainer>
       
       <NavMenu>

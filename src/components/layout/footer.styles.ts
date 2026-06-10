@@ -5,7 +5,7 @@ export const StyledFooter = styled.footer`
   background-color: #ffffff;
   border-top: 1px solid #f0f0f0;
   padding: 60px 40px 20px 40px;
-  margin-top: auto; /* Ensures footer stays pinned to bottom */
+  margin-top: auto; 
 `;
 
 export const FooterGrid = styled.div`

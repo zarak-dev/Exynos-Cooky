@@ -12,7 +12,7 @@ const LayoutWrapper = styled.div`
 `;
 
 const ContentArea = styled.main`
-  flex: 1; /* Pushes the footer to the bottom of the page if content is short */
+  flex: 1;
   width: 100%;
 `;
 
