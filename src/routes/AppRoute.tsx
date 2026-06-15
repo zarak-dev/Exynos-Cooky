@@ -1,10 +1,10 @@
 // src/routes/AppRoute.tsx
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from '../pages/home';
-import {AboutUs} from '../pages/aboutUs';
-import { Delivery } from '../pages/delivery';
-import {Contact} from '../pages/contact';
+import Home from '../pages/Home';
+import AboutUs from '../pages/aboutUs';
+import  Delivery from '../pages/delivery';
+import Contact from '../pages/contact';
 import MainLayout from '../components/layout/MainLayout.tsx'; // We will create this next
 
 const AppRoute: React.FC = () => {

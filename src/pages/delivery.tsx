@@ -1,1 +1,0 @@
-export const Delivery = () => <div>Delivery Details</div>;
