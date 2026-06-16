@@ -1,24 +1,25 @@
 // src/components/layout/header.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { Input } from 'antd'; // Added for the collapsing search drawer effect
 import logoSvg from '../../assets/images/exynos-cooky.svg';
-// If you want to use Ant Design Icons for the right side elements:
+import { useSearch } from '../../context/searchContext'; // Connect global search state
 import { SearchOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
 
 const StyledHeader = styled.header`
   position: sticky;
   top: 0;
   z-index: 1000;
-  width: 90%;
+  width: 100%; /* Changed from 90% to 100% to fill out screen nicely like original layout */
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 24px 40px;
-  background-color: #ffffff;
-  border-bottom: 1px solid rgba(240, 240, 240, 0.3); 
-  background-color: rgba(255, 255, 255, 0.55);       
-  backdrop-filter: blur(12px);                       
+  border-bottom: 1px solid rgba(240, 240, 240, 0.8); 
+  background-color: rgba(255, 255, 255, 0.85);       
+  backdrop-filter: blur(12px);                      
   -webkit-backdrop-filter: blur(12px);
 `;
 
@@ -27,7 +28,7 @@ const LogoContainer = styled(NavLink)`
   font-weight: 800;
   color: #00009c;
   text-decoration: none;
-  font-family:   -apple-system, sans-serif; 
+  font-family: -apple-system, sans-serif; 
   letter-spacing: -0.5px;
   display: flex;
   align-items: center;
@@ -38,15 +39,12 @@ const LogoContainer = styled(NavLink)`
     color: #000066; 
     transform: scale(1.02); 
   }
-
-  span, &::after {
-    font-size: 2rem;
-  }
 `;
 
 const NavMenu = styled.nav`
   display: flex;
   gap: 32px;
+  align-items: center;
 `;
 
 const NavigationLink = styled(NavLink)`
@@ -74,18 +72,37 @@ const IconActions = styled.div`
   gap: 24px;
   color: #00009c;
   font-size: 1.4rem;
-  cursor: pointer;
+  align-items: center;
 
   span:hover {
     opacity: 0.7;
   }
 `;
 
+/* Styled component to inject into actions layout box for sleek entry animation */
+const HeaderSearchInput = styled(Input)`
+  width: 160px;
+  border-radius: 0px;
+  border-color: #00009c;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  height: 32px;
+  transition: all 0.3s ease;
+
+  &:focus, &:hover {
+    border-color: #000066 !important;
+    box-shadow: none !important;
+  }
+`;
+
 const Header: React.FC = () => {
+  const { searchQuery, setSearchQuery } = useSearch();
+  const [showInput, setShowInput] = useState<boolean>(false);
+
   return (
     <StyledHeader>
       <LogoContainer to="/">
-       <img src={logoSvg} alt="logo" style={{ width: '190px', height: '40px', display: 'block', objectFit: 'contain' }} />
+        <img src={logoSvg} alt="logo" style={{ width: '190px', height: '40px', display: 'block', objectFit: 'contain' }} />
       </LogoContainer>
       
       <NavMenu>
@@ -95,9 +112,26 @@ const Header: React.FC = () => {
         <NavigationLink to="/contact">Careers</NavigationLink>
       </NavMenu>
 
-      {/* Matching the utility icons on the right side of image_4549dd.png */}
       <IconActions>
-        <SearchOutlined />
+        {/* Dynamic Expandable Utility Section */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {showInput && (
+            <HeaderSearchInput
+              placeholder="Search cookies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+              onBlur={() => {
+                // Collapse search input box automatically if user leaves it blank
+                if (!searchQuery.trim()) {
+                  setShowInput(false);
+                }
+              }}
+            />
+          )}
+          <SearchOutlined onClick={() => setShowInput(!showInput)} style={{ cursor: 'pointer' }} />
+        </div>
+        
         <UserOutlined />
         <ShoppingOutlined />
       </IconActions>

@@ -1,6 +1,6 @@
 // src/pages/careers.styles.ts
 import styled from 'styled-components';
-import { Card, Button, Collapse, Tag } from 'antd';
+import { Card, Button, Collapse } from 'antd';
 
 export const CareersContainer = styled.div`
   max-width: 1200px;
