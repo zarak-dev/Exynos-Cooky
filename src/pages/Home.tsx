@@ -1,5 +1,7 @@
 // src/pages/Home.tsx
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'; // Add Redux hooks
+import { addCookieToBox } from '../store/cartSlice';
 import { Row, Col, Card, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons'; // Import search icon
 import { COOKIE_MOCK_DATA, type Cookie } from '../utils/mockData';
@@ -21,6 +23,7 @@ import {
 } from './home.styles';
 
 const Home: React.FC = () => {
+  const dispatch = useDispatch();
   // Use global context instead of local state
   const { searchQuery, setSearchQuery } = useSearch();
 
@@ -31,7 +34,7 @@ const Home: React.FC = () => {
         cookie.description.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesSearch;
     });
-
+    
     if (showOnlyTopRated) {
       return filtered.slice(0, 3);
     }
@@ -56,7 +59,9 @@ const Home: React.FC = () => {
                 {cookie.isAvailable ? <PriceTag>Rs. {cookie.price}</PriceTag> : <OutOfStockBadge>Sold Out</OutOfStockBadge>}
               </CardHeader>
               <Card.Meta description={cookie.description} style={{ marginBottom: '16px', minHeight: '60px' }} />
-              <StyledButton type="primary" disabled={!cookie.isAvailable}>
+              <StyledButton type="primary" disabled={!cookie.isAvailable}
+              onClick={() => dispatch(addCookieToBox(cookie))}
+              >
                 {cookie.isAvailable ? 'Add to Box' : 'Unavailable'}
               </StyledButton>
             </StyledCard>
