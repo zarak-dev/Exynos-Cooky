@@ -1,4 +1,3 @@
-// src/components/layout/header.tsx
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +5,7 @@ import { toggleAuthModal, logoutUser } from '../../store/authSlice';
 import { type RootState } from '../../store';
 import { toggleCart } from '../../store/cartSlice';
 import styled from 'styled-components';
-import { Input,  Dropdown, Menu, message  } from 'antd'; // Added for the collapsing search drawer effect
+import { Input,  Dropdown, Menu, message  } from 'antd';
 import logoSvg from '../../assets/images/exynos-cooky.svg';
 import { useSearch } from '../../context/searchContext'; // Connect global search state
 import { SearchOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
@@ -15,7 +14,7 @@ const StyledHeader = styled.header`
   position: sticky;
   top: 0;
   z-index: 1000;
-  width: 100%; /* Changed from 90% to 100% to fill out screen nicely like original layout */
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;

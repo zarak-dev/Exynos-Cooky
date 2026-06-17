@@ -1,4 +1,3 @@
-// src/store/cartSlice.ts
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { message } from 'antd';
 import { type Cookie } from '../utils/mockData';
@@ -8,13 +7,13 @@ export type BoxSize = 4 | 6 | 12;
 interface CartState {
   boxSize: BoxSize;
   items: Cookie[];
-  isCartOpen: boolean; // Added state property
+  isCartOpen: boolean;
 }
 
 const initialState: CartState = {
   boxSize: 4,
   items: [],
-  isCartOpen: false, // Defaulting to closed drawer
+  isCartOpen: false, 
 };
 
 const cartSlice = createSlice({
@@ -55,7 +54,6 @@ const cartSlice = createSlice({
   }
 });
 
-// Explicitly exporting the missing actions to clear compilation errors
 export const { 
   setBoxSize, 
   addCookieToBox, 

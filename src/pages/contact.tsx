@@ -1,4 +1,3 @@
-// src/pages/contact.tsx
 import React from 'react';
 import { Tag } from 'antd';
 import {
@@ -53,7 +52,6 @@ const OPEN_POSITIONS: JobOpening[] = [
 const Contact: React.FC = () => {
   return (
     <CareersContainer>
-      {/* Hero Header Block */}
       <HeroSection>
         <HeroTitle>Join the Cookie Crew</HeroTitle>
         <HeroSubtitle>
@@ -61,7 +59,6 @@ const Contact: React.FC = () => {
         </HeroSubtitle>
       </HeroSection>
 
-      {/* Corporate Values Layer */}
       <SectionTitle>Our Core Ingredients</SectionTitle>
       <ValueGrid>
         <ValueCard title="Quality Obsessed" bordered={false}>
@@ -75,7 +72,6 @@ const Contact: React.FC = () => {
         </ValueCard>
       </ValueGrid>
 
-      {/* Open Postings Accordeon Layer */}
       <SectionTitle>Open Positions</SectionTitle>
       <JobCollapse 
         accordion 

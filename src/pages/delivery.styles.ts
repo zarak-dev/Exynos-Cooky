@@ -1,4 +1,3 @@
-// src/pages/delivery.styles.ts
 import styled from 'styled-components';
 import { Button, Input, List } from 'antd';
 

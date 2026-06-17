@@ -1,4 +1,3 @@
-// src/pages/aboutUs.styles.ts
 import styled from 'styled-components';
 import { Card } from 'antd';
 

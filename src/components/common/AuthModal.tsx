@@ -1,4 +1,3 @@
-// src/components/common/AuthModal.tsx
 import React, { useState } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';

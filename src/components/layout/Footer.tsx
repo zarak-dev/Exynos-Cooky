@@ -1,4 +1,3 @@
-// src/components/layout/footer.tsx
 import React from 'react';
 import logoSvg from '../../assets/images/exynos-cooky.svg';
 import {

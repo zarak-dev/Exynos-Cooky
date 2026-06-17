@@ -1,4 +1,3 @@
-// src/pages/aboutUs.tsx
 import React from 'react';
 import {
   AboutContainer,
@@ -15,13 +14,11 @@ import {
 const AboutUs: React.FC = () => {
   return (
     <AboutContainer>
-      {/* Editorial Header */}
       <EditorialHeader>
         <StoryTitle>Our Story</StoryTitle>
         <StoryDivider />
       </EditorialHeader>
 
-      {/* Main Narrative */}
       <NarrativeBlock>
         <Paragraph>
           Welcome to <HighlightText>Exynos Cooky</HighlightText>, where high-performance engineering meets creative frontend craftsmanship. What started as a vision to build a clean, flawless web interface has evolved into an architectural passion project designed to deliver crisp, digital excellence.
@@ -34,7 +31,7 @@ const AboutUs: React.FC = () => {
         </Paragraph>
       </NarrativeBlock>
 
-      {/* Engineering Foundations Grid */}
+     
       <StoryTitle style={{ fontSize: '1.6rem', textAlign: 'center' }}>
         Our Foundations
       </StoryTitle>

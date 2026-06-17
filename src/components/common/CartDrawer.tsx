@@ -1,4 +1,3 @@
-// src/components/common/CartDrawer.tsx
 import React from 'react';
 import { Drawer, Button, Radio, List, Avatar } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';

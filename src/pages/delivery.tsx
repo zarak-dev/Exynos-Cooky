@@ -1,4 +1,3 @@
-// src/pages/delivery.tsx
 import React, { useState } from 'react';
 import { Modal, List, Button } from 'antd';
 import {

@@ -1,4 +1,3 @@
-// src/pages/careers.styles.ts
 import styled from 'styled-components';
 import { Card, Button, Collapse } from 'antd';
 

@@ -1,12 +1,11 @@
-// src/pages/home.styles.ts
 import styled from 'styled-components';
-import { Card, Button, Tabs, Input } from 'antd'; // Added Tabs and Input here
+import { Card, Button, Tabs, Input } from 'antd'; 
 
 export const HomeContainer = styled.div`
   padding: 60px 20px;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #ffffff; /* Ultra clean white background */
+  background-color: #ffffff; 
 `;
 
 export const PageTitle = styled.h1`
@@ -21,21 +20,21 @@ export const PageTitle = styled.h1`
 `;
 
 export const StyledCard = styled(Card)<{ $isAvailable: boolean }>`
-  border-radius: 0px; /* Sharp, high-fashion editorial borders */
+  border-radius: 0px; 
   overflow: hidden;
   border: 1px solid #e8e8e8;
-  box-shadow: none; /* Flat minimalist aesthetic */
+  box-shadow: none; 
   transition: all 0.3s ease;
   opacity: ${props => props.$isAvailable ? 1 : 0.5};
 
   &:hover {
-    border-color: #00009c; /* Highlights border on hover */
+    border-color: #00009c;
   }
 
   .ant-card-cover img {
     height: 280px;
     object-fit: cover;
-    padding: 12px; /* Slight inset look for elegant product photography display */
+    padding: 12px;
     background-color: #fafafa;
   }
 `;
@@ -50,7 +49,7 @@ export const CardHeader = styled.div`
 export const CookieTitle = styled.h3`
   font-size: 1.15rem;
   font-weight: 700;
-  color: #00009c; /* Title is Navy */
+  color: #00009c; 
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -64,7 +63,7 @@ export const PriceTag = styled.span`
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  border-radius: 0px; /* Match structural card square borders */
+  border-radius: 0px; 
   background-color: #00009c;
   border-color: #00009c;
   color: #ffffff;
@@ -74,7 +73,7 @@ export const StyledButton = styled(Button)`
   letter-spacing: 1px;
 
   &:hover {
-    background-color: #000066 !important; /* Slightly darker shade on click hover */
+    background-color: #000066 !important; 
     border-color: #000066 !important;
     color: #ffffff !important;
   }
@@ -89,10 +88,6 @@ export const OutOfStockBadge = styled.div`
   text-transform: uppercase;
   letter-spacing: 0.5px;
 `;
-
-/* ==========================================================================
-   NEW EXPLORE SYSTEM & TAB ENTRIES (ADDED BELOW)
-   ========================================================================== */
 
 export const ExploreSection = styled.div`
   max-width: 500px;
