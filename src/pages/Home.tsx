@@ -1,8 +1,8 @@
 // src/pages/Home.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux'; // Add Redux hooks
 import { addCookieToBox } from '../store/cartSlice';
-import { Row, Col, Card, Button } from 'antd';
+import { Row, Col, Card,} from 'antd';
 import { SearchOutlined } from '@ant-design/icons'; // Import search icon
 import { COOKIE_MOCK_DATA, type Cookie } from '../utils/mockData';
 import { useSearch } from '../context/searchContext'; // Import shared state hook

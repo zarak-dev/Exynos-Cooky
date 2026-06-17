@@ -1,8 +1,12 @@
 // src/components/layout/header.tsx
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleAuthModal, logoutUser } from '../../store/authSlice';
+import { type RootState } from '../../store';
+import { toggleCart } from '../../store/cartSlice';
 import styled from 'styled-components';
-import { Input } from 'antd'; // Added for the collapsing search drawer effect
+import { Input,  Dropdown, Menu, message  } from 'antd'; // Added for the collapsing search drawer effect
 import logoSvg from '../../assets/images/exynos-cooky.svg';
 import { useSearch } from '../../context/searchContext'; // Connect global search state
 import { SearchOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
@@ -96,9 +100,32 @@ const HeaderSearchInput = styled(Input)`
 `;
 
 const Header: React.FC = () => {
+  const dispatch = useDispatch();
+  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
   const { searchQuery, setSearchQuery } = useSearch();
   const [showInput, setShowInput] = useState<boolean>(false);
 
+ const userMenu = {
+    items: [
+      {
+        key: 'profile',
+        label: <span>Logged in as: <strong>{user?.name}</strong></span>,
+        disabled: true,
+      },
+      {
+        type: 'divider' as const,
+      },
+      {
+        key: 'logout',
+        label: 'Log Out',
+        danger: true,
+        onClick: () => {
+          dispatch(logoutUser());
+          message.info("Logged out smoothly.");
+        },
+      },
+    ],
+  };
   return (
     <StyledHeader>
       <LogoContainer to="/">
@@ -131,9 +158,16 @@ const Header: React.FC = () => {
           )}
           <SearchOutlined onClick={() => setShowInput(!showInput)} style={{ cursor: 'pointer' }} />
         </div>
-        
-        <UserOutlined />
-        <ShoppingOutlined />
+        {isLoggedIn ? (
+        <Dropdown  menu={userMenu} placement="bottomRight" arrow>
+          <UserOutlined style={{ color: '#00009c', cursor: 'pointer' }} />
+        </Dropdown>
+      ) : (
+         <UserOutlined onClick={() => dispatch(toggleAuthModal())} style={{ cursor: 'pointer' }} />)}
+       <ShoppingOutlined 
+          onClick={() => dispatch(toggleCart())} 
+          style={{ cursor: 'pointer' }} 
+        />
       </IconActions>
     </StyledHeader>
   );

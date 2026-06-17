@@ -3,6 +3,8 @@ import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from './Header';
 import Footer from './Footer';
+import { AuthModal } from '../common/AuthModal';
+import { CartDrawer } from '../common/CartDrawer';
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -23,6 +25,8 @@ const MainLayout: React.FC = () => {
       <ContentArea>
         <Outlet /> {/* dynamically renders whatever page you are currently on! */}
       </ContentArea>
+      <AuthModal/>
+      <CartDrawer />
       <Footer />
     </LayoutWrapper>
   );

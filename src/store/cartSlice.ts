@@ -8,11 +8,13 @@ export type BoxSize = 4 | 6 | 12;
 interface CartState {
   boxSize: BoxSize;
   items: Cookie[];
+  isCartOpen: boolean; // Added state property
 }
 
 const initialState: CartState = {
-  boxSize: 4, // Default Crumbl style box tier
+  boxSize: 4,
   items: [],
+  isCartOpen: false, // Defaulting to closed drawer
 };
 
 const cartSlice = createSlice({
@@ -21,7 +23,6 @@ const cartSlice = createSlice({
   reducers: {
     setBoxSize: (state, action: PayloadAction<BoxSize>) => {
       state.boxSize = action.payload;
-      // If they downsize the box and their cookies exceed the new limit, trim the excess
       if (state.items.length > action.payload) {
         state.items = state.items.slice(0, action.payload);
         message.info(`Box resized to ${action.payload}-Pack. Excess cookies removed.`);
@@ -38,15 +39,30 @@ const cartSlice = createSlice({
       message.success(`Added ${action.payload.name} to your box! 🍪`);
     },
     removeCookieFromBox: (state, action: PayloadAction<number>) => {
-      // Remove by index to handle duplicate flavors in the same box smoothly
       state.items.splice(action.payload, 1);
     },
     clearBox: (state) => {
       state.items = [];
       message.info('Box cleared!');
+    },
+    // Added open/close actions for the drawer overlay layout
+    toggleCart: (state) => {
+      state.isCartOpen = !state.isCartOpen;
+    },
+    setCartOpen: (state, action: PayloadAction<boolean>) => {
+      state.isCartOpen = action.payload;
     }
   }
 });
 
-export const { setBoxSize, addCookieToBox, removeCookieFromBox, clearBox } = cartSlice.actions;
+// Explicitly exporting the missing actions to clear compilation errors
+export const { 
+  setBoxSize, 
+  addCookieToBox, 
+  removeCookieFromBox, 
+  clearBox, 
+  toggleCart, 
+  setCartOpen 
+} = cartSlice.actions;
+
 export default cartSlice.reducer;
