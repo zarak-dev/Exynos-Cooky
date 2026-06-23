@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleAuthModal, logoutUser } from '../../store/authSlice';
 import { type RootState } from '../../store';
@@ -82,7 +82,7 @@ const IconActions = styled.div`
   }
 `;
 
-/* Styled component to inject into actions layout box for sleek entry animation */
+
 const HeaderSearchInput = styled(Input)`
   width: 160px;
   border-radius: 0px;
@@ -100,17 +100,34 @@ const HeaderSearchInput = styled(Input)`
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
   const { searchQuery, setSearchQuery } = useSearch();
   const [showInput, setShowInput] = useState<boolean>(false);
 
- const userMenu = {
+  const userMenu = {
     items: [
       {
         key: 'profile',
-        label: <span>Logged in as: <strong>{user?.name}</strong></span>,
+        label: (
+          <span>
+            Role: <strong style={{ color: user?.role === 'admin' ? '#d92323' : '#00009c', textTransform: 'uppercase' }}>
+              {user?.role}
+            </strong>
+          </span>
+        ),
         disabled: true,
       },
+
+      ...(user?.role === 'admin' ? [
+        {
+          key: 'admin-dashboard',
+          label: <span style={{ fontWeight: 700, color: '#00009c' }}>🛠️ Admin Dashboard</span>,
+          onClick: () => {
+            navigate('/admin');
+          }
+        }
+      ] : []),
       {
         type: 'divider' as const,
       },
@@ -139,7 +156,6 @@ const Header: React.FC = () => {
       </NavMenu>
 
       <IconActions>
-        {/* Dynamic Expandable Utility Section */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {showInput && (
             <HeaderSearchInput

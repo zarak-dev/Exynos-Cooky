@@ -37,12 +37,29 @@ export const AuthModal: React.FC = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector((state: RootState) => state.auth.isAuthModalOpen);
   const [isSignUp, setIsSignUp] = useState<boolean>(true); // Toggles between Sign Up and Login layouts
-
+  
   const onFinish = (values: any) => {
-    // Simulate API registration action
-    dispatch(loginUser({ name: values.name || 'Valued Guest', email: values.email }));
-    message.success(isSignUp ? 'Account created successfully! 🎂' : 'Logged in successfully!');
-  };
+  const { email, password, name } = values;
+  const ADMIN_EMAIL = "admin@exynoscooky.com";
+  const SECRET_ADMIN_PASS = "galaxy98"; // Our local prototype master password
+
+  // Check if they are trying to log into the administrative portal
+  if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+    if (password !== SECRET_ADMIN_PASS) {
+      // Bounces them out if the password doesn't match our system secret
+      message.error("Access Denied: Invalid Administrative Password!");
+      return;
+    }
+  }
+
+  // If password checks pass (or it's a regular customer), log them in smoothly
+  dispatch(loginUser({ 
+    name: name || (email.toLowerCase() === ADMIN_EMAIL.toLowerCase() ? 'System Admin' : 'Valued Guest'), 
+    email: email 
+  }));
+  
+  message.success("Logged in successfully! 🍪");
+};
 
   return (
     <Modal
