@@ -10,7 +10,7 @@ export const AdminOverview: React.FC = () => {
     { month: 'Feb', revenue: 52000 },
     { month: 'Mar', revenue: 61000 },
     { month: 'Apr', revenue: 58000 },
-    { month: 'May', revenue: 74000 },
+    { month: 'May', revenue: 74800 },
     { month: 'Jun', revenue: 95000 },
   ];
 
@@ -49,7 +49,7 @@ export const AdminOverview: React.FC = () => {
           <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
             <Statistic
               title="Net Revenue"
-              value={385000}
+              value={385270}
               precision={0}
               valueStyle={{ color: '#00009c', fontWeight: 700 }}
               prefix={<DollarOutlined />}

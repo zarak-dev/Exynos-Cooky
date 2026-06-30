@@ -1,9 +1,9 @@
-// src/pages/AdminInventory.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { Table, Tag, Switch, Space, Card, Image, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-// Let's bring in your actual mock data array to view and manipulate
-import { COOKIE_MOCK_DATA } from '../utils/mockData'; 
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleItemAvailability } from '../store/inventorySlice';
+import { type RootState } from '../store';
 
 interface CookieItem {
   id: number;
@@ -15,13 +15,10 @@ interface CookieItem {
 }
 
 export const AdminInventory: React.FC = () => {
-  // Store the mock data array in local state so toggles trigger UI updates instantly
-  const [inventory, setInventory] = useState<CookieItem[]>(COOKIE_MOCK_DATA);
-
-  // Handler to switch availability status back and forth
+const inventory = useSelector((state: RootState) => state.inventory.items);
+  const dispatch = useDispatch();
   const handleAvailabilityChange = (id: number, checked: boolean) => {
-    setInventory(prev => 
-      prev.map(item => item.id === id ? { ...item, isAvailable: checked } : item)
+   dispatch(toggleItemAvailability({ id, isAvailable: checked })
     );
     
     const targetItem = inventory.find(item => item.id === id);

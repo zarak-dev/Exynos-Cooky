@@ -59,16 +59,12 @@ export const AdminLayout: React.FC = () => {
     {
       key: '/',
       icon: <HomeOutlined />,
-      label: 'EXIT TO SHOP',
+      label: 'EXIT',
     },
   ];
 
   const handleMenuClick = ({ key }: { key: string }) => {
-    if (key === '/') {
-      window.location.href = '/'; // Hard reload to exit workspace context cleanly
-    } else {
       navigate(key);
-    }
   };
 
   return (
