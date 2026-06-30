@@ -1,9 +1,10 @@
 import React from 'react';
 import { Row, Col, Card, Rate } from 'antd'; 
 import { SearchOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
-import { COOKIE_MOCK_DATA, type Cookie } from '../utils/mockData';
+import { useDispatch, useSelector } from 'react-redux';
+import { type Cookie } from '../utils/mockData';
 import { useSearch } from '../context/searchContext';
+import { type RootState } from '../store';
 import { addCookieToBox } from '../store/cartSlice';
 import {
   HomeContainer,
@@ -24,9 +25,9 @@ import {
 const Home: React.FC = () => {
   const dispatch = useDispatch();
   const { searchQuery, setSearchQuery } = useSearch();
-
+  const cookies = useSelector((state: RootState) => state.inventory.items);
   const getFilteredCookies = (showOnlyTopRated: boolean) => {
-    const filtered = COOKIE_MOCK_DATA.filter((cookie: Cookie) => {
+    const filtered = cookies.filter((cookie: any) => {
       const matchesSearch = 
         cookie.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cookie.description.toLowerCase().includes(searchQuery.toLowerCase());
