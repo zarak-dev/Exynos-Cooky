@@ -1,6 +1,6 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { message } from 'antd';
-import { type Cookie } from '../utils/mockData';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { message } from "antd";
+import { type Cookie } from "../utils/mockData";
 
 export type BoxSize = 4 | 6 | 12;
 
@@ -10,28 +10,32 @@ interface CartState {
   isCartOpen: boolean;
 }
 
-const initialState: CartState = {
+export const initialState: CartState = {
   boxSize: 4,
   items: [],
-  isCartOpen: false, 
+  isCartOpen: false,
 };
 
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
   reducers: {
     setBoxSize: (state, action: PayloadAction<BoxSize>) => {
       state.boxSize = action.payload;
       if (state.items.length > action.payload) {
         state.items = state.items.slice(0, action.payload);
-        message.info(`Box resized to ${action.payload}-Pack. Excess cookies removed.`);
+        message.info(
+          `Box resized to ${action.payload}-Pack. Excess cookies removed.`,
+        );
       } else {
         message.info(`Box tier changed to ${action.payload}-Pack!`);
       }
     },
     addCookieToBox: (state, action: PayloadAction<Cookie>) => {
       if (state.items.length >= state.boxSize) {
-        message.error(`Your ${state.boxSize}-Pack is full! Clear items or upgrade your box size.`);
+        message.error(
+          `Your ${state.boxSize}-Pack is full! Clear items or upgrade your box size.`,
+        );
         return;
       }
       state.items.push(action.payload);
@@ -42,7 +46,7 @@ const cartSlice = createSlice({
     },
     clearBox: (state) => {
       state.items = [];
-      message.info('Box cleared!');
+      message.info("Box cleared!");
     },
     // Added open/close actions for the drawer overlay layout
     toggleCart: (state) => {
@@ -50,17 +54,27 @@ const cartSlice = createSlice({
     },
     setCartOpen: (state, action: PayloadAction<boolean>) => {
       state.isCartOpen = action.payload;
-    }
-  }
+    },
+    setToZero: (state) => {
+      state.items = [];
+      state.boxSize = 4;
+      state.isCartOpen = false;
+    },
+    setToZeroOne: (state) => {
+      state = initialState;
+      state.boxSize = initialState.boxSize;
+      state.isCartOpen = initialState.isCartOpen;
+    },
+  },
 });
 
-export const { 
-  setBoxSize, 
-  addCookieToBox, 
-  removeCookieFromBox, 
-  clearBox, 
-  toggleCart, 
-  setCartOpen 
+export const {
+  setBoxSize,
+  addCookieToBox,
+  removeCookieFromBox,
+  clearBox,
+  toggleCart,
+  setCartOpen,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

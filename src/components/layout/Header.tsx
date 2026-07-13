@@ -5,7 +5,7 @@ import { toggleAuthModal, logoutUser } from '../../store/authSlice';
 import { type RootState } from '../../store';
 import { toggleCart } from '../../store/cartSlice';
 import styled from 'styled-components';
-import { Input,  Dropdown, Menu, message  } from 'antd';
+import { Input,  Dropdown, Badge, message  } from 'antd';
 import logoSvg from '../../assets/images/exynos-cooky.svg';
 import { useSearch } from '../../context/searchContext'; // Connect global search state
 import { SearchOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
@@ -99,11 +99,13 @@ const HeaderSearchInput = styled(Input)`
 `;
 
 const Header: React.FC = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
-  const { searchQuery, setSearchQuery } = useSearch();
-  const [showInput, setShowInput] = useState<boolean>(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const cartItems = useSelector((state: RootState) => state.cart.items);
+    const totalCartCount = cartItems ? cartItems.length : 0;
+    const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
+    const { searchQuery, setSearchQuery } = useSearch();
+    const [showInput, setShowInput] = useState<boolean>(false);
 
   const userMenu = {
     items: [
@@ -179,10 +181,17 @@ const Header: React.FC = () => {
         </Dropdown>
       ) : (
          <UserOutlined onClick={() => dispatch(toggleAuthModal())} style={{ cursor: 'pointer' }} />)}
-       <ShoppingOutlined 
+         <Badge 
+            count={totalCartCount} 
+            size="small"
+            offset={[2, 0]} // Fine-tunes the numeric position slightly to the top right of the bag
+            style={{ backgroundColor: '#fa8c16', color: '#fff' }} // Distinct accent color tag
+          >
+        <ShoppingOutlined 
           onClick={() => dispatch(toggleCart())} 
-          style={{ cursor: 'pointer' }} 
+          style={{ cursor: 'pointer', fontSize: '26px', color: '#00009c' }} 
         />
+        </Badge>
       </IconActions>
     </StyledHeader>
   );

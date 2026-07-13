@@ -2,8 +2,8 @@ import React from 'react';
 import { Drawer, Button, Radio, List, Avatar } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { type RootState } from '../../store';
 import { setCartOpen, setBoxSize, removeCookieFromBox, type BoxSize } from '../../store/cartSlice';
+import { selectCartData } from '../../store/selectors';
 import styled from 'styled-components';
 
 const DrawerTitle = styled.h2`
@@ -105,7 +105,7 @@ const CheckoutButton = styled(Button)`
 
 export const CartDrawer: React.FC = () => {
   const dispatch = useDispatch();
-  const { isCartOpen, items, boxSize } = useSelector((state: RootState) => state.cart);
+  const { isCartOpen, items, boxSize } = useSelector(selectCartData);
 
   // Pad or map items into layout arrays to display placeholders for remaining slots
   const visualSlots = Array.from({ length: boxSize }, (_, i) => items[i] || null);

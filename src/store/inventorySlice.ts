@@ -10,12 +10,21 @@ interface CookieItem {
   description: string;
 }
 
+const loadInventoryFromStorage = () => {
+  try {
+    const savedInventory = localStorage.getItem('exynos_inventory');
+    return savedInventory ? JSON.parse(savedInventory) : COOKIE_MOCK_DATA;
+  } catch (error) {
+    return COOKIE_MOCK_DATA;
+  }
+};
+
 interface InventoryState {
   items: CookieItem[];
 }
 
 const initialState: InventoryState = {
-  items: COOKIE_MOCK_DATA, 
+  items: loadInventoryFromStorage(),
 };
 
 const inventorySlice = createSlice({
@@ -27,6 +36,7 @@ const inventorySlice = createSlice({
       const item = state.items.find(i => i.id === action.payload.id);
       if (item) {
         item.isAvailable = action.payload.isAvailable;
+        localStorage.setItem('exynos_inventory', JSON.stringify(state.items));
       }
     },
   },
