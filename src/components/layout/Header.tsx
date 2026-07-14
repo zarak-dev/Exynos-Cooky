@@ -152,7 +152,7 @@ const Header: React.FC = () => {
       <NavMenu>
         <NavigationLink to="/">Weekly Menu</NavigationLink>
         <NavigationLink to="/about">Our Story</NavigationLink>
-        <NavigationLink to="/delivery">Local Delivery</NavigationLink>
+        <NavigationLink to="/track-order">Track Order</NavigationLink>
         <NavigationLink to="/contact">Careers</NavigationLink>
       </NavMenu>
 

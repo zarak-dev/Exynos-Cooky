@@ -1,33 +1,16 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Table, Tag, Button, Space, message,Typography } from 'antd';
+import { Card, Table, Tag, Button, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { CheckCircleOutlined, SyncOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { updateOrderStatus, type Order } from '../store/orderSlice';
 import { type RootState } from '../store';
 
-interface OrderItem {
-  id: string;
-  customerName: string;
-  boxSize: string;
-  contents: string;
-  totalPrice: number;
-  status: 'Pending' | 'Baking' | 'Dispatched';
-  timestamp: string;
-}
-
-const { Title } = Typography;
 
 export const AdminOrders: React.FC = () => {
   const dispatch = useDispatch();
 
-  // 🌟 Cleanly read the orders array from Redux (holds both your hardcoded data & new orders!)
   const orders = useSelector((state: RootState) => state.orders.orders);
-
- const handleStatusChange = (orderId: string, newStatus: any) => {
-  dispatch(updateOrderStatus({ id: orderId, status: newStatus }));
-  message.success(`Order ${orderId} updated to ${newStatus}`);
-  };
   const advanceOrderStatus = (orderId: string, currentStatus: string) => {
   // Map your status progression (e.g. Pending -> Baking -> Dispatched)
   let nextStatus: 'Pending' | 'Baking' | 'Dispatched' | 'Delivered' = 'Pending';
@@ -35,8 +18,7 @@ export const AdminOrders: React.FC = () => {
   if (currentStatus === 'Pending') nextStatus = 'Baking';
   else if (currentStatus === 'Baking') nextStatus = 'Dispatched';
   else if (currentStatus === 'Dispatched') nextStatus = 'Delivered';
-
-  // 🌟 Dispatch directly to Redux!
+  // Dispatch directly to Redux!
   dispatch(updateOrderStatus({ id: orderId, status: nextStatus }));
 };
 

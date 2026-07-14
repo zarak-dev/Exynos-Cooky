@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
           <FooterHeading>Explore</FooterHeading>
           <FooterLink to="/">Weekly Menu</FooterLink>
           <FooterLink to="/about">Our Story</FooterLink>
-          <FooterLink to="/delivery">Local Delivery</FooterLink>
+          <FooterLink to="/track-order">Track Order</FooterLink>
           <FooterLink to="/contact">Careers</FooterLink>
         </FooterColumn>
 

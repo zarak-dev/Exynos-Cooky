@@ -13,20 +13,15 @@ export const CheckoutPage: React.FC = () => {
   const [form] = Form.useForm();
   
   const [isOrdered, setIsOrdered] = useState(false);
+  const [confirmedOrderId, setConfirmedOrderId] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cod');
 
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const boxSize = useSelector((state: RootState) => state.cart.boxSize);
 
-  // Pricing Logic
-  const getBoxPrice = (size: number) => {
-    if (size === 4) return 1200;
-    if (size === 6) return 1850;
-    if (size === 12) return 3400;
-    return 0;
-  };
-  const subtotal = getBoxPrice(boxSize);
-  const deliveryFee = subtotal > 0 ? 150 : 0;
+ 
+  const subtotal = cartItems.reduce((sum: number, item: any) => sum + (Number(item.price) || 0), 0);
+  const deliveryFee = cartItems.length > 0 ? 150 : 0; // Standard delivery fee of Rs. 150 if there are items in the cart
   const totalAmount = subtotal + deliveryFee;
 
   const onFinish = (values: any) => {
@@ -47,11 +42,13 @@ export const CheckoutPage: React.FC = () => {
       status: 'Pending',
       timestamp: 'Just now'
     }));
+    setConfirmedOrderId(generatedOrderId);
     setIsOrdered(true);
     dispatch(clearBox());
     
     message.success("Order dispatched successfully! 🍪");
   };
+
 
   if (isOrdered) {
     return (
@@ -60,12 +57,42 @@ export const CheckoutPage: React.FC = () => {
           <Result
             status="success"
             title={<span style={{ color: '#00009c', fontWeight: 800 }}>Order Confirmed!</span>}
-            subTitle="Your delicious cookie box is being prepared and will head your way shortly."
+            subTitle={
+              <div>
+                <p>Your delicious cookie box is being prepared and will head your way shortly.</p>
+                
+                {/* 📦 BOLD TRACKING BOX */}
+                <div style={{ 
+                  background: '#f0f2f5', 
+                  padding: '16px', 
+                  borderRadius: '8px', 
+                  margin: '24px 0',
+                  border: '1px dashed #00009c' 
+                }}>
+                  <span style={{ display: 'block', fontSize: '0.9rem', color: '#666', marginBottom: '4px' }}>
+                    YOUR TRACKING NUMBER:
+                  </span>
+                  <strong style={{ fontSize: '1.4rem', color: '#00009c', letterSpacing: '1px' }}>
+                    {confirmedOrderId}
+                  </strong>
+                  <p style={{ margin: '8px 0 0 0', fontSize: '0.8rem', color: '#888' }}>
+                    Copy this code to track your bake status live!
+                  </p>
+                </div>
+              </div>
+            }
             extra={[
               <Button 
                 type="primary" 
+                key="track" 
+                style={{ background: '#00009c', borderColor: '#00009c', height: '40px', fontWeight: 700, marginRight: '8px' }}
+                onClick={() => navigate('/track-order')}
+              >
+                Track My Order
+              </Button>,
+              <Button 
                 key="home" 
-                style={{ background: '#00009c', borderColor: '#00009c', height: '40px', fontWeight: 700 }}
+                style={{ height: '40px', fontWeight: 600 }}
                 onClick={() => navigate('/')}
               >
                 Back to Shop
