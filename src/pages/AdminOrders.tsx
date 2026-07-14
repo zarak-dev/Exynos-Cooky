@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { Card, Table, Tag, Button, Space, Tooltip, message } from 'antd';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Card, Table, Tag, Button, Space, message,Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { CheckCircleOutlined, SyncOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { updateOrderStatus, type Order } from '../store/orderSlice';
+import { type RootState } from '../store';
 
 interface OrderItem {
   id: string;
@@ -13,61 +16,31 @@ interface OrderItem {
   timestamp: string;
 }
 
+const { Title } = Typography;
+
 export const AdminOrders: React.FC = () => {
-  const [orders, setOrders] = useState<OrderItem[]>([
-    {
-      id: "EXNS-9481",
-      customerName: "Jimmy Khan",
-      boxSize: "6-Pack Signature Box",
-      contents: "3x Triple Chocolate, 3x Classic Chocolate Chip",
-      totalPrice: 1850,
-      status: "Baking",
-      timestamp: "10 mins ago"
-    },
-    {
-      id: "EXNS-9482",
-      customerName: "Baddie Khan",
-      boxSize: "12-Pack Party Box",
-      contents: "4x Lotus Biscoff, 4x Velvet Red, 4x Peanut Butter Crunch",
-      totalPrice: 3400,
-      status: "Pending",
-      timestamp: "24 mins ago"
-    },
-    {
-      id: "EXNS-9483",
-      customerName: "Bilal Ahmed",
-      boxSize: "4-Pack Sample Box",
-      contents: "2x Matcha White Choc, 2x Salted Caramel",
-      totalPrice: 1200,
-      status: "Dispatched",
-      timestamp: "1 hour ago"
-    }
-    ,
-    {
-      id: "EXNS-9486",
-      customerName: "Milly Khan",
-      boxSize: "4-Pack Sample Box",
-      contents: "2x Matcha White Choc, 2x Salted Caramel",
-      totalPrice: 1200,
-      status: "Dispatched",
-      timestamp: "1 hour ago"
-    }
-  ]);
+  const dispatch = useDispatch();
 
-  const advanceOrderStatus = (id: string, currentStatus: 'Pending' | 'Baking' | 'Dispatched') => {
-    let nextStatus: 'Pending' | 'Baking' | 'Dispatched' = currentStatus;
-    
-    if (currentStatus === 'Pending') nextStatus = 'Baking';
-    else if (currentStatus === 'Baking') nextStatus = 'Dispatched';
+  // 🌟 Cleanly read the orders array from Redux (holds both your hardcoded data & new orders!)
+  const orders = useSelector((state: RootState) => state.orders.orders);
 
-    setOrders(prev => 
-      prev.map(order => order.id === id ? { ...order, status: nextStatus } : order)
-    );
-
-    message.success(`Order ${id} advanced to ${nextStatus}!`);
+ const handleStatusChange = (orderId: string, newStatus: any) => {
+  dispatch(updateOrderStatus({ id: orderId, status: newStatus }));
+  message.success(`Order ${orderId} updated to ${newStatus}`);
   };
+  const advanceOrderStatus = (orderId: string, currentStatus: string) => {
+  // Map your status progression (e.g. Pending -> Baking -> Dispatched)
+  let nextStatus: 'Pending' | 'Baking' | 'Dispatched' | 'Delivered' = 'Pending';
+  
+  if (currentStatus === 'Pending') nextStatus = 'Baking';
+  else if (currentStatus === 'Baking') nextStatus = 'Dispatched';
+  else if (currentStatus === 'Dispatched') nextStatus = 'Delivered';
 
-  const columns: ColumnsType<OrderItem> = [
+  // 🌟 Dispatch directly to Redux!
+  dispatch(updateOrderStatus({ id: orderId, status: nextStatus }));
+};
+
+  const columns: ColumnsType<Order> = [
     {
       title: 'ORDER ID',
       dataIndex: 'id',

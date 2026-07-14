@@ -13,7 +13,7 @@ import Contact from '../pages/contact';
 import Delivery from '../pages/delivery';
 import Careers from '../pages/contact';
 import CartPage from '../pages/CartPage';
-
+import {CheckoutPage} from '../pages/CheckoutPage';
 export const AppRoute: React.FC = () => {
   // Grab the logged-in user profile from our secure Redux store
   const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
@@ -28,6 +28,7 @@ export const AppRoute: React.FC = () => {
         <Route path="delivery" element={<Delivery />} />
         <Route path="careers" element={<Careers />} />
         <Route path="cart" element={<CartPage />} />
+        <Route path="checkout" element={<CheckoutPage />} />
       </Route>
 
       {/* ADMIN WORKSPACE LAYOUT GROUP */}

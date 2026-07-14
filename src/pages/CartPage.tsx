@@ -1,4 +1,3 @@
-// src/pages/CartPage.tsx
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { type RootState } from '../store';
@@ -13,8 +12,7 @@ export const CartPage: React.FC = () => {
   const boxSize = useSelector((state: RootState) => state.cart.boxSize);
   // Grab your standard cart items array
   const cartItems = useSelector((state: RootState) => state.cart.items);
-
-  // 🌟 Simple calculation: sum of all individual cookie prices currently in the cart
+  // Simple calculation: sum of all individual cookie prices currently in the cart
   const subtotal = cartItems.reduce((acc, item: any) => acc + item.price, 0);
   const deliveryFee = subtotal > 0 ? 150 : 0; // Standard 150 Rs delivery charge
   const totalAmount = subtotal + deliveryFee;
@@ -146,7 +144,7 @@ export const CartPage: React.FC = () => {
               // 🌟 Keeps button disabled unless the box is perfectly filled!
               disabled={cartItems.length !== boxSize} 
               style={{ background: '#00009c', borderColor: '#00009c', fontWeight: 700 }}
-              onClick={() => message.success("Proceeding to checkout!")}
+              onClick={() => navigate('/checkout')}
             >
               {cartItems.length === boxSize 
                 ? "PROCEED TO CHECKOUT" 

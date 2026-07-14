@@ -4,7 +4,7 @@ import createSagaMiddleware from 'redux-saga'
 import authReducer from './authSlice';
 import inventoryReducer from './inventorySlice';
 import mySaga from './saga'
-
+import orderReducer from './orderSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -13,6 +13,7 @@ export const store = configureStore({
     cart: cartReducer,
     auth: authReducer,
     inventory: inventoryReducer,
+    orders: orderReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });
