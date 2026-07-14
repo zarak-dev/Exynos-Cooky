@@ -3,7 +3,6 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleAuthModal, logoutUser } from '../../store/authSlice';
 import { type RootState } from '../../store';
-import { toggleCart } from '../../store/cartSlice';
 import styled from 'styled-components';
 import { Input,  Dropdown, Badge, message  } from 'antd';
 import logoSvg from '../../assets/images/exynos-cooky.svg';
@@ -188,8 +187,10 @@ const Header: React.FC = () => {
             style={{ backgroundColor: '#fa8c16', color: '#fff' }} // Distinct accent color tag
           >
         <ShoppingOutlined 
-          onClick={() => dispatch(toggleCart())} 
-          style={{ cursor: 'pointer', fontSize: '26px', color: '#00009c' }} 
+          onClick={() => {
+          navigate('/cart');
+          }} 
+          style={{ cursor: 'pointer', fontSize: '25px', color: '#00009c' }} 
         />
         </Badge>
       </IconActions>
