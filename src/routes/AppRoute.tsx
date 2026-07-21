@@ -10,29 +10,32 @@ import { AdminLayout } from '../components/layout/AdminLayout';
 import Home from '../pages/Home';
 import AboutUs from '../pages/aboutUs';
 import Contact from '../pages/contact';
-import trackOrder from '../pages/TrackOrder';
 import Careers from '../pages/contact';
 import CartPage from '../pages/CartPage';
 import {CheckoutPage} from '../pages/CheckoutPage';
 import TrackOrder from '../pages/TrackOrder';
+import ScrollToTop from '../utils/scrollToTop';
+
 
 export const AppRoute: React.FC = () => {
   // Grab the logged-in user profile from our secure Redux store
   const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
 
   return (
-    <Routes>
-      {/*  STOREFRONT LAYOUT GROUP */}
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<Home />} />
-        <Route path="about" element={<AboutUs />} />
+      <>
+      <ScrollToTop />
+      <Routes>
+        {/*  STOREFRONT LAYOUT GROUP */}
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<AboutUs />} />
         <Route path="contact" element={<Contact />} />
         <Route path="track-order" element={<TrackOrder />} />
         <Route path="careers" element={<Careers />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<CheckoutPage />} />
       </Route>
-
+    
       {/* ADMIN WORKSPACE LAYOUT GROUP */}
       <Route 
         path="/admin" 
@@ -52,6 +55,7 @@ export const AppRoute: React.FC = () => {
       {/* Catch-all fallback route redirects broken URLs back home */}
       <Route path="*"  element={<Navigate to="/" replace />} />
     </Routes>
+      </>
   );
 };
 

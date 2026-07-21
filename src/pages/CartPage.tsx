@@ -141,7 +141,7 @@ export const CartPage: React.FC = () => {
               type="primary" 
               block 
               size="large" 
-              // 🌟 Keeps button disabled unless the box is perfectly filled!
+              // Keeps button disabled unless the box is perfectly filled!
               disabled={cartItems.length !== boxSize} 
               style={{ background: '#00009c', borderColor: '#00009c', fontWeight: 700 }}
               onClick={() => navigate('/checkout')}

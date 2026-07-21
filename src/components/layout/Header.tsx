@@ -52,14 +52,15 @@ const NavMenu = styled.nav`
 const NavigationLink = styled(NavLink)`
   font-size: 0.9rem;
   font-weight: 700;
-  color: #00009c;
   text-decoration: none;
   text-transform: uppercase; 
   letter-spacing: 0.5px;
   font-family: 'Poppins', sans-serif;
   transition: opacity 0.2s ease;
   padding-bottom: 4px;
-
+  &&& .frtnsB {
+    color: #e61616;
+  }
   &:hover {
     opacity: 0.7;
   }
@@ -68,7 +69,8 @@ const NavigationLink = styled(NavLink)`
     border-bottom: 2px solid #00009c; 
   }
 `;
-
+ 
+ 
 const IconActions = styled.div`
   display: flex;
   gap: 24px;

@@ -46,7 +46,6 @@ const cartSlice = createSlice({
     },
     clearBox: (state) => {
       state.items = [];
-      message.info("Box cleared!");
     },
     // Added open/close actions for the drawer overlay layout
     toggleCart: (state) => {

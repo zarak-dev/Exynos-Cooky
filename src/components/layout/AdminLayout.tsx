@@ -118,7 +118,7 @@ export const AdminLayout: React.FC = () => {
           margin: '24px', 
           padding: '24px',
           background: '#f5f5f5',
-          overflowY: 'auto', // 🌟 Only the inventory and graphs scroll now!
+          overflowY: 'auto', // Enables vertical scrolling for content
           flex: 1
         }}>
           <Outlet />

@@ -109,7 +109,7 @@ export const CartDrawer: React.FC = () => {
 
   // Pad or map items into layout arrays to display placeholders for remaining slots
   const visualSlots = Array.from({ length: boxSize }, (_, i) => items[i] || null);
-  const totalCost = items.reduce((sum, item) => sum + item.price, 0);
+  const totalCost = items.reduce((sum: number, item: { price: number }) => sum + item.price, 0);
 
   return (
     <Drawer
@@ -156,7 +156,7 @@ export const CartDrawer: React.FC = () => {
         itemLayout="horizontal"
         dataSource={items}
         locale={{ emptyText: 'Your customized baking box is currently empty.' }}
-        renderItem={(item, index) => (
+        renderItem={(item: any, index) => (
           <List.Item
             actions={[
               <Button 
