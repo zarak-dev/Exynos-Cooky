@@ -1,5 +1,5 @@
 import React from 'react';
-import logoSvg from '../../assets/images/exynos-cooky.svg';
+import logoSvg from '../../../assets/images/exynos-cooky.svg';
 import {
   StyledFooter,
   FooterGrid,

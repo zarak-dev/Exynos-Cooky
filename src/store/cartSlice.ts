@@ -53,17 +53,8 @@ const cartSlice = createSlice({
     },
     setCartOpen: (state, action: PayloadAction<boolean>) => {
       state.isCartOpen = action.payload;
-    },
-    setToZero: (state) => {
-      state.items = [];
-      state.boxSize = 4;
-      state.isCartOpen = false;
-    },
-    setToZeroOne: (state) => {
-      state = initialState;
-      state.boxSize = initialState.boxSize;
-      state.isCartOpen = initialState.isCartOpen;
-    },
+    }
+   
   },
 });
 

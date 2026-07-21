@@ -66,7 +66,6 @@ const Home: React.FC = () => {
                   disabled 
                   allowHalf 
                   defaultValue={cookie.id === 2 ? 5 : cookie.id === 3 ? 5 : 4.5} 
-                  style={{ color: '#00009c', fontSize: '#0.95rem' }} 
                 />
                 <span style={{ marginLeft: '8px', fontSize: '0.8rem', color: '#666', fontWeight: 600 }}>
                   ({cookie.id === 2 ? '120+' : cookie.id === 3 ? '98' : '84'})

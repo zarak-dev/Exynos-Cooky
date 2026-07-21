@@ -68,7 +68,7 @@ export const AuthModal: React.FC = () => {
       onCancel={() => dispatch(setOpenAuthModal(false))}
       footer={null}
       centered
-      destroyOnClose
+      destroyOnHidden
 
     >
       <Form layout="vertical" onFinish={onFinish} requiredMark={false} style={{ marginTop: '24px' }}>

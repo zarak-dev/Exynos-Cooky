@@ -115,7 +115,7 @@ export const CartDrawer: React.FC = () => {
     <Drawer
       title={<DrawerTitle>Your Cookie Box</DrawerTitle>}
       placement="right"
-      width={400}
+      size={400}
       onClose={() => dispatch(setCartOpen(false))}
       open={isCartOpen}
       style={{ fontFamily: 'Poppins, sans-serif' }}

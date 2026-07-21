@@ -5,7 +5,7 @@ import { toggleAuthModal, logoutUser } from '../../../store/authSlice';
 import { type RootState } from '../../../store';
 import styled from 'styled-components';
 import { Input,  Dropdown, Badge, message  } from 'antd';
-import logoSvg from '../../assets/images/exynos-cooky.svg';
+import logoSvg from '../../../assets/images/exynos-cooky.svg';
 import { useSearch } from '../../../context/searchContext'; // Connect global search state
 import { SearchOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
 

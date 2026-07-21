@@ -1,15 +1,14 @@
 import React from 'react';
 import { Row, Col, Card, Statistic, Progress, List, Tag, Typography } from 'antd';
-import { Column, Pie } from '@ant-design/charts'; // 
+import { Column, Pie } from '@ant-design/charts';
 import { ArrowUpOutlined, ShoppingOutlined, DollarOutlined, UserOutlined } from '@ant-design/icons';
-
+import { useSelector } from 'react-redux';
+import { type RootState } from '../../store';
 
 const { Text } = Typography;
 
 export const AdminOverview: React.FC = () => {
-  // const inventory = useSelector((state: RootState) => state.inventory.items);
-  
-  // Existing Bar Chart Data
+  // Column Chart Data
   const chartData = [
     { month: 'Jan', revenue: 45000 },
     { month: 'Feb', revenue: 52000 },
@@ -19,34 +18,26 @@ export const AdminOverview: React.FC = () => {
     { month: 'Jun', revenue: 95000 },
   ];
 
+  // 🌟 Clean Column Chart Config (Compatible with Ant Design Charts v2+)
   const chartConfig = {
     data: chartData,
     xField: 'month',
     yField: 'revenue',
-    color: '#1890ff',
-    columnStyle: {
+    colorField: '#1890ff',
+    style: {
       radius: [4, 4, 0, 0],
     },
     label: {
+      text: (d: any) => `${d.revenue}`,
       position: 'top',
       style: {
         fill: '#8c8c8c',
         opacity: 0.6,
       },
     },
-    xAxis: {
-      label: {
-        style: { fill: '#8c8c8c' },
-      },
-    },
-    yAxis: {
-      label: {
-        style: { fill: '#8c8c8c' },
-      },
-    },
   };
 
-  // Pie Chart Data (Cookie Distribution Share)
+  // Pie/Donut Chart Data
   const pieData = [
     { type: 'Chilled Sugar', value: 40 },
     { type: 'Triple Chocolate', value: 25 },
@@ -55,30 +46,29 @@ export const AdminOverview: React.FC = () => {
     { type: 'Lotus Biscoff', value: 8 },
   ];
 
+  // 🌟 Fixed Pie Config (Removed deprecated shape.inner / type:'inner')
   const pieConfig = {
-    appendPadding: 10,
     data: pieData,
     angleField: 'value',
     colorField: 'type',
-    radius: 1,
-    innerRadius: 0.6, // Gives it a clean donut style look
-    color: ['#00009c', '#1890ff', '#722ed1', '#52c41a', '#faad14'],
+    innerRadius: 0.6, // Donut style
     label: {
-      type: 'inner',
-      offset: '-50%',
-      content: '{value}%',
+      text: 'value',
       style: {
-        textAlign: 'center',
-        fontSize: 14,
+        fontWeight: 'bold',
       },
     },
-    interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
+    legend: {
+      color: {
+        position: 'bottom',
+        layout: { justifyContent: 'center' },
+      },
+    },
   };
 
-  //   Inventory Mock Data
   const inventoryData = [
     { name: 'Chilled Sugar', stock: 120, maxCapacity: 150 },
-    { name: 'Triple Chocolate', stock: 18, maxCapacity: 150 }, // Low Stock example
+    { name: 'Triple Chocolate', stock: 18, maxCapacity: 150 },
     { name: 'Classic Chocolate Chip', stock: 85, maxCapacity: 150 },
     { name: 'Red Velvet Classic', stock: 140, maxCapacity: 150 },
     { name: 'Lotus Biscoff', stock: 55, maxCapacity: 150 },
@@ -93,23 +83,46 @@ export const AdminOverview: React.FC = () => {
       {/* STATISTICAL CARDS ROW */}
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-            <Statistic title="Net Revenue" value={385270} valueStyle={{ color: '#00009c', fontWeight: 700 }} prefix={<DollarOutlined />} suffix="Rs." />
+          <Card variant="borderless" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <Statistic 
+              title="Net Revenue" 
+              value={385270} 
+              styles={{ content: { color: '#00009c', fontWeight: 700 } }} 
+              prefix={<DollarOutlined />} 
+              suffix="Rs." 
+            />
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-            <Statistic title="Boxes Baked / Sold" value={284} valueStyle={{ color: '#3f8600', fontWeight: 700 }} prefix={<ShoppingOutlined />} />
+          <Card variant="borderless" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <Statistic 
+              title="Boxes Baked / Sold" 
+              value={284} 
+              styles={{ content: { color: '#3f8600', fontWeight: 700 } }} 
+              prefix={<ShoppingOutlined />} 
+            />
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-            <Statistic title="Month-over-Month Growth" value={28.40} precision={2} valueStyle={{ color: '#3f8600', fontWeight: 700 }} prefix={<ArrowUpOutlined />} suffix="%" />
+          <Card variant="borderless" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <Statistic 
+              title="Month-over-Month Growth" 
+              value={28.40} 
+              precision={2} 
+              styles={{ content: { color: '#3f8600', fontWeight: 700 } }} 
+              prefix={<ArrowUpOutlined />} 
+              suffix="%" 
+            />
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-            <Statistic title="Active System Users" value={18} valueStyle={{ color: '#00009c', fontWeight: 700 }} prefix={<UserOutlined />} />
+          <Card variant="borderless" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <Statistic 
+              title="Active System Users" 
+              value={18} 
+              styles={{ content: { color: '#00009c', fontWeight: 700 } }} 
+              prefix={<UserOutlined />} 
+            />
           </Card>
         </Col>
       </Row>
@@ -117,43 +130,41 @@ export const AdminOverview: React.FC = () => {
       {/* COLUMN CHART CONTAINER */}
       <Card 
         title={<span style={{ color: '#00009c', fontWeight: 700 }}>Gross Financial Performance Trajectory</span>}
-        bordered={false}
+        variant="borderless"
         style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginTop: '8px' }}
       >
         <div style={{ height: '350px' }}>
-          <Column {...chartConfig} autoFit />
+          <Column {...chartConfig} />
         </div>
       </Card>
 
-      {/* NEW SIDE-BY-SIDE OVERVIEW ROW */}
+      {/* SIDE-BY-SIDE OVERVIEW ROW */}
       <Row gutter={[24, 24]}>
-        {/* PIE CHART COLUMN */}
         <Col xs={24} lg={12}>
           <Card 
             title={<span style={{ color: '#00009c', fontWeight: 700 }}>Sales Distribution Share</span>} 
-            bordered={false} 
+            variant="borderless" 
             style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
           >
             <div style={{ height: '320px' }}>
-              <Pie {...pieConfig} autoFit />
+              <Pie {...pieConfig} />
             </div>
           </Card>
         </Col>
 
-        {/* INVENTORY STATUS MONITOR COLUMN */}
         <Col xs={24} lg={12}>
           <Card 
             title={<span style={{ color: '#00009c', fontWeight: 700 }}>Kitchen Stock Status Overview</span>} 
-            bordered={false} 
+            variant="borderless" 
             style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
-          />
+          >
             <div style={{ height: '320px', overflowY: 'auto', paddingRight: '4px' }}>
               <List
                 itemLayout="horizontal"
                 dataSource={inventoryData}
                 renderItem={(item) => {
                   const stockPercentage = Math.round((item.stock / item.maxCapacity) * 100);
-                  const isLowStock = item.stock < 30; // Triggers alert warning under 30 units
+                  const isLowStock = item.stock < 30;
 
                   return (
                     <List.Item style={{ padding: '12px 0' }}>
@@ -182,8 +193,9 @@ export const AdminOverview: React.FC = () => {
                 }}
               />
             </div>
-          </Col>
-        </Row>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 };
