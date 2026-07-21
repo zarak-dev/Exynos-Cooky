@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { type RootState } from '../store';
+import { type RootState } from '../../store';
 import { Table, Button, Card, Row, Col, Empty, message, Radio } from 'antd';
 import { DeleteOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { removeCookieFromBox, setBoxSize} from '../store/cartSlice'; 
+import { removeCookieFromBox, setBoxSize} from '../../store/cartSlice'; 
 
 export const CartPage: React.FC = () => {
   const navigate = useNavigate();

@@ -2,22 +2,14 @@ import React from "react";
 import { Table, Tag, Switch, Space, Card, Image, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleItemAvailability } from "../store/inventorySlice";
-import { type RootState } from "../store";
-
-interface CookieItem {
-  id: number;
-  name: string;
-  price: number;
-  isAvailable: boolean;
-  imageUrl: string;
-  description: string;
-}
+import { toggleItemAvailability } from "../../store/inventorySlice";
+import { type RootState } from "../../store";
+import type { CookieItem } from "./types";
 
 export const AdminInventory: React.FC = () => {
   const inventory = useSelector((state: RootState) => state.inventory.items);
   const dispatch = useDispatch();
-  
+
   const handleAvailabilityChange = (id: number, checked: boolean) => {
     dispatch(toggleItemAvailability({ id, isAvailable: checked }));
 
@@ -25,9 +17,7 @@ export const AdminInventory: React.FC = () => {
     // Conditoin to check if record is active/inactive
     // if active show it on store front, othwewise mark it sold out
     if (checked) {
-      message.success(
-        `"${targetItem?.name}" is now active on the storefront!`,
-      );
+      message.success(`"${targetItem?.name}" is now active on the storefront!`);
     } else {
       message.warning(`"${targetItem?.name}" marked as Sold Out.`);
     }
@@ -106,10 +96,7 @@ export const AdminInventory: React.FC = () => {
         INVENTORY MANAGEMENT
       </h1>
 
-      <Card
-        bordered={false}
-        style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
-      >
+      <Card style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
         <Table
           columns={columns}
           dataSource={inventory}

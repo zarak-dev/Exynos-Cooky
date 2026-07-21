@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleAuthModal, logoutUser } from '../../store/authSlice';
-import { type RootState } from '../../store';
+import { toggleAuthModal, logoutUser } from '../../../store/authSlice';
+import { type RootState } from '../../../store';
 import styled from 'styled-components';
 import { Input,  Dropdown, Badge, message  } from 'antd';
 import logoSvg from '../../assets/images/exynos-cooky.svg';
-import { useSearch } from '../../context/searchContext'; // Connect global search state
+import { useSearch } from '../../../context/searchContext'; // Connect global search state
 import { SearchOutlined, UserOutlined, ShoppingOutlined } from '@ant-design/icons';
 
 const StyledHeader = styled.header`

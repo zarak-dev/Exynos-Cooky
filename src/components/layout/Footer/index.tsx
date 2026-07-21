@@ -9,7 +9,7 @@ import {
   FooterHeading,
   FooterLink,
   CopyrightBar
-} from './footer.styles';
+} from './styles';
 
 const Footer: React.FC = () => {
   return (

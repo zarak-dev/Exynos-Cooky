@@ -9,7 +9,7 @@ import {
   HighlightText,
   CoreGrid,
   FeatureCard
-} from './aboutUs.styles';
+} from './styles';
 
 const AboutUs: React.FC = () => {
   return (

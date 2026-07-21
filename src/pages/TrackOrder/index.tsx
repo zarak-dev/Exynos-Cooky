@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { type RootState } from '../store';
+import { type RootState } from '../../store';
 import { Card, Input, Steps, Result, Button, message, Badge } from 'antd';
 import { SearchOutlined, LoadingOutlined, SmileOutlined, CarOutlined, SolutionOutlined } from '@ant-design/icons';
 

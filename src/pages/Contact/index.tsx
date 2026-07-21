@@ -11,16 +11,9 @@ import {
   JobCollapse,
   ApplyButton,
   JobMeta
-} from './careers.styles';
+} from './styles';
+import type { JobOpening } from './types';
 
-interface JobOpening {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: string;
-  description: string;
-}
 
 const OPEN_POSITIONS: JobOpening[] = [
   {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
-import Header from './Header';
-import Footer from './Footer';
-import { AuthModal } from '../common/AuthModal';
-import { CartDrawer } from '../common/CartDrawer';
+import Header from '../Header'; 
+import Footer from '../Footer';
+import { AuthModal } from '../../common/AuthModal';
+import { CartDrawer } from '../../common/CartDrawer';
 
 const LayoutWrapper = styled.div`
   display: flex;

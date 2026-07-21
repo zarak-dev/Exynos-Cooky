@@ -2,10 +2,10 @@ import React from 'react';
 import { Row, Col, Card, Rate } from 'antd'; 
 import { SearchOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { type Cookie } from '../utils/mockData';
-import { useSearch } from '../context/searchContext';
-import { type RootState } from '../store';
-import { addCookieToBox } from '../store/cartSlice';
+import { type Cookie } from '../../utils/mockData';
+import { useSearch } from '../../context/searchContext';
+import { type RootState } from '../../store';
+import { addCookieToBox } from '../../store/cartSlice';
 import {
   HomeContainer,
   StyledCard,
@@ -20,7 +20,7 @@ import {
   SearchBarButton,
   MenuTabs,
   NoResults
-} from './home.styles';
+} from './styles';
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();

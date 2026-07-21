@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Card, Table, Tag, Button, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { CheckCircleOutlined, SyncOutlined, ClockCircleOutlined } from '@ant-design/icons';
-import { updateOrderStatus, type Order } from '../store/orderSlice';
-import { type RootState } from '../store';
+import { updateOrderStatus, type Order } from '../../../store/orderSlice';
+import { type RootState } from '../../../store';
 
 
 export const AdminOrders: React.FC = () => {

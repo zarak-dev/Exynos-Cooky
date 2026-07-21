@@ -2,17 +2,16 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { type RootState } from '../store';
-import AdminOverview from '../pages/AdminOverview';
+import AdminOverview from '../pages/AdminPanel';
 import AdminInventory from '../pages/AdminInventory';
-import AdminOrders from '../pages/AdminOrders';
-import MainLayout from '../components/layout/MainLayout';
-import { AdminLayout } from '../components/layout/AdminLayout';
+import AdminOrders from '../pages/AdminPanel/Components/AdminOrders';
+import MainLayout from '../components/layout/Main';
+import { AdminLayout } from '../components/layout/Admin';
 import Home from '../pages/Home';
-import AboutUs from '../pages/aboutUs';
-import Contact from '../pages/contact';
-import Careers from '../pages/contact';
-import CartPage from '../pages/CartPage';
-import {CheckoutPage} from '../pages/CheckoutPage';
+import AboutUs from '../pages/AboutUs';
+import Contact from '../pages/Contact/index';
+import CartPage from '../pages/Cart';
+import {CheckoutPage} from '../pages/Checkout';
 import TrackOrder from '../pages/TrackOrder';
 import ScrollToTop from '../utils/scrollToTop';
 
@@ -31,7 +30,6 @@ export const AppRoute: React.FC = () => {
           <Route path="about" element={<AboutUs />} />
         <Route path="contact" element={<Contact />} />
         <Route path="track-order" element={<TrackOrder />} />
-        <Route path="careers" element={<Careers />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<CheckoutPage />} />
       </Route>
