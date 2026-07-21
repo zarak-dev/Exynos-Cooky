@@ -61,7 +61,7 @@ export const CheckoutPage: React.FC = () => {
               <div>
                 <p>Your delicious cookie box is being prepared and will head your way shortly.</p>
                 
-                {/* 📦 BOLD TRACKING BOX */}
+                {/*  BOLD TRACKING BOX */}
                 <div style={{ 
                   background: '#f0f2f5', 
                   padding: '16px', 

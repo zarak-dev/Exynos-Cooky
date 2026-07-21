@@ -12,9 +12,9 @@ export const CartPage: React.FC = () => {
   const boxSize = useSelector((state: RootState) => state.cart.boxSize);
   // Grab your standard cart items array
   const cartItems = useSelector((state: RootState) => state.cart.items);
-  // Simple calculation: sum of all individual cookie prices currently in the cart
+  // sum of all individual cookie prices currently in the cart
   const subtotal = cartItems.reduce((acc, item: any) => acc + item.price, 0);
-  const deliveryFee = subtotal > 0 ? 150 : 0; // Standard 150 Rs delivery charge
+  const deliveryFee = subtotal > 0 ? 150 : 0; 
   const totalAmount = subtotal + deliveryFee;
 
   const columns = [
@@ -48,7 +48,6 @@ export const CartPage: React.FC = () => {
           danger 
           icon={<DeleteOutlined />} 
           onClick={() => {
-            // 🌟 Dispatch your standard removal action using the cookie's unique ID
             dispatch(removeCookieFromBox(index));
             message.success(`"${record.name}" removed from cart.`);
           }} 
@@ -136,7 +135,7 @@ export const CartPage: React.FC = () => {
               <strong>Rs. {totalAmount}</strong>
             </div>
 
-            {/* 🔒 SMART CHECKOUT BUTTON */}
+            {/* SMART CHECKOUT BUTTON */}
             <Button 
               type="primary" 
               block 

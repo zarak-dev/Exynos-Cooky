@@ -18,7 +18,7 @@ import ScrollToTop from '../utils/scrollToTop';
 
 
 export const AppRoute: React.FC = () => {
-  // Grab the logged-in user profile from our secure Redux store
+  // Grab the logged-in user profile from Redux store
   const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
 
   return (

@@ -1,9 +1,8 @@
 import React from 'react';
 import { Row, Col, Card, Statistic, Progress, List, Tag, Typography } from 'antd';
-import { Column, Pie } from '@ant-design/charts'; // 🌟 Added Pie component here
+import { Column, Pie } from '@ant-design/charts'; // 
 import { ArrowUpOutlined, ShoppingOutlined, DollarOutlined, UserOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux'; // 🌟 Fixed typo from Type UseSelector to standard hook
-import { type RootState } from '../store';
+
 
 const { Text } = Typography;
 
@@ -47,7 +46,7 @@ export const AdminOverview: React.FC = () => {
     },
   };
 
-  // 🌟 NEW: Pie Chart Data (Cookie Distribution Share)
+  // Pie Chart Data (Cookie Distribution Share)
   const pieData = [
     { type: 'Chilled Sugar', value: 40 },
     { type: 'Triple Chocolate', value: 25 },
@@ -76,7 +75,7 @@ export const AdminOverview: React.FC = () => {
     interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
   };
 
-  // 🌟 NEW: Inventory Mock Data
+  //   Inventory Mock Data
   const inventoryData = [
     { name: 'Chilled Sugar', stock: 120, maxCapacity: 150 },
     { name: 'Triple Chocolate', stock: 18, maxCapacity: 150 }, // Low Stock example
@@ -126,7 +125,7 @@ export const AdminOverview: React.FC = () => {
         </div>
       </Card>
 
-      {/* 🌟 NEW SIDE-BY-SIDE OVERVIEW ROW */}
+      {/* NEW SIDE-BY-SIDE OVERVIEW ROW */}
       <Row gutter={[24, 24]}>
         {/* PIE CHART COLUMN */}
         <Col xs={24} lg={12}>
