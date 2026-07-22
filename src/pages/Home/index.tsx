@@ -27,7 +27,7 @@ const Home: React.FC = () => {
   const { searchQuery, setSearchQuery } = useSearch();
   const cookies = useSelector((state: RootState) => state.inventory.items);
   const getFilteredCookies = (showOnlyTopRated: boolean) => {
-    const filtered = cookies.filter((cookie: any) => {
+    const filtered = cookies.filter((cookie: Cookie) => {
       const matchesSearch = 
         cookie.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cookie.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -51,7 +51,7 @@ const Home: React.FC = () => {
 
     return (
       <Row gutter={[24, 24]}>
-        {cookies.map((cookie: Cookie, {/*index: number*/}) => (
+        {cookies.map((cookie: Cookie) => (
           <Col xs={24} sm={12} md={8} key={cookie.id}>
             <StyledCard $isAvailable={cookie.isAvailable} hoverable cover={<img alt={cookie.name} src={cookie.imageUrl} />}>
               <CardHeader>

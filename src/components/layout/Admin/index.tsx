@@ -6,7 +6,7 @@ import {
   ShoppingOutlined, 
   HomeOutlined 
 } from '@ant-design/icons';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const { Header, Sider, Content } = Layout;
@@ -38,6 +38,7 @@ const StyledHeader = styled(Header)`
 
 export const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
 
   const menuItems = [
@@ -66,7 +67,7 @@ export const AdminLayout: React.FC = () => {
   const handleMenuClick = ({ key }: { key: string }) => {
       navigate(key);
   };
-
+  
   return (
     <Layout style={{ height: '100vh', overflow: 'hidden' }}>
       <Sider 
@@ -83,13 +84,15 @@ export const AdminLayout: React.FC = () => {
           zIndex: 100
         }}
       >
+        
         <AdminLogo>
           {collapsed ? 'EXNS' : 'Exynos Admin'}
         </AdminLogo>
+        
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['/admin']}
+          defaultSelectedKeys={[location.pathname]}
           items={menuItems}
           onClick={handleMenuClick}
           style={{ background: '#00009c', marginTop: '16px' }}

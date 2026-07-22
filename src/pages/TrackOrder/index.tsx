@@ -4,7 +4,7 @@ import { type RootState } from '../../store';
 import { Card, Input, Steps, Result, Button, message, Badge } from 'antd';
 import { SearchOutlined, LoadingOutlined, SmileOutlined, CarOutlined, SolutionOutlined } from '@ant-design/icons';
 
-export const trackOrder: React.FC = () => {
+export const TrackOrder: React.FC = () => {
   const [orderId, setOrderId] = useState('');
   const [searchedOrder, setSearchedOrder] = useState<any>(null);
 
@@ -78,7 +78,9 @@ export const trackOrder: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
             <div>
               <h3 style={{ margin: 0 }}>Order: <span style={{ color: '#00009c' }}>{searchedOrder.id}</span></h3>
-              <p style={{ color: '#888', margin: '4px 0 0 0' }}>Placed: {searchedOrder.timestamp || 'Just now'}</p>
+              <p style={{ color: '#888', margin: '4px 0 0 0' }}>
+              Placed: {searchedOrder.timestamp ? new Date(searchedOrder.timestamp).toLocaleString() : 'Just now'}
+              </p>
             </div>
             <Badge status="processing" text={<strong style={{ color: '#00009c' }}>{searchedOrder.status}</strong>} />
           </div>
@@ -124,4 +126,4 @@ export const trackOrder: React.FC = () => {
   );
 };
 
-export default trackOrder;
+export default TrackOrder;

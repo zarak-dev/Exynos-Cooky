@@ -40,7 +40,7 @@ export const CheckoutPage: React.FC = () => {
       contents: contentsString,
       totalPrice: totalAmount,
       status: 'Pending',
-      timestamp: 'Just now'
+      timestamp: new Date().toISOString()
     }));
     setConfirmedOrderId(generatedOrderId);
     setIsOrdered(true);

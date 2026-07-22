@@ -9,13 +9,21 @@ export interface Order {
   status: 'Pending' | 'Baking' | 'Dispatched' | 'Delivered';
   timestamp: string;
 }
+const loadOrdersFromStorage = (): Order[] => {
+  try {
+    const saved = localStorage.getItem('exynos_orders');
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+};
 
 interface OrderState {
   orders: Order[];
 }
 
 const initialState: OrderState = {
-  orders: [ ]
+ orders: loadOrdersFromStorage(),
 };
 
 const orderSlice = createSlice({
@@ -24,11 +32,13 @@ const orderSlice = createSlice({
   reducers: {
     placeNewOrder: (state, action: PayloadAction<Order>) => {
       state.orders.unshift(action.payload)
+      localStorage.setItem('exynos_orders', JSON.stringify(state.orders));
     },
     updateOrderStatus: (state, action: PayloadAction<{ id: string; status: Order['status'] }>) => {
       const order = state.orders.find(o => o.id === action.payload.id);
       if (order) {
         order.status = action.payload.status;
+        localStorage.setItem('exynos_orders', JSON.stringify(state.orders));
       }
     }
   }

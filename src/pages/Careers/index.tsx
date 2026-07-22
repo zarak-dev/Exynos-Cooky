@@ -42,7 +42,7 @@ const OPEN_POSITIONS: JobOpening[] = [
   }
 ];
 
-const Contact: React.FC = () => {
+const Careers: React.FC = () => {
   return (
     <CareersContainer>
       <HeroSection>
@@ -68,7 +68,7 @@ const Contact: React.FC = () => {
       <SectionTitle>Open Positions</SectionTitle>
       <JobCollapse 
         accordion 
-        expandIconPosition="end"
+        expandIconPlacement="end"
         items={OPEN_POSITIONS.map(job => ({
           key: job.id,
           label: (
@@ -97,4 +97,4 @@ const Contact: React.FC = () => {
   );
 };
 
-export default Contact;
+export default Careers;

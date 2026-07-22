@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
           <FooterLink to="/">Weekly Menu</FooterLink>
           <FooterLink to="/about">Our Story</FooterLink>
           <FooterLink to="/track-order">Track Order</FooterLink>
-          <FooterLink to="/contact">Careers</FooterLink>
+          <FooterLink to="/careers">Careers</FooterLink>
         </FooterColumn>
 
         {/* Column 3: Corporate/Gifting links */}

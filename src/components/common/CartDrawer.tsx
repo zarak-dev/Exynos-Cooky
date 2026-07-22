@@ -1,6 +1,7 @@
 import React from 'react';
 import { Drawer, Button, Radio, List, Avatar } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartOpen, setBoxSize, removeCookieFromBox, type BoxSize } from '../../store/cartSlice';
 import { selectCartData } from '../../store/selectors';
@@ -105,8 +106,12 @@ const CheckoutButton = styled(Button)`
 
 export const CartDrawer: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isCartOpen, items, boxSize } = useSelector(selectCartData);
-
+  const handleCheckout = () => {
+    dispatch(setCartOpen(false));
+    navigate('/checkout');
+  };
   // Pad or map items into layout arrays to display placeholders for remaining slots
   const visualSlots = Array.from({ length: boxSize }, (_, i) => items[i] || null);
   const totalCost = items.reduce((sum: number, item: { price: number }) => sum + item.price, 0);
@@ -182,7 +187,7 @@ export const CartDrawer: React.FC = () => {
           <span>TOTAL PRICE:</span>
           <span>Rs. {totalCost}</span>
         </div>
-        <CheckoutButton type="primary" disabled={items.length === 0}>
+        <CheckoutButton type="primary" disabled={items.length === 0} onClick={handleCheckout}>
           Proceed to Checkout
         </CheckoutButton>
       </div>

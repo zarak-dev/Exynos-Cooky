@@ -9,7 +9,7 @@ import MainLayout from '../components/layout/Main';
 import { AdminLayout } from '../components/layout/Admin';
 import Home from '../pages/Home';
 import AboutUs from '../pages/AboutUs';
-import Contact from '../pages/Contact/index';
+import Careers from '../pages/Careers';
 import CartPage from '../pages/Cart';
 import {CheckoutPage} from '../pages/Checkout';
 import TrackOrder from '../pages/TrackOrder';
@@ -28,12 +28,12 @@ export const AppRoute: React.FC = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<AboutUs />} />
-        <Route path="contact" element={<Contact />} />
-        <Route path="track-order" element={<TrackOrder />} />
-        <Route path="cart" element={<CartPage />} />
-        <Route path="checkout" element={<CheckoutPage />} />
-      </Route>
-    
+          <Route path="track-order" element={<TrackOrder />} />
+          <Route path="careers" element={<Careers />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
+        </Route>
+
       {/* ADMIN WORKSPACE LAYOUT GROUP */}
       <Route 
         path="/admin" 
