@@ -14,6 +14,7 @@ import CartPage from '../pages/Cart';
 import {CheckoutPage} from '../pages/Checkout';
 import TrackOrder from '../pages/TrackOrder';
 import ScrollToTop from '../utils/scrollToTop';
+import { UserHistory } from '../pages/AdminPanel/Components/UserHistory';
 
 
 export const AppRoute: React.FC = () => {
@@ -49,6 +50,7 @@ export const AppRoute: React.FC = () => {
         <Route index element={<AdminOverview />} />
         <Route path="inventory" element={<AdminInventory />} />
         <Route path="orders" element={<AdminOrders />} />
+        <Route path="history" element={<UserHistory />} />
       </Route>
       {/* Catch-all fallback route redirects broken URLs back home */}
       <Route path="*"  element={<Navigate to="/" replace />} />
