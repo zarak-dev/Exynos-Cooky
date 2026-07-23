@@ -7,18 +7,22 @@ import { store } from './store';
 import './index.css'
 import App from './App.tsx'
 
-const theme = {
-  token: {
-    colorPrimary: '#00009c',
-    borderRadius: 0,
-    fontFamily: "'Poppins', sans-serif",
-  },
-};
+const rootElement = document.getElementById('root');
 
-createRoot(document.getElementById('root')!).render(
+if (!rootElement) {
+  throw new Error('Failed to find the root element');
+}
+
+createRoot(rootElement).render(
   <StrictMode>
     <Provider store={store}>
-      <ConfigProvider theme={theme}>
+      <ConfigProvider theme={{
+          token: {
+            colorPrimary: '#00009c',
+            borderRadius: 6,
+            fontFamily: 'inherit',
+          },
+        }}>
         <AntApp>
           <App />
         </AntApp>
