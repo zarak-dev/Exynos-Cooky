@@ -4,14 +4,14 @@ import createSagaMiddleware from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
 
 // 1. Import Reducers
-import authReducer from './authSlice';
-import cartReducer from './cartSlice';
-import inventoryReducer from './inventorySlice';
-import orderReducer from './orderSlice';
-import userHistoryReducer from './userHistorySlice'; // 🌟 Your new reducer
+import authReducer from '../store/slices/authSlice';
+import cartReducer from '../store/slices/cartSlice';
+import inventoryReducer from '../store/slices/inventorySlice';
+import orderReducer from '../store/slices/orderSlice';
+import userHistoryReducer from './slices/userHistorySlice'; // 
 
 // 2. Import Sagas
-import { watchUserHistory } from './sagas/userHistorySaga'; // 🌟 Your new saga
+import { watchUserHistory } from './sagas/userHistorySaga'; // 
 
 // 3. Centralized Root Saga
 // As you add more features, just add their watchers here

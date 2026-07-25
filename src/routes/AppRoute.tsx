@@ -2,19 +2,19 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { type RootState } from '../store';
-import AdminOverview from '../pages/AdminPanel';
-import AdminInventory from '../pages/AdminInventory';
-import AdminOrders from '../pages/AdminPanel/Components/AdminOrders';
-import MainLayout from '../components/layout/Main';
-import { AdminLayout } from '../components/layout/Admin';
-import Home from '../pages/Home';
-import AboutUs from '../pages/AboutUs';
-import Careers from '../pages/Careers';
-import CartPage from '../pages/Cart';
-import {CheckoutPage} from '../pages/Checkout';
-import TrackOrder from '../pages/TrackOrder';
+import AdminOverview from '../pages/admin/Dashboard/index';
+import AdminInventory from '../pages/admin/Inventory/index';
+import AdminOrders from '../pages/admin/Dashboard/Components/AdminOrders';
+import MainLayout from '../components/layout/AppLayout/Main';
+import { AdminLayout } from '../components/layout/AdminLayout';
+import Home from '../pages/customer/Home';
+import AboutUs from '../pages/customer/AboutUs';
+import Careers from '../pages/customer/Careers';
+import CartPage from '../pages/customer/Cart';
+import {CheckoutPage} from '../pages/customer/Checkout';
+import TrackOrder from '../pages/customer/TrackOrder';
 import ScrollToTop from '../utils/scrollToTop';
-import { UserHistory } from '../pages/AdminPanel/Components/UserHistory';
+import { UserHistory } from '../pages/admin/Dashboard/Components/UserHistory';
 
 
 export const AppRoute: React.FC = () => {

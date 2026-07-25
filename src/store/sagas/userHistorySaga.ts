@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } from '../userHistorySlice';
+import { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } from '../slices/userHistorySlice';
 
 // API Call Function
 const fetchUsersApi = async () => {
