@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { Card, Button, Collapse } from 'antd';
+import { Card, Button, Collapse, Typography } from 'antd';
+
+const { Title, Text, Paragraph } = Typography;
 
 export const CareersContainer = styled.div`
   max-width: 1200px;
@@ -16,34 +18,43 @@ export const HeroSection = styled.div`
   border-bottom: 1px solid #f0f0f0;
 `;
 
-export const HeroTitle = styled.h1`
-  font-size: 3rem;
-  font-weight: 800;
-  color: #00009c;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
-  
-  @media (max-width: 768px) {
-    font-size: 2.2rem;
+// 🌟 Upgraded to Antd Typography
+export const HeroTitle = styled(Title)`
+  &.ant-typography {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #00009c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    
+    @media (max-width: 768px) {
+      font-size: 2.2rem;
+    }
   }
 `;
 
-export const HeroSubtitle = styled.p`
-  font-size: 1.2rem;
-  color: #555;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
+// 🌟 Upgraded to Antd Typography
+export const HeroSubtitle = styled(Paragraph)`
+  &.ant-typography {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
 `;
 
-export const SectionTitle = styled.h2`
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #00009c;
-  text-transform: uppercase;
-  margin-bottom: 32px;
-  letter-spacing: 0.5px;
+// 🌟 Upgraded to Antd Typography
+export const SectionTitle = styled(Title)`
+  &.ant-typography {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #00009c;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    letter-spacing: 0.5px;
+  }
 `;
 
 export const ValueGrid = styled.div`
@@ -75,6 +86,7 @@ export const ValueCard = styled(Card)`
   }
 `;
 
+// 🌟 Stripped out all the redundant text/flex formatting
 export const JobCollapse = styled(Collapse)`
   background: transparent !important;
   border: none !important;
@@ -93,17 +105,6 @@ export const JobCollapse = styled(Collapse)`
   .ant-collapse-header {
     align-items: center !important;
     padding: 20px !important;
-  }
-
-  .ant-collapse-header-text {
-    font-weight: 700;
-    color: #00009c !important;
-    font-size: 1.1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding-right: 24px;
   }
   
   .ant-collapse-content {
@@ -135,4 +136,29 @@ export const ApplyButton = styled(Button)`
     border-color: #000066 !important;
     color: #ffffff !important;
   }
+`;
+
+export const JobLabelWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const JobTitleText = styled(Text)`
+  color: #00009c;
+  font-weight: 600;
+  font-size: 1.1rem;
+`;
+
+export const JobContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+`;
+
+export const JobDescriptionText = styled(Paragraph)`
+  color: #555;
+  line-height: 1.6;
+  margin: 0 !important;
 `;

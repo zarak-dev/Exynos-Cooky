@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, Badge, message, Drawer, Image, Typography, Flex } from "antd";
+import { Dropdown, Badge, message, Image, Typography, Flex } from "antd";
 import { 
   SearchOutlined, 
   UserOutlined, 
@@ -17,7 +17,7 @@ import logoSvg from "../../../../assets/images/exynos-cooky.svg";
 import {
   StyledHeader, LogoContainer, DesktopMenu, MobileMenuButton, 
   IconActions, SearchWrapper, HeaderSearchInput, ActionIcon, 
-  CartIcon, RoleText, AdminMenuText
+  CartIcon, RoleText, AdminMenuText, DrawerTitleText, StyledDrawer, MobileDrawerMenu
 } from "./styles";
 
 const { Text } = Typography;
@@ -33,8 +33,6 @@ const Header: React.FC = () => {
   
   const { searchQuery, setSearchQuery } = useSearch();
   const [showInput, setShowInput] = useState<boolean>(false);
-  
-  // 🌟 NEW STATE: Controls the mobile slide-out drawer
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   const userMenu = {
@@ -77,10 +75,9 @@ const Header: React.FC = () => {
     { key: "/careers", label: "Careers" },
   ];
 
-  // Helper to handle navigation and close drawer on mobile
   const handleNavClick = (path: string) => {
     navigate(path);
-    setIsMobileMenuOpen(false); // Auto-close drawer after clicking a link
+    setIsMobileMenuOpen(false); 
   };
 
   return (
@@ -145,7 +142,7 @@ const Header: React.FC = () => {
           count={totalCartCount} 
           size="small" 
           offset={[2, 0]} 
-          color="#fa8c16" // 🌟 Clean AntD prop instead of inline style
+          color="#fa8c16" 
         >
           <CartIcon onClick={() => navigate("/cart")}>
             <ShoppingOutlined />
@@ -154,22 +151,20 @@ const Header: React.FC = () => {
       </IconActions>
 
       {/* 🌟 5. Mobile Slide-out Drawer */}
-      <Drawer
-        title={<Text strong style={{ color: '#00009c' }}>Menu</Text>}
+      <StyledDrawer
+        title={<DrawerTitleText strong>Menu</DrawerTitleText>}
         placement="left"
         onClose={() => setIsMobileMenuOpen(false)}
         open={isMobileMenuOpen}
         width={250}
-        styles={{ body: { padding: 0 } }} // AntD 5.x syntax for drawer body styles
       >
-        <DesktopMenu
-          mode="vertical" // Switches to vertical layout for the drawer
+        <MobileDrawerMenu
+          mode="vertical" 
           selectedKeys={[location.pathname]}
           items={navItems}
           onClick={(info) => handleNavClick(info.key)}
-          style={{ display: 'block', borderRight: 'none' }} // Overrides the hidden mobile state just for the drawer
         />
-      </Drawer>
+      </StyledDrawer>
 
     </StyledHeader>
   );

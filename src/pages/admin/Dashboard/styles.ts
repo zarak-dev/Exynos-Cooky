@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Card } from 'antd';
+import { Card, Statistic, Flex, Typography } from 'antd';
 
 export const DashboardContainer = styled.div`
   display: flex;
@@ -55,4 +55,30 @@ export const StockListWrapper = styled.div`
 export const StockItem = styled.div<{ $isLast: boolean }>`
   padding: 12px 0;
   border-bottom: ${(props) => (props.$isLast ? 'none' : '1px solid #f0f0f0')};
+`;
+export const PrimaryStatistic = styled(Statistic)`
+  .ant-statistic-content {
+    color: #00009c;
+    font-weight: 700;
+  }
+`;
+
+export const SuccessStatistic = styled(Statistic)`
+  .ant-statistic-content {
+    color: #3f8600;
+    font-weight: 700;
+  }
+`;
+
+export const StockItemHeader = styled(Flex)`
+  margin-bottom: 6px;
+`;
+
+export const StockTagsWrapper = styled(Flex)`
+  align-items: center;
+`;
+
+export const StockCountText = styled(Typography.Text)`
+  margin-right: 12px;
+  font-size: 0.85rem;
 `;

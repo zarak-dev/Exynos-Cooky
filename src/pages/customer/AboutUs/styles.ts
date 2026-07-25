@@ -77,3 +77,7 @@ export const FeatureCard = styled(Card)`
     letter-spacing: 0.5px;
   }
 `;
+export const FoundationsTitle = styled(StoryTitle)`
+  font-size: 1.6rem;
+  text-align: center;
+`;

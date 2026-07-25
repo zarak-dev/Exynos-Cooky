@@ -1,31 +1,20 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import styled from 'styled-components';
 import Header from '../Header'; 
 import Footer from '../Footer';
 import { AuthModal } from '../../../common/Auth/AuthModal';
 import { CartDrawer } from '../../../common/CartDrawer/CartDrawer';
-
-const LayoutWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #ffffff;
-`;
-
-const ContentArea = styled.main`
-  flex: 1;
-  width: 100%;
-`;
+import { LayoutWrapper, ContentArea } from './styles';
 
 const MainLayout: React.FC = () => {
   return (
     <LayoutWrapper>
       <Header />
       <ContentArea>
-        <Outlet /> {/* dynamically renders whatever page you are currently on! */}
+        {/* Dynamically renders whatever page you are currently on */}
+        <Outlet /> 
       </ContentArea>
-      <AuthModal/>
+      <AuthModal />
       <CartDrawer />
       <Footer />
     </LayoutWrapper>

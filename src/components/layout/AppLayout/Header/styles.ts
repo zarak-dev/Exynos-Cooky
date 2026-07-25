@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Layout, Menu, Input, Button, Typography, Flex } from 'antd';
+import { Layout, Menu, Input, Button, Typography, Flex, Drawer } from 'antd';
 import { NavLink } from 'react-router-dom';
 
 const { Header } = Layout;
@@ -70,7 +70,6 @@ export const DesktopMenu = styled(Menu)`
     display: none !important;
   }
 
- /* 🌟 2. CREATE THE CUSTOM SMOOTH UNDERLINE */
   .ant-menu-item::before {
     content: '';
     position: absolute;
@@ -171,4 +170,20 @@ export const RoleText = styled(Text)<{ $isAdmin?: boolean }>`
 export const AdminMenuText = styled(Text)`
   font-weight: 700;
   color: #00009c;
+`;
+
+export const DrawerTitleText = styled(Typography.Text)`
+  color: #00009c;
+`;
+
+export const StyledDrawer = styled(Drawer)`
+  .ant-drawer-body {
+    padding: 0 !important;
+  }
+`;
+
+// Extends your existing DesktopMenu to override its mobile hidden state
+export const MobileDrawerMenu = styled(DesktopMenu)`
+  display: block !important;
+  border-right: none !important;
 `;

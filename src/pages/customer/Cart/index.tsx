@@ -156,7 +156,6 @@ export const CartPage: React.FC = () => {
     return (
       <EmptyCartContainer vertical align="center" justify="center">
         <Empty description="Your shopping cart is empty!" />
-        {/* 🌟 Zero inline styles */}
         <ContinueButton type="primary" onClick={() => navigate('/')}>
           <ArrowLeftOutlined /> Continue Shopping
         </ContinueButton>
@@ -199,7 +198,6 @@ export const CartPage: React.FC = () => {
 
             <SummaryRow justify="space-between">
               <Text>Cookies in Box:</Text>
-              {/* 🌟 Zero inline styles, passing boolean for dynamic color */}
               <BoxCapacityText strong $isFull={cartItems.length === boxSize}>
                 {cartItems.length} / {boxSize}
               </BoxCapacityText>
@@ -214,8 +212,6 @@ export const CartPage: React.FC = () => {
               <Text>Delivery Charges:</Text>
               <Text>Rs. {deliveryFee}</Text>
             </SummaryRow>
-            
-            {/* 🌟 Zero inline styles */}
             <SpacedDivider />
             
             <TotalRow justify="space-between" align="center">

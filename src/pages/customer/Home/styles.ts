@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { Card, Button, Tabs, Input } from 'antd'; 
+import { Card, Button, Tabs, Input, Typography, Flex, Tag, Image } from 'antd'; 
+import { SearchOutlined } from '@ant-design/icons';
+
+const { Title, Text, Paragraph } = Typography;
 
 export const HomeContainer = styled.div`
   padding: 60px 20px;
@@ -8,15 +11,17 @@ export const HomeContainer = styled.div`
   background-color: #ffffff; 
 `;
 
-export const PageTitle = styled.h1`
-  text-align: center;
-  font-size: 2.2rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-family: 'Poppins', sans-serif;
-  color: #00009c; /* Signature Navy */
-  margin-bottom: 50px;
+export const PageTitle = styled(Title)`
+  &.ant-typography {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Poppins', sans-serif;
+    color: #00009c;
+    margin-bottom: 50px;
+  }
 `;
 
 export const StyledCard = styled(Card)<{ $isAvailable: boolean }>`
@@ -30,32 +35,35 @@ export const StyledCard = styled(Card)<{ $isAvailable: boolean }>`
   &:hover {
     border-color: #00009c;
   }
-
-  .ant-card-cover img {
-    height: 280px;
-    object-fit: cover;
-    padding: 12px;
-    background-color: #fafafa;
-  }
 `;
 
-export const CardHeader = styled.div`
-  display: flex;
+// 🌟 Upgraded to Antd Image for the Card Cover
+export const CoverImage = styled(Image)`
+  height: 280px !important;
+  object-fit: cover !important;
+  padding: 12px !important;
+  background-color: #fafafa !important;
+`;
+
+// 🌟 Upgraded to Antd Flex
+export const CardHeader = styled(Flex)`
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 12px;
 `;
 
-export const CookieTitle = styled.h3`
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #00009c; 
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+export const CookieTitle = styled(Title)`
+  &.ant-typography {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #00009c; 
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 `;
 
-export const PriceTag = styled.span`
+export const PriceTag = styled(Text)`
   font-size: 1.1rem;
   font-weight: 700;
   color: #00009c;
@@ -79,14 +87,17 @@ export const StyledButton = styled(Button)`
   }
 `;
 
-export const OutOfStockBadge = styled.div`
+// 🌟 Upgraded to Antd Tag
+export const OutOfStockBadge = styled(Tag)`
   background-color: #e0e0e0;
   color: #666;
+  border: none;
   padding: 4px 8px;
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin: 0;
 `;
 
 export const ExploreSection = styled.div`
@@ -95,8 +106,19 @@ export const ExploreSection = styled.div`
   text-align: center;
 `;
 
-export const SearchWrapper = styled.div`
-  display: flex;
+// 🌟 Extracted the inline styles for the Explore Title
+export const ExploreTitle = styled(Title)`
+  &.ant-typography {
+    color: #00009c;
+    font-weight: 800;
+    font-size: 2rem;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+`;
+
+// 🌟 Upgraded to Antd Flex
+export const SearchWrapper = styled(Flex)`
   align-items: center;
   width: 100%;
   max-width: 500px;
@@ -137,6 +159,12 @@ export const SearchBarButton = styled(Button)`
     background-color: #000066 !important;
   }
 `;
+
+export const StyledSearchIcon = styled(SearchOutlined)`
+  font-size: 1.3rem;
+  color: #ffffff;
+`;
+
 export const MenuTabs = styled(Tabs)`
   .ant-tabs-nav-wrap {
     justify-content: center;
@@ -173,10 +201,30 @@ export const CookieGrid = styled.div`
   margin-top: 20px;
 `;
 
-export const NoResults = styled.div`
-  text-align: center;
-  padding: 60px 20px;
-  font-size: 1.1rem;
+export const NoResults = styled(Paragraph)`
+  &.ant-typography {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
+  }
+`;
+
+// 🌟 Extracted Rating and Meta styles
+export const RatingWrapper = styled(Flex)`
+  margin-bottom: 12px;
+  margin-top: -4px;
+`;
+
+export const ReviewCountText = styled(Text)`
+  margin-left: 8px;
+  font-size: 0.8rem;
   color: #666;
-  font-weight: 500;
+  font-weight: 600;
+`;
+
+export const StyledCardMeta = styled(Card.Meta)`
+  margin-bottom: 16px;
+  min-height: 60px;
 `;

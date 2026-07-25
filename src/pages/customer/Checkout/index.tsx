@@ -80,7 +80,7 @@ export const CheckoutPage: React.FC = () => {
     dispatch(placeNewOrder({
       id: generatedOrderId,
       customerName: `${values.firstName} ${values.lastName}`,
-      // customerEmail: values.email, // Kept commented out to prevent Redux TS error
+      // customerEmail: values.email,
       boxSize: `${boxSize}-Pack Custom Box`,
       contents: contentsString,
       totalPrice: totalAmount,

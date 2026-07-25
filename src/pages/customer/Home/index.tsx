@@ -1,6 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Rate } from 'antd'; 
-import { SearchOutlined } from '@ant-design/icons';
+import { Row, Col, Rate } from 'antd'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { type Cookie } from '../../../utils/mockData';
 import { useSearch } from '../../../context/searchContext';
@@ -9,23 +8,30 @@ import { addCookieToBox } from '../../../store/slices/cartSlice';
 import {
   HomeContainer,
   StyledCard,
+  CoverImage,
   CardHeader,
   CookieTitle,
   PriceTag,
   StyledButton,
   OutOfStockBadge,
   ExploreSection,
+  ExploreTitle,
   SearchWrapper,
   SearchBarInput,
   SearchBarButton,
+  StyledSearchIcon,
   MenuTabs,
-  NoResults
+  NoResults,
+  RatingWrapper,
+  ReviewCountText,
+  StyledCardMeta
 } from './styles';
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
   const { searchQuery, setSearchQuery } = useSearch();
   const cookies = useSelector((state: RootState) => state.inventory.items);
+  
   const getFilteredCookies = (showOnlyTopRated: boolean) => {
     const filtered = cookies.filter((cookie: Cookie) => {
       const matchesSearch = 
@@ -40,7 +46,6 @@ const Home: React.FC = () => {
     return filtered;
   };
 
-
   const topRatedList = getFilteredCookies(true);
   const allMenuList = getFilteredCookies(false);
 
@@ -53,27 +58,36 @@ const Home: React.FC = () => {
       <Row gutter={[24, 24]}>
         {cookies.map((cookie: Cookie) => (
           <Col xs={24} sm={12} md={8} key={cookie.id}>
-            <StyledCard $isAvailable={cookie.isAvailable} hoverable cover={<img alt={cookie.name} src={cookie.imageUrl} />}>
+            <StyledCard 
+              $isAvailable={cookie.isAvailable} 
+              hoverable 
+              cover={<CoverImage alt={cookie.name} src={cookie.imageUrl} preview={false} />}
+            >
               <CardHeader>
-                <CookieTitle>{cookie.name}</CookieTitle>
-                {cookie.isAvailable ? <PriceTag>Rs. {cookie.price}</PriceTag> : <OutOfStockBadge>Sold Out</OutOfStockBadge>}
+                <CookieTitle level={3}>{cookie.name}</CookieTitle>
+                {cookie.isAvailable ? (
+                  <PriceTag>Rs. {cookie.price}</PriceTag>
+                ) : (
+                  <OutOfStockBadge>Sold Out</OutOfStockBadge>
+                )}
               </CardHeader>
               
               {/* CONDITIONAL STAR RATINGS FOR TOP RATED ENTRIES */}
-            {isTopRatedView && (cookie.id === 2 || cookie.id === 3 || cookie.id === 4) && (
-              <div style={{ marginBottom: '12px', marginTop: '-4px' }}>
-                <Rate 
-                  disabled 
-                  allowHalf 
-                  defaultValue={cookie.id === 2 ? 5 : cookie.id === 3 ? 5 : 4.5} 
-                />
-                <span style={{ marginLeft: '8px', fontSize: '0.8rem', color: '#666', fontWeight: 600 }}>
-                  ({cookie.id === 2 ? '120+' : cookie.id === 3 ? '98' : '84'})
-                </span>
-              </div>
-            )}
+              {isTopRatedView && (cookie.id === 2 || cookie.id === 3 || cookie.id === 4) && (
+                <RatingWrapper align="center">
+                  <Rate 
+                    disabled 
+                    allowHalf 
+                    defaultValue={cookie.id === 2 ? 5 : cookie.id === 3 ? 5 : 4.5} 
+                  />
+                  <ReviewCountText>
+                    ({cookie.id === 2 ? '120+' : cookie.id === 3 ? '98' : '84'})
+                  </ReviewCountText>
+                </RatingWrapper>
+              )}
 
-              <Card.Meta description={cookie.description} style={{ marginBottom: '16px', minHeight: '60px' }} />
+              <StyledCardMeta description={cookie.description} />
+              
               <StyledButton 
                 type="primary" 
                 disabled={!cookie.isAvailable}
@@ -91,9 +105,9 @@ const Home: React.FC = () => {
   return (
     <HomeContainer>
       <ExploreSection>
-        <h1 style={{ color: '#00009c', fontWeight: 800, fontSize: '2rem', textTransform: 'uppercase', marginBottom: '16px' }}>
+        <ExploreTitle level={1}>
           Explore Our Menu
-        </h1>
+        </ExploreTitle>
         <SearchWrapper>
           <SearchBarInput
             placeholder="Search flavor profiles (e.g., Chocolate, Velvet, Sugar...)"
@@ -102,7 +116,7 @@ const Home: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <SearchBarButton type="primary">
-            <SearchOutlined style={{ fontSize: '1.3rem', color: '#ffffff' }} />
+            <StyledSearchIcon />
           </SearchBarButton>
         </SearchWrapper>
       </ExploreSection>
@@ -114,12 +128,12 @@ const Home: React.FC = () => {
           { 
             key: '1', 
             label: '🌟 Top Rated', 
-            children: renderCookieGrid(topRatedList, true) // Pass true to show stars
+            children: renderCookieGrid(topRatedList, true) 
           },
           { 
             key: '2', 
             label: '🍪 All Menu', 
-            children: renderCookieGrid(allMenuList, false) // Pass false to hide stars
+            children: renderCookieGrid(allMenuList, false) 
           }
         ]}
       />

@@ -5,10 +5,12 @@ import {
   FooterGrid,
   FooterColumn,
   FooterBrand,
+  LogoImage,
   FooterText,
   FooterHeading,
   FooterLink,
-  CopyrightBar
+  CopyrightBar,
+  PolicyLinksWrapper
 } from './styles';
 
 const Footer: React.FC = () => {
@@ -17,7 +19,9 @@ const Footer: React.FC = () => {
       <FooterGrid>
         {/* Column 1: Brand details */}
         <FooterColumn>
-          <FooterBrand> <img src={logoSvg} alt="logo" style={{width:'225px'}} /> </FooterBrand>
+          <FooterBrand>
+            <LogoImage src={logoSvg} alt="Exynos Cooky Logo" /> 
+          </FooterBrand>
           <FooterText>
             Bringing premium, freshly baked cookies directly to your screen. The ultimate cookie experience.
           </FooterText>
@@ -40,8 +44,7 @@ const Footer: React.FC = () => {
           <FooterLink to="#">Catering</FooterLink>
           <FooterLink to="#">Franchising</FooterLink>
         </FooterColumn>
-
-        {/* Column 4: Customer Support info */}
+        
         <FooterColumn>
           <FooterHeading>Support</FooterHeading>
           <FooterText>Email: support@exynoscooky.com</FooterText>
@@ -49,13 +52,12 @@ const Footer: React.FC = () => {
         </FooterColumn>
       </FooterGrid>
 
-      {/* Copyright footer segment */}
       <CopyrightBar>
         <FooterText>© 2026 Exynos Cooky. All rights reserved.</FooterText>
-        <div style={{ display: 'flex', gap: '20px' }}>
+        <PolicyLinksWrapper>
           <FooterLink to="#">Privacy Policy</FooterLink>
           <FooterLink to="#">Terms of Service</FooterLink>
-        </div>
+        </PolicyLinksWrapper>
       </CopyrightBar>
     </StyledFooter>
   );

@@ -1,10 +1,19 @@
 import React from "react";
-import { Table, Tag, Switch, Space, Card, Image, message } from "antd";
+import { Table, Switch, Space, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleItemAvailability } from "../../../store/slices/inventorySlice";
 import { type RootState } from "../../../store";
 import type { CookieItem } from "./types";
+import {
+  InventoryContainer,
+  PageTitle,
+  InventoryCard,
+  CookieImage,
+  CookieNameText,
+  StatusTag,
+  PriceText
+} from "./styles";
 
 export const AdminInventory: React.FC = () => {
   const inventory = useSelector((state: RootState) => state.inventory.items);
@@ -14,8 +23,7 @@ export const AdminInventory: React.FC = () => {
     dispatch(toggleItemAvailability({ id, isAvailable: checked }));
 
     const targetItem = inventory.find((item) => item.id === id);
-    // Conditoin to check if record is active/inactive
-    // if active show it on store front, othwewise mark it sold out
+    
     if (checked) {
       message.success(`"${targetItem?.name}" is now active on the storefront!`);
     } else {
@@ -31,11 +39,10 @@ export const AdminInventory: React.FC = () => {
       key: "imageUrl",
       width: 100,
       render: (url: string, record) => (
-        <Image
+        <CookieImage
           src={url}
           alt={record.name}
           width={60}
-          style={{ borderRadius: 6, objectFit: "cover" }}
         />
       ),
     },
@@ -44,26 +51,23 @@ export const AdminInventory: React.FC = () => {
       dataIndex: "name",
       key: "name",
       render: (text: string) => (
-        <strong style={{ color: "#00009c" }}>{text}</strong>
+        <CookieNameText strong>{text}</CookieNameText>
       ),
     },
     {
       title: "PRICE",
       dataIndex: "price",
       key: "price",
-      render: (price: number) => <span>Rs. {price}</span>,
+      render: (price: number) => <PriceText>Rs. {price}</PriceText>,
     },
     {
       title: "STATUS",
       dataIndex: "isAvailable",
       key: "isAvailable",
       render: (isAvailable: boolean) => (
-        <Tag
-          color={isAvailable ? "success" : "error"}
-          style={{ fontWeight: 600 }}
-        >
+        <StatusTag color={isAvailable ? "success" : "error"}>
           {isAvailable ? "AVAILABLE" : "SOLD OUT"}
-        </Tag>
+        </StatusTag>
       ),
     },
     {
@@ -84,27 +88,20 @@ export const AdminInventory: React.FC = () => {
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      <h1
-        style={{
-          color: "#00009c",
-          margin: 0,
-          fontWeight: 800,
-          fontSize: "1.8rem",
-        }}
-      >
+    <InventoryContainer>
+      <PageTitle level={1}>
         INVENTORY MANAGEMENT
-      </h1>
+      </PageTitle>
 
-      <Card style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+      <InventoryCard>
         <Table
           columns={columns}
           dataSource={inventory}
           rowKey="id"
           pagination={{ pageSize: 5 }}
         />
-      </Card>
-    </div>
+      </InventoryCard>
+    </InventoryContainer>
   );
 };
 

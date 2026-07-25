@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { type RootState } from '../store';
 import AdminOverview from '../pages/admin/Dashboard/index';
 import AdminInventory from '../pages/admin/Inventory/index';
-import AdminOrders from '../pages/admin/Dashboard/Components/AdminOrders';
+import AdminOrders from '../pages/admin/Dashboard/components/AdminOrders';
 import MainLayout from '../components/layout/AppLayout/Main';
 import { AdminLayout } from '../components/layout/AdminLayout';
 import Home from '../pages/customer/Home';
@@ -14,7 +14,7 @@ import CartPage from '../pages/customer/Cart';
 import {CheckoutPage} from '../pages/customer/Checkout';
 import TrackOrder from '../pages/customer/TrackOrder';
 import ScrollToTop from '../utils/scrollToTop';
-import { UserHistory } from '../pages/admin/Dashboard/Components/UserHistory';
+import { UserHistory } from '../pages/admin/Dashboard/components/UserHistory';
 
 
 export const AppRoute: React.FC = () => {

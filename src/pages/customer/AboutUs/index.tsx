@@ -8,7 +8,8 @@ import {
   Paragraph,
   HighlightText,
   CoreGrid,
-  FeatureCard
+  FeatureCard,
+  FoundationsTitle
 } from './styles';
 
 const AboutUs: React.FC = () => {
@@ -31,10 +32,10 @@ const AboutUs: React.FC = () => {
         </Paragraph>
       </NarrativeBlock>
 
-     
-      <StoryTitle style={{ fontSize: '1.6rem', textAlign: 'center' }}>
+      <FoundationsTitle>
         Our Foundations
-      </StoryTitle>
+      </FoundationsTitle>
+      
       <CoreGrid>
         <FeatureCard title="Precision Architecture" bordered={false}>
           We design modular systems focused on absolute performance, utilizing strictly typed boundaries to prevent structural failures.

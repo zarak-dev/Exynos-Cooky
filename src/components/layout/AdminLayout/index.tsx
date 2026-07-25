@@ -62,8 +62,6 @@ export const AdminLayout: React.FC = () => {
       
       <MainContentWrapper $collapsed={collapsed}>
         <StyledHeader>
-          
-          {/* 🌟 Zero HTML tags. Uses Ant Design Typography.Text underneath */}
           <HeaderTitle>
             Operational Command Center
           </HeaderTitle>
@@ -73,7 +71,6 @@ export const AdminLayout: React.FC = () => {
           </HeaderSubtitle>
 
         </StyledHeader>
-
         <StyledContent>
           <Outlet /> 
         </StyledContent>

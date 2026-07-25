@@ -1,8 +1,26 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { type RootState } from '../../../store';
-import { Card, Input, Steps, Result, Button, message, Badge } from 'antd';
+import { Input, Steps, Result, message, Badge, Typography } from 'antd';
 import { SearchOutlined, LoadingOutlined, SmileOutlined, CarOutlined, SolutionOutlined } from '@ant-design/icons';
+import {
+  TrackContainer,
+  PageTitle,
+  PageSubtitle,
+  SearchCard,
+  SearchWrapper,
+  SearchButton,
+  ResultCard,
+  ResultHeader,
+  OrderTitle,
+  OrderIdText,
+  OrderDateText,
+  BadgeText,
+  DetailsCard,
+  DetailRow
+} from './styles';
+
+const { Text } = Typography;
 
 export const TrackOrder: React.FC = () => {
   const [orderId, setOrderId] = useState('');
@@ -42,17 +60,17 @@ export const TrackOrder: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '40px 24px', maxWidth: '800px', margin: '0 auto', minHeight: '80vh' }}>
-      <h1 style={{ color: '#00009c', fontWeight: 800, marginBottom: 8, textAlign: 'center' }}>
+    <TrackContainer>
+      <PageTitle level={1}>
         TRACK YOUR BAKE
-      </h1>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: 32 }}>
+      </PageTitle>
+      <PageSubtitle>
         Enter your unique Order ID to track your custom cookie box live.
-      </p>
+      </PageSubtitle>
 
       {/* SEARCH BAR */}
-      <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: 24 }}>
-        <div style={{ display: 'flex', gap: '12px' }}>
+      <SearchCard bordered={false}>
+        <SearchWrapper>
           <Input 
             size="large" 
             placeholder="Enter your Order ID (e.g., EXNS-12345)" 
@@ -60,30 +78,33 @@ export const TrackOrder: React.FC = () => {
             onChange={(e) => setOrderId(e.target.value)}
             onPressEnter={handleSearch}
           />
-          <Button 
-            type="primary" 
+          <SearchButton 
             size="large" 
             icon={<SearchOutlined />} 
-            style={{ background: '#00009c', borderColor: '#00009c' }}
             onClick={handleSearch}
           >
             Search
-          </Button>
-        </div>
-      </Card>
+          </SearchButton>
+        </SearchWrapper>
+      </SearchCard>
 
       {/* TRACKING RESULTS */}
       {searchedOrder ? (
-        <Card bordered={false} style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+        <ResultCard bordered={false}>
+          <ResultHeader>
             <div>
-              <h3 style={{ margin: 0 }}>Order: <span style={{ color: '#00009c' }}>{searchedOrder.id}</span></h3>
-              <p style={{ color: '#888', margin: '4px 0 0 0' }}>
-              Placed: {searchedOrder.timestamp ? new Date(searchedOrder.timestamp).toLocaleString() : 'Just now'}
-              </p>
+              <OrderTitle level={3}>
+                Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
+              </OrderTitle>
+              <OrderDateText>
+                Placed: {searchedOrder.timestamp ? new Date(searchedOrder.timestamp).toLocaleString() : 'Just now'}
+              </OrderDateText>
             </div>
-            <Badge status="processing" text={<strong style={{ color: '#00009c' }}>{searchedOrder.status}</strong>} />
-          </div>
+            <Badge 
+              status="processing" 
+              text={<BadgeText strong>{searchedOrder.status}</BadgeText>} 
+            />
+          </ResultHeader>
 
           {/* STEP PROGRESS */}
           <Steps
@@ -108,13 +129,13 @@ export const TrackOrder: React.FC = () => {
             ]}
           />
 
-          <Card type="inner" title="Order details" style={{ marginTop: 24 }}>
-            <p><strong>Customer:</strong> {searchedOrder.customerName}</p>
-            <p><strong>Box Size:</strong> {searchedOrder.boxSize}</p>
-            <p><strong>Cookies Selected:</strong> {searchedOrder.contents}</p>
-            <p style={{ margin: 0 }}><strong>Total Paid:</strong> Rs. {searchedOrder.totalPrice}</p>
-          </Card>
-        </Card>
+          <DetailsCard type="inner" title="Order details">
+            <DetailRow><Text strong>Customer:</Text> {searchedOrder.customerName}</DetailRow>
+            <DetailRow><Text strong>Box Size:</Text> {searchedOrder.boxSize}</DetailRow>
+            <DetailRow><Text strong>Cookies Selected:</Text> {searchedOrder.contents}</DetailRow>
+            <DetailRow $isLast><Text strong>Total Paid:</Text> Rs. {searchedOrder.totalPrice}</DetailRow>
+          </DetailsCard>
+        </ResultCard>
       ) : (
         <Result
           status="info"
@@ -122,7 +143,7 @@ export const TrackOrder: React.FC = () => {
           subTitle="Place an order to watch its preparation. The kitchen is standing by!"
         />
       )}
-    </div>
+    </TrackContainer>
   );
 };
 

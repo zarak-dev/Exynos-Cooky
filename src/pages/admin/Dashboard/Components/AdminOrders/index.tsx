@@ -1,19 +1,29 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Card, Table, Tag, Button, Space } from "antd";
+import { Table, Tag, Button, Space } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   CheckCircleOutlined,
   SyncOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
-import { updateOrderStatus, type Order } from "../../../../store/slices/orderSlice";
-import { type RootState } from "../../../../store";
+import { updateOrderStatus, type Order } from "../../../../../store/slices/orderSlice";
+import { type RootState } from "../../../../../store";
+import {
+  OrdersContainer,
+  PageTitle,
+  OrdersCard,
+  OrderIdText,
+  CustomerNameText,
+  PriceText,
+  CompleteText
+} from "./styles";
 
 export const AdminOrders: React.FC = () => {
   const dispatch = useDispatch();
 
   const orders = useSelector((state: RootState) => state.orders.orders);
+  
   const advanceOrderStatus = (orderId: string, currentStatus: string) => {
     // Map your status progression (e.g. Pending -> Baking -> Dispatched)
     let nextStatus: "Pending" | "Baking" | "Dispatched" | "Delivered" =
@@ -22,6 +32,7 @@ export const AdminOrders: React.FC = () => {
     if (currentStatus === "Pending") nextStatus = "Baking";
     else if (currentStatus === "Baking") nextStatus = "Dispatched";
     else if (currentStatus === "Dispatched") nextStatus = "Delivered";
+    
     // Dispatch directly to Redux!
     dispatch(updateOrderStatus({ id: orderId, status: nextStatus }));
   };
@@ -32,14 +43,14 @@ export const AdminOrders: React.FC = () => {
       dataIndex: "id",
       key: "id",
       render: (text) => (
-        <code style={{ fontWeight: 700, color: "#333" }}>{text}</code>
+        <OrderIdText code>{text}</OrderIdText>
       ),
     },
     {
       title: "CUSTOMER",
       dataIndex: "customerName",
       key: "customerName",
-      render: (text) => <strong style={{ color: "#00009c" }}>{text}</strong>,
+      render: (text) => <CustomerNameText strong>{text}</CustomerNameText>,
     },
     {
       title: "BOX SELECTION",
@@ -56,7 +67,7 @@ export const AdminOrders: React.FC = () => {
       title: "TOTAL",
       dataIndex: "totalPrice",
       key: "totalPrice",
-      render: (val) => <span>Rs. {val}</span>,
+      render: (val) => <PriceText>Rs. {val}</PriceText>,
     },
     {
       title: "FULFILLMENT STATUS",
@@ -109,9 +120,9 @@ export const AdminOrders: React.FC = () => {
                 {nextActionLabel[record.status]}
               </Button>
             ) : (
-              <span style={{ color: "#8c8c8c", fontSize: "0.85rem" }}>
+              <CompleteText>
                 Complete ✓
-              </span>
+              </CompleteText>
             )}
           </Space>
         );
@@ -120,30 +131,20 @@ export const AdminOrders: React.FC = () => {
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      <h1
-        style={{
-          color: "#00009c",
-          margin: 0,
-          fontWeight: 800,
-          fontSize: "1.8rem",
-        }}
-      >
+    <OrdersContainer>
+      <PageTitle level={1}>
         CUSTOMER ORDERS STREAM
-      </h1>
+      </PageTitle>
 
-      <Card
-        bordered={false}
-        style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
-      >
+      <OrdersCard bordered={false}>
         <Table
           columns={columns}
           dataSource={orders}
           rowKey="id"
           pagination={false}
         />
-      </Card>
-    </div>
+      </OrdersCard>
+    </OrdersContainer>
   );
 };
 

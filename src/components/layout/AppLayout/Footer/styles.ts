@@ -8,6 +8,15 @@ export const StyledFooter = styled.footer`
   margin-top: auto; 
 `;
 
+export const LogoImage = styled.img`
+  width: 225px;
+`;
+
+export const PolicyLinksWrapper = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
 export const FooterGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
