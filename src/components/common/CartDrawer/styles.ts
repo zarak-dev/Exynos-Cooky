@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import { Button, Drawer, Flex, Typography } from 'antd';
+import styled from "styled-components";
+import { Button, Drawer, Flex, Typography } from "antd";
 
 const { Text, Title } = Typography;
 
 export const StyledDrawer = styled(Drawer)`
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 `;
 
 export const DrawerHeaderTitle = styled(Title)`
@@ -12,29 +12,29 @@ export const DrawerHeaderTitle = styled(Title)`
   font-weight: 800 !important;
   text-transform: uppercase;
   margin: 0 !important;
-  font-family: 'Poppins', sans-serif !important;
+  font-family: "Poppins", sans-serif !important;
 `;
 
 export const SectionLabel = styled(Text)<{ $noMarginTop?: boolean }>`
   font-weight: 700;
   display: block;
-  margin: ${(props) => (props.$noMarginTop ? '0 0 8px 0' : '20px 0 8px 0')};
+  margin: ${(props) => (props.$noMarginTop ? "0 0 8px 0" : "20px 0 8px 0")};
   font-size: 0.8rem;
   color: #00009c;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 `;
 
 export const BoxTierWrapper = styled.div`
   margin-bottom: 16px;
-  
+
   .ant-radio-group {
     width: 100%;
     display: flex;
     border: 2px solid #00009c;
   }
-  
+
   .ant-radio-button-wrapper {
     flex: 1;
     text-align: center;
@@ -44,11 +44,13 @@ export const BoxTierWrapper = styled.div`
     color: #00009c;
     height: 40px;
     line-height: 38px;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     text-transform: uppercase;
     font-size: 0.85rem;
 
-    &::before { display: none !important; }
+    &::before {
+      display: none !important;
+    }
   }
 
   .ant-radio-button-wrapper-checked {
@@ -68,13 +70,13 @@ export const SlotGrid = styled.div`
 
 export const CookieSlot = styled(Flex)<{ $filled: boolean }>`
   aspect-ratio: 1;
-  border: ${(props) => (props.$filled ? '2px solid #00009c' : '2px dashed #ccc')};
-  background: ${(props) => (props.$filled ? '#ffffff' : 'transparent')};
+  border: ${(props) =>
+    props.$filled ? "2px solid #00009c" : "2px dashed #ccc"};
+  background: ${(props) => (props.$filled ? "#ffffff" : "transparent")};
   overflow: hidden;
   position: relative;
-  
-  /* Safely targets Ant Design Image to avoid inline styling */
-  .ant-image, .ant-image-img {
+  .ant-image,
+  .ant-image-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -120,9 +122,10 @@ export const ActionButton = styled(Button)`
   border-radius: 0px;
   letter-spacing: 0.5px;
   margin-top: 20px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: #000066 !important;
     border-color: #000066 !important;
     color: #ffffff !important;

@@ -1,18 +1,48 @@
-import React, { useState, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Form, Input, Button, Row, Col, Radio, Result, Divider, message, Typography } from 'antd';
-import { ShoppingCartOutlined, CreditCardOutlined, CarOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import { type RootState } from '../../../store';
-import { clearBox } from '../../../store/slices/cartSlice'; 
-import { placeNewOrder } from '../../../store/slices/orderSlice';
+import React, { useState, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  Form,
+  Input,
+  Button,
+  Row,
+  Col,
+  Radio,
+  Result,
+  Divider,
+  message,
+  Typography,
+} from "antd";
+import {
+  ShoppingCartOutlined,
+  CreditCardOutlined,
+  CarOutlined,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { type RootState } from "../../../store";
+import { clearBox } from "../../../store/slices/cartSlice";
+import { placeNewOrder } from "../../../store/slices/orderSlice";
 
-import { 
-  CheckoutContainer, CenteredContainer, StyledCard, OrderSummarySticky, SuccessCard, 
-  SectionTitle, SuccessTitle, TotalText, BrandButton, SubmitButton, TrackingBox, 
-  TrackingLabel, TrackingNumber, TrackingSubtext, SummaryRow, TotalRow, 
-  FullWidthRadioGroup, PaymentMethodCard, PaymentLabel 
-} from './styles';
+import {
+  CheckoutContainer,
+  CenteredContainer,
+  StyledCard,
+  OrderSummarySticky,
+  SuccessCard,
+  SectionTitle,
+  SuccessTitle,
+  TotalText,
+  BrandButton,
+  SubmitButton,
+  TrackingBox,
+  TrackingLabel,
+  TrackingNumber,
+  TrackingSubtext,
+  SummaryRow,
+  TotalRow,
+  FullWidthRadioGroup,
+  PaymentMethodCard,
+  PaymentLabel,
+} from "./styles";
 
 const { Text, Paragraph } = Typography;
 
@@ -26,17 +56,28 @@ export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  
-  const [isOrdered, setIsOrdered] = useState(false);
-  const [confirmedOrderId, setConfirmedOrderId] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('cod');
 
-  const cartItems = useSelector((state: RootState) => state.cart.items as CartItem[]);
+  const [isOrdered, setIsOrdered] = useState(false);
+  const [confirmedOrderId, setConfirmedOrderId] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+
+  const cartItems = useSelector(
+    (state: RootState) => state.cart.items as CartItem[],
+  );
   const boxSize = useSelector((state: RootState) => state.cart.boxSize);
 
-  // 🌟 MEMOIZED AGGREGATION: Groups duplicate items together
+  // Groups duplicate items together
   const groupedCartItems = useMemo(() => {
-    const map = new Map<string, { id: number; name: string; price: number; quantity: number; totalPrice: number }>();
+    const map = new Map<
+      string,
+      {
+        id: number;
+        name: string;
+        price: number;
+        quantity: number;
+        totalPrice: number;
+      }
+    >();
 
     cartItems.forEach((item) => {
       const existing = map.get(item.name);
@@ -66,27 +107,32 @@ export const CheckoutPage: React.FC = () => {
 
   const onFinish = (values: any) => {
     const generatedOrderId = `EXY-${Math.floor(10000 + Math.random() * 90000)}`;
-    
+
     // Clean data mapping with strict types
-    const cookieCounts = cartItems.reduce((acc: Record<string, number>, item) => {
-      acc[item.name] = (acc[item.name] || 0) + 1;
-      return acc;
-    }, {});  
-    
+    const cookieCounts = cartItems.reduce(
+      (acc: Record<string, number>, item) => {
+        acc[item.name] = (acc[item.name] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
+
     const contentsString = Object.entries(cookieCounts)
       .map(([name, count]) => `${count}x ${name}`)
-      .join(', ');
+      .join(", ");
 
-    dispatch(placeNewOrder({
-      id: generatedOrderId,
-      customerName: `${values.firstName} ${values.lastName}`,
-      // customerEmail: values.email,
-      boxSize: `${boxSize}-Pack Custom Box`,
-      contents: contentsString,
-      totalPrice: totalAmount,
-      status: 'Pending',
-      timestamp: new Date().toISOString()
-    }));
+    dispatch(
+      placeNewOrder({
+        id: generatedOrderId,
+        customerName: `${values.firstName} ${values.lastName}`,
+        // customerEmail: values.email,
+        boxSize: `${boxSize}-Pack Custom Box`,
+        contents: contentsString,
+        totalPrice: totalAmount,
+        status: "Pending",
+        timestamp: new Date().toISOString(),
+      }),
+    );
 
     setConfirmedOrderId(generatedOrderId);
     setIsOrdered(true);
@@ -97,27 +143,39 @@ export const CheckoutPage: React.FC = () => {
   if (isOrdered) {
     return (
       <CenteredContainer>
-        <SuccessCard bordered={false}>
+        <SuccessCard variant="borderless">
           <Result
             status="success"
             title={<SuccessTitle level={3}>Order Confirmed!</SuccessTitle>}
             subTitle={
               <>
-                <Paragraph>Your delicious cookie box is being prepared and will head your way shortly.</Paragraph>
+                <Paragraph>
+                  Your delicious cookie box is being prepared and will head your
+                  way shortly.
+                </Paragraph>
                 <TrackingBox vertical align="center">
-                  <TrackingLabel type="secondary">YOUR TRACKING NUMBER:</TrackingLabel>
+                  <TrackingLabel type="secondary">
+                    YOUR TRACKING NUMBER:
+                  </TrackingLabel>
                   <TrackingNumber>{confirmedOrderId}</TrackingNumber>
-                  <TrackingSubtext type="secondary">Copy this code to track your bake status live!</TrackingSubtext>
+                  <TrackingSubtext type="secondary">
+                    Copy this code to track your bake status live!
+                  </TrackingSubtext>
                 </TrackingBox>
               </>
             }
             extra={[
-              <BrandButton type="primary" key="track" size="large" onClick={() => navigate('/track-order')}>
+              <BrandButton
+                type="primary"
+                key="track"
+                size="large"
+                onClick={() => navigate("/track-order")}
+              >
                 Track My Order
               </BrandButton>,
-              <Button key="home" size="large" onClick={() => navigate('/')}>
+              <Button key="home" size="large" onClick={() => navigate("/")}>
                 Back to Shop
-              </Button>
+              </Button>,
             ]}
           />
         </SuccessCard>
@@ -132,7 +190,11 @@ export const CheckoutPage: React.FC = () => {
           status="warning"
           title="Your Cart is Empty"
           extra={
-            <BrandButton type="primary" size="large" onClick={() => navigate('/')}>
+            <BrandButton
+              type="primary"
+              size="large"
+              onClick={() => navigate("/")}
+            >
               Fill Your Box
             </BrandButton>
           }
@@ -144,20 +206,33 @@ export const CheckoutPage: React.FC = () => {
   return (
     <CheckoutContainer>
       <SectionTitle level={2}>DELIVERY & CHECKOUT</SectionTitle>
-      
+
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Row gutter={[24, 24]}>
-          
           <Col xs={24} lg={14}>
-            <StyledCard title="1. Delivery Address" bordered={false}>
+            <StyledCard title="1. Delivery Address" variant="borderless">
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item name="firstName" label="First Name" rules={[{ required: true, message: 'Required' }, { pattern: /^[a-zA-Z\s]+$/, message: 'Letters only' }]}>
+                  <Form.Item
+                    name="firstName"
+                    label="First Name"
+                    rules={[
+                      { required: true, message: "Required" },
+                      { pattern: /^[a-zA-Z\s]+$/, message: "Letters only" },
+                    ]}
+                  >
                     <Input size="large" placeholder="First Name" />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name="lastName" label="Last Name" rules={[{ required: true, message: 'Required' }, { pattern: /^[a-zA-Z\s]+$/, message: 'Letters only' }]}>
+                  <Form.Item
+                    name="lastName"
+                    label="Last Name"
+                    rules={[
+                      { required: true, message: "Required" },
+                      { pattern: /^[a-zA-Z\s]+$/, message: "Letters only" },
+                    ]}
+                  >
                     <Input size="large" placeholder="Last Name" />
                   </Form.Item>
                 </Col>
@@ -165,24 +240,51 @@ export const CheckoutPage: React.FC = () => {
 
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item name="email" label="Email Address" rules={[{ required: true, message: 'Required' }, { type: 'email', message: 'Invalid email' }]}>
+                  <Form.Item
+                    name="email"
+                    label="Email Address"
+                    rules={[
+                      { required: true, message: "Required" },
+                      { type: "email", message: "Invalid email" },
+                    ]}
+                  >
                     <Input size="large" placeholder="user@exynos.com" />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name="phone" label="Phone Number" rules={[{ required: true, message: 'Required' }, { pattern: /^[0-9]+$/, message: 'Numbers only' }, { min: 10, message: 'Too short' }]}>
+                  <Form.Item
+                    name="phone"
+                    label="Phone Number"
+                    rules={[
+                      { required: true, message: "Required" },
+                      { pattern: /^[0-9]+$/, message: "Numbers only" },
+                      { min: 10, message: "Too short" },
+                    ]}
+                  >
                     <Input size="large" placeholder="e.g. 03001234567" />
                   </Form.Item>
                 </Col>
               </Row>
 
-              <Form.Item name="address" label="Street Address" rules={[{ required: true, message: 'Address required' }]}>
-                <Input.TextArea rows={3} placeholder="Apartment, area, street..." />
+              <Form.Item
+                name="address"
+                label="Street Address"
+                rules={[{ required: true, message: "Address required" }]}
+              >
+                <Input.TextArea
+                  rows={3}
+                  placeholder="Apartment, area, street..."
+                />
               </Form.Item>
 
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item name="city" label="City" rules={[{ required: true, message: 'Required' }]} initialValue="Islamabad">
+                  <Form.Item
+                    name="city"
+                    label="City"
+                    rules={[{ required: true, message: "Required" }]}
+                    initialValue="Islamabad"
+                  >
                     <Input size="large" />
                   </Form.Item>
                 </Col>
@@ -194,20 +296,33 @@ export const CheckoutPage: React.FC = () => {
               </Row>
             </StyledCard>
 
-            <StyledCard title="2. Payment Method" bordered={false}>
-              <FullWidthRadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+            <StyledCard title="2. Payment Method" variant="borderless">
+              <FullWidthRadioGroup
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              >
                 <Row gutter={[16, 16]}>
                   <Col span={12}>
-                    <PaymentMethodCard hoverable $isActive={paymentMethod === 'cod'}>
+                    <PaymentMethodCard
+                      hoverable
+                      $isActive={paymentMethod === "cod"}
+                    >
                       <Radio value="cod">
-                        <PaymentLabel strong><CarOutlined /> Cash on Delivery</PaymentLabel>
+                        <PaymentLabel strong>
+                          <CarOutlined /> Cash on Delivery
+                        </PaymentLabel>
                       </Radio>
                     </PaymentMethodCard>
                   </Col>
                   <Col span={12}>
-                    <PaymentMethodCard hoverable $isActive={paymentMethod === 'card'}>
+                    <PaymentMethodCard
+                      hoverable
+                      $isActive={paymentMethod === "card"}
+                    >
                       <Radio value="card">
-                        <PaymentLabel strong><CreditCardOutlined /> Card Payment</PaymentLabel>
+                        <PaymentLabel strong>
+                          <CreditCardOutlined /> COD Card{" "}
+                        </PaymentLabel>
                       </Radio>
                     </PaymentMethodCard>
                   </Col>
@@ -217,11 +332,20 @@ export const CheckoutPage: React.FC = () => {
           </Col>
 
           <Col xs={24} lg={10}>
-            <OrderSummarySticky title={<><ShoppingCartOutlined /> Order Summary Matrix</>} bordered={false}>
-              {/* 🌟 Renders the grouped items here */}
+            <OrderSummarySticky
+              title={
+                <>
+                  <ShoppingCartOutlined /> Order Summary Matrix
+                </>
+              }
+              variant="borderless"
+            >
+              {/*  Renders the grouped items here */}
               {groupedCartItems.map((item) => (
                 <SummaryRow key={item.name} justify="space-between">
-                  <Text type="secondary">{item.quantity}x <Text strong>{item.name}</Text></Text>
+                  <Text type="secondary">
+                    {item.quantity}x <Text strong>{item.name}</Text>
+                  </Text>
                   <Text type="secondary">Rs. {item.totalPrice}</Text>
                 </SummaryRow>
               ))}

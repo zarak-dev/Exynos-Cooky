@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { type RootState } from '../../../store';
-import { Input, Steps, Result, message, Badge, Typography } from 'antd';
-import { SearchOutlined, LoadingOutlined, SmileOutlined, CarOutlined, SolutionOutlined } from '@ant-design/icons';
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { type RootState } from "../../../store";
+import { Input, Steps, Result, message, Badge, Typography } from "antd";
+import {
+  SearchOutlined,
+  LoadingOutlined,
+  SmileOutlined,
+  CarOutlined,
+  SolutionOutlined,
+} from "@ant-design/icons";
 import {
   TrackContainer,
   PageTitle,
@@ -17,70 +23,75 @@ import {
   OrderDateText,
   BadgeText,
   DetailsCard,
-  DetailRow
-} from './styles';
+  DetailRow,
+} from "./styles";
 
 const { Text } = Typography;
 
 export const TrackOrder: React.FC = () => {
-  const [orderId, setOrderId] = useState('');
+  const [orderId, setOrderId] = useState("");
   const [searchedOrder, setSearchedOrder] = useState<any>(null);
 
-  // Grab live orders from our global Redux store!
+  // Grab live orders from our global Redux store
   const orders = useSelector((state: RootState) => state.orders.orders);
 
   const handleSearch = () => {
     const trimmedId = orderId.trim();
     if (!trimmedId) {
-      message.warning('Please enter an Order ID to track!');
+      message.warning("Please enter an Order ID to track!");
       return;
     }
 
     // Search for the order in our global Redux state
-    const foundOrder = orders.find(o => o.id.toUpperCase() === trimmedId.toUpperCase());
+    const foundOrder = orders.find(
+      (o) => o.id.toUpperCase() === trimmedId.toUpperCase(),
+    );
 
     if (foundOrder) {
       setSearchedOrder(foundOrder);
-      message.success('Order status retrieved successfully!');
+      message.success("Order status retrieved successfully!");
     } else {
       setSearchedOrder(null);
-      message.error('Order ID not found. Please check your spelling.');
+      message.error("Order ID not found. Please check your spelling.");
     }
   };
 
   // Maps order state status string to Steps index
   const getStepStatusIndex = (status: string) => {
     switch (status) {
-      case 'Pending': return 0;
-      case 'Baking': return 1;
-      case 'Dispatched': return 2;
-      case 'Delivered': return 3;
-      default: return 0;
+      case "Pending":
+        return 0;
+      case "Baking":
+        return 1;
+      case "Dispatched":
+        return 2;
+      case "Delivered":
+        return 3;
+      default:
+        return 0;
     }
   };
 
   return (
     <TrackContainer>
-      <PageTitle level={1}>
-        TRACK YOUR BAKE
-      </PageTitle>
+      <PageTitle level={1}>TRACK YOUR BAKE</PageTitle>
       <PageSubtitle>
         Enter your unique Order ID to track your custom cookie box live.
       </PageSubtitle>
 
       {/* SEARCH BAR */}
-      <SearchCard bordered={false}>
+      <SearchCard variant="borderless">
         <SearchWrapper>
-          <Input 
-            size="large" 
-            placeholder="Enter your Order ID (e.g., EXNS-12345)" 
+          <Input
+            size="large"
+            placeholder="Enter your Order ID (e.g., EXNS-12345)"
             value={orderId}
             onChange={(e) => setOrderId(e.target.value)}
             onPressEnter={handleSearch}
           />
-          <SearchButton 
-            size="large" 
-            icon={<SearchOutlined />} 
+          <SearchButton
+            size="large"
+            icon={<SearchOutlined />}
             onClick={handleSearch}
           >
             Search
@@ -90,19 +101,22 @@ export const TrackOrder: React.FC = () => {
 
       {/* TRACKING RESULTS */}
       {searchedOrder ? (
-        <ResultCard bordered={false}>
+        <ResultCard variant="borderless">
           <ResultHeader>
             <div>
-              <OrderTitle level={3}>
+              <OrderTitle level={5}>
                 Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
               </OrderTitle>
               <OrderDateText>
-                Placed: {searchedOrder.timestamp ? new Date(searchedOrder.timestamp).toLocaleString() : 'Just now'}
+                Placed:{" "}
+                {searchedOrder.timestamp
+                  ? new Date(searchedOrder.timestamp).toLocaleString()
+                  : "Just now"}
               </OrderDateText>
             </div>
-            <Badge 
-              status="processing" 
-              text={<BadgeText strong>{searchedOrder.status}</BadgeText>} 
+            <Badge
+              status="processing"
+              text={<BadgeText strong>{searchedOrder.status}</BadgeText>}
             />
           </ResultHeader>
 
@@ -111,29 +125,37 @@ export const TrackOrder: React.FC = () => {
             current={getStepStatusIndex(searchedOrder.status)}
             items={[
               {
-                title: 'Order Placed',
+                title: "Order Placed",
                 icon: <SolutionOutlined />,
               },
               {
-                title: 'Baking',
+                title: "Baking",
                 icon: <LoadingOutlined />,
               },
               {
-                title: 'Dispatched',
+                title: "Dispatched",
                 icon: <CarOutlined />,
               },
               {
-                title: 'Delivered',
+                title: "Delivered",
                 icon: <SmileOutlined />,
               },
             ]}
           />
 
           <DetailsCard type="inner" title="Order details">
-            <DetailRow><Text strong>Customer:</Text> {searchedOrder.customerName}</DetailRow>
-            <DetailRow><Text strong>Box Size:</Text> {searchedOrder.boxSize}</DetailRow>
-            <DetailRow><Text strong>Cookies Selected:</Text> {searchedOrder.contents}</DetailRow>
-            <DetailRow $isLast><Text strong>Total Paid:</Text> Rs. {searchedOrder.totalPrice}</DetailRow>
+            <DetailRow>
+              <Text strong>Customer:</Text> {searchedOrder.customerName}
+            </DetailRow>
+            <DetailRow>
+              <Text strong>Box Size:</Text> {searchedOrder.boxSize}
+            </DetailRow>
+            <DetailRow>
+              <Text strong>Cookies Selected:</Text> {searchedOrder.contents}
+            </DetailRow>
+            <DetailRow $isLast>
+              <Text strong>Total Paid:</Text> Rs. {searchedOrder.totalPrice}
+            </DetailRow>
           </DetailsCard>
         </ResultCard>
       ) : (

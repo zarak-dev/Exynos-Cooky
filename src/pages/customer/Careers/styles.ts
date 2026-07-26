@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Card, Button, Collapse, Typography } from 'antd';
+import styled from "styled-components";
+import { Card, Button, Collapse, Typography } from "antd";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -8,7 +8,7 @@ export const CareersContainer = styled.div`
   margin: 0 auto;
   padding: 60px 20px;
   background-color: #ffffff;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 `;
 
 export const HeroSection = styled.div`
@@ -18,7 +18,6 @@ export const HeroSection = styled.div`
   border-bottom: 1px solid #f0f0f0;
 `;
 
-// 🌟 Upgraded to Antd Typography
 export const HeroTitle = styled(Title)`
   &.ant-typography {
     font-size: 3rem;
@@ -27,14 +26,13 @@ export const HeroTitle = styled(Title)`
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 16px;
-    
+
     @media (max-width: 768px) {
       font-size: 2.2rem;
     }
   }
 `;
 
-// 🌟 Upgraded to Antd Typography
 export const HeroSubtitle = styled(Paragraph)`
   &.ant-typography {
     font-size: 1.2rem;
@@ -45,7 +43,6 @@ export const HeroSubtitle = styled(Paragraph)`
   }
 `;
 
-// 🌟 Upgraded to Antd Typography
 export const SectionTitle = styled(Title)`
   &.ant-typography {
     font-size: 1.8rem;
@@ -86,7 +83,6 @@ export const ValueCard = styled(Card)`
   }
 `;
 
-// 🌟 Stripped out all the redundant text/flex formatting
 export const JobCollapse = styled(Collapse)`
   background: transparent !important;
   border: none !important;
@@ -96,7 +92,7 @@ export const JobCollapse = styled(Collapse)`
     margin-bottom: 16px;
     background: #fafafa;
     border: 1px solid #e8e8e8;
-    
+
     &:hover {
       border-color: #00009c;
     }
@@ -106,7 +102,7 @@ export const JobCollapse = styled(Collapse)`
     align-items: center !important;
     padding: 20px !important;
   }
-  
+
   .ant-collapse-content {
     background: #ffffff !important;
     border-top: 1px solid #e8e8e8 !important;

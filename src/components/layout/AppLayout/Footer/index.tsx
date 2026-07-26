@@ -1,5 +1,5 @@
-import React from 'react';
-import logoSvg from '../../../../assets/images/exynos-cooky.svg';
+import React from "react";
+import logoSvg from "../../../../assets/images/exynos-cooky.svg";
 import {
   StyledFooter,
   FooterGrid,
@@ -10,8 +10,8 @@ import {
   FooterHeading,
   FooterLink,
   CopyrightBar,
-  PolicyLinksWrapper
-} from './styles';
+  PolicyLinksWrapper,
+} from "./styles";
 
 const Footer: React.FC = () => {
   return (
@@ -20,10 +20,11 @@ const Footer: React.FC = () => {
         {/* Column 1: Brand details */}
         <FooterColumn>
           <FooterBrand>
-            <LogoImage src={logoSvg} alt="Exynos Cooky Logo" /> 
+            <LogoImage src={logoSvg} alt="Exynos Cooky Logo" />
           </FooterBrand>
           <FooterText>
-            Bringing premium, freshly baked cookies directly to your screen. The ultimate cookie experience.
+            Bringing premium, freshly baked cookies directly to your screen. The
+            ultimate cookie experience.
           </FooterText>
         </FooterColumn>
 
@@ -44,7 +45,7 @@ const Footer: React.FC = () => {
           <FooterLink to="#">Catering</FooterLink>
           <FooterLink to="#">Franchising</FooterLink>
         </FooterColumn>
-        
+
         <FooterColumn>
           <FooterHeading>Support</FooterHeading>
           <FooterText>Email: support@exynoscooky.com</FooterText>

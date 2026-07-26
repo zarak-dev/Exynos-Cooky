@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Layout, Card, Typography, Flex, Radio, Button, Divider } from 'antd';
+import styled from "styled-components";
+import { Layout, Card, Typography, Flex, Radio, Button, Divider } from "antd";
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -21,7 +21,6 @@ export const StyledCard = styled(Card)`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 `;
 
-/* --- Typography --- */
 export const PageTitle = styled(Title)`
   color: #00009c !important;
   font-weight: 800 !important;
@@ -43,7 +42,6 @@ export const TotalText = styled(Text)`
   color: #00009c;
 `;
 
-/* --- Reusable Layouts --- */
 export const SummaryRow = styled(Flex)`
   margin-bottom: 12px;
 `;
@@ -83,7 +81,7 @@ export const QuantityControl = styled(Flex)`
 
 export const QuantityText = styled(Text)`
   display: inline-block;
-  width: 36px; 
+  width: 36px;
   text-align: center;
   font-weight: 700;
   font-size: 1rem;
@@ -94,7 +92,7 @@ export const CookieNameText = styled(Text)`
 `;
 
 export const BoxCapacityText = styled(Text)<{ $isFull: boolean }>`
-  color: ${(props) => (props.$isFull ? '#52c41a' : '#fa8c16')};
+  color: ${(props) => (props.$isFull ? "#52c41a" : "#fa8c16")};
 `;
 
 export const SpacedDivider = styled(Divider)`

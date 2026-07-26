@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserProfile {
   index: number;
@@ -22,7 +22,7 @@ const initialState: UserHistoryState = {
 };
 
 const userHistorySlice = createSlice({
-  name: 'userHistory',
+  name: "userHistory",
   initialState,
   reducers: {
     fetchUsersStart(state) {
@@ -40,5 +40,6 @@ const userHistorySlice = createSlice({
   },
 });
 
-export const { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } = userHistorySlice.actions;
+export const { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } =
+  userHistorySlice.actions;
 export default userHistorySlice.reducer;

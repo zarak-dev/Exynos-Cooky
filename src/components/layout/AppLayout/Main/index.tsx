@@ -1,10 +1,10 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import Header from '../Header'; 
-import Footer from '../Footer';
-import { AuthModal } from '../../../common/Auth/AuthModal';
-import { CartDrawer } from '../../../common/CartDrawer/CartDrawer';
-import { LayoutWrapper, ContentArea } from './styles';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Header from "../Header";
+import Footer from "../Footer";
+import { AuthModal } from "../../../common/Auth/AuthModal";
+import { CartDrawer } from "../../../common/CartDrawer/CartDrawer";
+import { LayoutWrapper, ContentArea } from "./styles";
 
 const MainLayout: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ const MainLayout: React.FC = () => {
       <Header />
       <ContentArea>
         {/* Dynamically renders whatever page you are currently on */}
-        <Outlet /> 
+        <Outlet />
       </ContentArea>
       <AuthModal />
       <CartDrawer />

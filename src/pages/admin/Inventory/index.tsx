@@ -12,7 +12,7 @@ import {
   CookieImage,
   CookieNameText,
   StatusTag,
-  PriceText
+  PriceText,
 } from "./styles";
 
 export const AdminInventory: React.FC = () => {
@@ -23,7 +23,7 @@ export const AdminInventory: React.FC = () => {
     dispatch(toggleItemAvailability({ id, isAvailable: checked }));
 
     const targetItem = inventory.find((item) => item.id === id);
-    
+
     if (checked) {
       message.success(`"${targetItem?.name}" is now active on the storefront!`);
     } else {
@@ -31,7 +31,6 @@ export const AdminInventory: React.FC = () => {
     }
   };
 
-  // Define table columns matching our storefront structures
   const columns: ColumnsType<CookieItem> = [
     {
       title: "IMAGE",
@@ -39,20 +38,14 @@ export const AdminInventory: React.FC = () => {
       key: "imageUrl",
       width: 100,
       render: (url: string, record) => (
-        <CookieImage
-          src={url}
-          alt={record.name}
-          width={60}
-        />
+        <CookieImage src={url} alt={record.name} width={60} />
       ),
     },
     {
       title: "COOKIE NAME",
       dataIndex: "name",
       key: "name",
-      render: (text: string) => (
-        <CookieNameText strong>{text}</CookieNameText>
-      ),
+      render: (text: string) => <CookieNameText strong>{text}</CookieNameText>,
     },
     {
       title: "PRICE",
@@ -89,9 +82,7 @@ export const AdminInventory: React.FC = () => {
 
   return (
     <InventoryContainer>
-      <PageTitle level={1}>
-        INVENTORY MANAGEMENT
-      </PageTitle>
+      <PageTitle level={1}>INVENTORY MANAGEMENT</PageTitle>
 
       <InventoryCard>
         <Table
@@ -99,6 +90,7 @@ export const AdminInventory: React.FC = () => {
           dataSource={inventory}
           rowKey="id"
           pagination={{ pageSize: 5 }}
+          scroll={{ x: "max-content" }}
         />
       </InventoryCard>
     </InventoryContainer>

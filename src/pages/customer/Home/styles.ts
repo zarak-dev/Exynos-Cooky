@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { Card, Button, Tabs, Input, Typography, Flex, Tag, Image } from 'antd'; 
-import { SearchOutlined } from '@ant-design/icons';
+import styled from "styled-components";
+import { Card, Button, Tabs, Input, Typography, Flex, Tag, Image } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -8,7 +8,7 @@ export const HomeContainer = styled.div`
   padding: 60px 20px;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #ffffff; 
+  background-color: #ffffff;
 `;
 
 export const PageTitle = styled(Title)`
@@ -18,26 +18,25 @@ export const PageTitle = styled(Title)`
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     color: #00009c;
     margin-bottom: 50px;
   }
 `;
 
 export const StyledCard = styled(Card)<{ $isAvailable: boolean }>`
-  border-radius: 0px; 
+  border-radius: 0px;
   overflow: hidden;
   border: 1px solid #e8e8e8;
-  box-shadow: none; 
+  box-shadow: none;
   transition: all 0.3s ease;
-  opacity: ${props => props.$isAvailable ? 1 : 0.5};
+  opacity: ${(props) => (props.$isAvailable ? 1 : 0.5)};
 
   &:hover {
     border-color: #00009c;
   }
 `;
 
-// 🌟 Upgraded to Antd Image for the Card Cover
 export const CoverImage = styled(Image)`
   height: 280px !important;
   object-fit: cover !important;
@@ -45,18 +44,22 @@ export const CoverImage = styled(Image)`
   background-color: #fafafa !important;
 `;
 
-// 🌟 Upgraded to Antd Flex
 export const CardHeader = styled(Flex)`
+  width: 100%; /* Ensures the flex container doesn't collapse */
   justify-content: space-between;
   align-items: flex-start;
+  gap: 12px;
   margin-bottom: 12px;
 `;
 
 export const CookieTitle = styled(Title)`
   &.ant-typography {
+    flex: 1;
+    word-break: break-word;
+    line-height: 1.3;
     font-size: 1.15rem;
     font-weight: 700;
-    color: #00009c; 
+    color: #00009c;
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -64,14 +67,18 @@ export const CookieTitle = styled(Title)`
 `;
 
 export const PriceTag = styled(Text)`
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #00009c;
+  &.ant-typography {
+    font-size: 1.1rem;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    font-weight: 700;
+    color: #00009c;
+  }
 `;
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  border-radius: 0px; 
+  border-radius: 0px;
   background-color: #00009c;
   border-color: #00009c;
   color: #ffffff;
@@ -81,13 +88,12 @@ export const StyledButton = styled(Button)`
   letter-spacing: 1px;
 
   &:hover {
-    background-color: #000066 !important; 
+    background-color: #000066 !important;
     border-color: #000066 !important;
     color: #ffffff !important;
   }
 `;
 
-// 🌟 Upgraded to Antd Tag
 export const OutOfStockBadge = styled(Tag)`
   background-color: #e0e0e0;
   color: #666;
@@ -98,6 +104,7 @@ export const OutOfStockBadge = styled(Tag)`
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0;
+  flex-shrink: 0;
 `;
 
 export const ExploreSection = styled.div`
@@ -106,7 +113,6 @@ export const ExploreSection = styled.div`
   text-align: center;
 `;
 
-// 🌟 Extracted the inline styles for the Explore Title
 export const ExploreTitle = styled(Title)`
   &.ant-typography {
     color: #00009c;
@@ -117,7 +123,6 @@ export const ExploreTitle = styled(Title)`
   }
 `;
 
-// 🌟 Upgraded to Antd Flex
 export const SearchWrapper = styled(Flex)`
   align-items: center;
   width: 100%;
@@ -132,11 +137,12 @@ export const SearchBarInput = styled(Input)`
   border: none !important;
   border-radius: 0px !important;
   height: 100% !important;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.95rem;
   padding-left: 16px;
 
-  &:focus, &:hover {
+  &:focus,
+  &:hover {
     box-shadow: none !important;
     border: none !important;
   }
@@ -169,9 +175,9 @@ export const MenuTabs = styled(Tabs)`
   .ant-tabs-nav-wrap {
     justify-content: center;
   }
-  
+
   .ant-tabs-tab {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 1.1rem;
@@ -211,7 +217,6 @@ export const NoResults = styled(Paragraph)`
   }
 `;
 
-// 🌟 Extracted Rating and Meta styles
 export const RatingWrapper = styled(Flex)`
   margin-bottom: 12px;
   margin-top: -4px;

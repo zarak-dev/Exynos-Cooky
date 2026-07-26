@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Card } from 'antd';
+import styled from "styled-components";
+import { Card } from "antd";
 
 export const HistoryCardWrapper = styled(Card)`
   margin-top: 24px;
@@ -14,4 +14,5 @@ export const HistoryCardWrapper = styled(Card)`
 export const SearchContainer = styled.div`
   margin-bottom: 24px;
   max-width: 400px;
+  margin-left: auto;
 `;

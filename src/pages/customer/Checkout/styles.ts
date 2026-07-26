@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Layout, Card, Typography, Flex, Button, Radio } from 'antd';
+import styled from "styled-components";
+import { Layout, Card, Typography, Flex, Button, Radio } from "antd";
 
 const { Content } = Layout;
 const { Text, Title } = Typography;
@@ -40,7 +40,6 @@ export const SuccessCard = styled(Card)`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 `;
 
-/* --- Typography & Branding --- */
 export const SectionTitle = styled(Title)`
   color: #00009c !important;
   font-weight: 800 !important;
@@ -66,7 +65,6 @@ export const SubmitButton = styled(BrandButton)`
   height: 50px;
 `;
 
-/* --- Tracking Box Layout --- */
 export const TrackingBox = styled(Flex)`
   background: #f0f2f5;
   padding: 16px;
@@ -92,7 +90,6 @@ export const TrackingSubtext = styled(Text)`
   margin-top: 8px;
 `;
 
-/* --- Reusable Layouts --- */
 export const SummaryRow = styled(Flex)`
   margin-bottom: 12px;
 `;
@@ -106,7 +103,7 @@ export const FullWidthRadioGroup = styled(Radio.Group)`
 `;
 
 export const PaymentMethodCard = styled(Card)<{ $isActive: boolean }>`
-  border-color: ${(props) => (props.$isActive ? '#00009c' : '#f0f0f0')};
+  border-color: ${(props) => (props.$isActive ? "#00009c" : "#f0f0f0")};
 `;
 
 export const PaymentLabel = styled(Text)`

@@ -1,59 +1,97 @@
-import React from 'react';
+import React from "react";
+import storyIllustration from "../../../assets/images/man-with-cookie.jpg";
+
 import {
+  PageWrapper,
   AboutContainer,
+  HeroSection,
+  LeftColumn,
+  RightColumn,
+  StoryImage,
   EditorialHeader,
   StoryTitle,
-  StoryDivider,
   NarrativeBlock,
   Paragraph,
   HighlightText,
   CoreGrid,
   FeatureCard,
-  FoundationsTitle
-} from './styles';
+  FoundationsTitle,
+} from "./styles";
 
 const AboutUs: React.FC = () => {
   return (
-    <AboutContainer>
-      <EditorialHeader>
-        <StoryTitle>Our Story</StoryTitle>
-        <StoryDivider />
-      </EditorialHeader>
+    <PageWrapper>
+      <AboutContainer>
+        {/* Hero Section */}
+        <HeroSection>
+          <LeftColumn>
+            <EditorialHeader>
+              <StoryTitle>Spreading Happiness One Cookie at A Time</StoryTitle>
+            </EditorialHeader>
 
-      <NarrativeBlock>
-        <Paragraph>
-          Welcome to <HighlightText>Exynos Cooky</HighlightText>, where high-performance engineering meets creative frontend craftsmanship. What started as a vision to build a clean, flawless web interface has evolved into an architectural passion project designed to deliver crisp, digital excellence.
-        </Paragraph>
-        <Paragraph>
-          We believe that software engineering is an art form. Our mission centers around creating structured, intelligent frontend designs that seamlessly manage state, performance, and aesthetic elegance. Every component, line of code, and layout line is deliberately implemented with extreme mathematical precision.
-        </Paragraph>
-        <Paragraph>
-          From routing structures to scalable styling layers, our applications are built from the ground up to reflect modern system architectural principles. We are dedicated to providing user-centric interfaces that remain lightning-fast and highly secure.
-        </Paragraph>
-      </NarrativeBlock>
+            <NarrativeBlock>
+              <Paragraph>
+                Welcome to <HighlightText>Exynos Cooky</HighlightText>, where
+                our passion for baking meets the pursuit of the perfect sweet
+                treat. What started as a simple idea in a home kitchen has
+                blossomed into a destination for the most delicious,
+                melt-in-your-mouth cookies you will ever experience.
+              </Paragraph>
+              <Paragraph>
+                We believe that baking is an art form. Our mission is to create
+                moments of pure joy through our carefully crafted, giant
+                cookies. Every recipe is meticulously tested, using only the
+                finest ingredients—from rich European butter to premium
+                chocolate chunks—to ensure every single bite brings a smile to
+                your face.
+              </Paragraph>
+              <Paragraph>
+                From our classic chilled sugar to our rotating weekly menu of
+                innovative flavors, our cookies are baked fresh daily to
+                guarantee that warm, gooey center. We are dedicated to
+                delivering not just a dessert, but an unforgettable sweet
+                experience right to your door.
+              </Paragraph>
+            </NarrativeBlock>
+          </LeftColumn>
 
-      <FoundationsTitle>
-        Our Foundations
-      </FoundationsTitle>
-      
-      <CoreGrid>
-        <FeatureCard title="Precision Architecture" bordered={false}>
-          We design modular systems focused on absolute performance, utilizing strictly typed boundaries to prevent structural failures.
-        </FeatureCard>
+          <RightColumn>
+            <StoryImage src={storyIllustration} alt="Exynos Cooky Mascot" />
+          </RightColumn>
+        </HeroSection>
 
-        <FeatureCard title="Intelligent Web Systems" bordered={false}>
-          Our engineering approach looks toward the future, integrating data fluidly to enable dynamic, smart application experiences.
-        </FeatureCard>
+        {/* Foundations Section */}
+        <div>
+          <FoundationsTitle>What Makes Us Special</FoundationsTitle>
 
-        <FeatureCard title="Sleek Aesthetics" bordered={false}>
-          Inspired by structural minimalism, we leverage high-contrast palettes and perfect geometric constraints to prioritize user readability.
-        </FeatureCard>
+          <CoreGrid>
+            <FeatureCard title="Gourmet Ingredients" variant="borderless">
+              We never compromise on quality. We source only the highest quality
+              butter, premium chocolates, and fresh ingredients to craft the
+              perfect cookie.
+            </FeatureCard>
 
-        <FeatureCard title="Uncompromising Quality" bordered={false}>
-          From clean Git branch histories to responsive layout scaling, our pipeline ensures code that scales effortlessly over time.
-        </FeatureCard>
-      </CoreGrid>
-    </AboutContainer>
+            <FeatureCard title="Weekly Rotating Menu" variant="borderless">
+              Boredom is not in our vocabulary. Our flavor lineup changes every
+              single week, bringing you exciting and innovative new cookie
+              creations to try.
+            </FeatureCard>
+
+            <FeatureCard title="Baked Fresh Daily" variant="borderless">
+              Timing is everything. Every cookie is mixed, balled, and baked
+              in-house throughout the day to ensure ultimate freshness and that
+              perfect warm pull.
+            </FeatureCard>
+
+            <FeatureCard title="Signature Packaging" variant="borderless">
+              Whether it is a 4-pack or a party box, we perfectly pack our
+              signature boxes so your cookies arrive looking as beautiful as
+              they taste.
+            </FeatureCard>
+          </CoreGrid>
+        </div>
+      </AboutContainer>
+    </PageWrapper>
   );
 };
 

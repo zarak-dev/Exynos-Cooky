@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { Layout, Menu, Input, Button, Typography, Flex, Drawer } from 'antd';
-import { NavLink } from 'react-router-dom';
+import styled from "styled-components";
+import { Layout, Menu, Input, Button, Typography, Flex, Drawer } from "antd";
+import { NavLink } from "react-router-dom";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -10,20 +10,25 @@ export const StyledHeader = styled(Header)`
   top: 0;
   z-index: 1000;
   width: 100%;
-  box-sizing: border-box; /* 🌟 CRITICAL FIX: Stops the padding from breaking the 100% width */
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
-  height: 80px;
+  height: 64px;
   border-bottom: 1px solid rgba(240, 240, 240, 0.8);
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     padding: 0 20px;
   }
+`;
+
+export const LeftContainer = styled(Flex)`
+  flex: 1;
+  align-items: center;
 `;
 
 export const LogoContainer = styled(NavLink)`
@@ -39,19 +44,19 @@ export const LogoContainer = styled(NavLink)`
   }
 `;
 
-/* 🌟 DESKTOP MENU: Hides on screens smaller than 768px */
 export const DesktopMenu = styled(Menu)`
   border: none;
   background: transparent;
   flex: 1;
   justify-content: center;
+  line-height: 64px;
+  min-width: max-content; /* Helps prevent internal crushing */
 
-  /* 🌟 GLOBAL MENU ITEM STYLES */
   .ant-menu-item {
     color: #00009c !important;
     font-weight: 600 !important;
     font-size: 1.05rem !important;
-    position: relative; /* Required for the custom underline positioning */
+    position: relative;
     transition: color 0.2s ease;
   }
 
@@ -64,47 +69,48 @@ export const DesktopMenu = styled(Menu)`
     font-weight: 800 !important;
   }
 
-  /* 🌟 1. KILL DEFAULT ANT DESIGN UNDERLINE */
-  &.ant-menu-horizontal > .ant-menu-item::after,
-  &.ant-menu-horizontal > .ant-menu-submenu::after {
+  .ant-menu-item::after,
+  .ant-menu-item:hover::after,
+  .ant-menu-item-selected::after,
+  .ant-menu-item-active::after {
     display: none !important;
+    border: none !important;
   }
 
   .ant-menu-item::before {
-    content: '';
+    content: "";
     position: absolute;
-    bottom: 0px; /* 🌟 CRITICAL FIX: Pushed the line all the way to the bottom edge */
-    left: 16px; /* Aligning strictly with Ant Design's default padding */
+    bottom: 14px;
+    left: 16px;
     right: 16px;
-    height: 1.5px;
+    height: 2px;
     background-color: #00009c;
     border-radius: 2px;
-    
-    transform: scaleX(0);
+    transform: scaleX(0) translateZ(0);
     transform-origin: left;
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
   }
 
-  /* 🌟 3. TRIGGER ANIMATION ON HOVER AND ACTIVE STATE */
   .ant-menu-item:hover::before {
-    transform: scaleX(1);
+    transform: scaleX(1) translateZ(0);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     display: none;
   }
 `;
 
-/* 🌟 MOBILE MENU BUTTON (Hamburger): Shows ONLY on screens smaller than 768px */
 export const MobileMenuButton = styled(Button)`
   display: none;
   border: none;
   background: transparent;
   color: #00009c;
   .anticon {
-    font-size: 1.4rem; 
+    font-size: 1.4rem;
   }
-  @media (max-width: 768px) {
+
+  @media (max-width: 992px) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -112,10 +118,12 @@ export const MobileMenuButton = styled(Button)`
 `;
 
 export const IconActions = styled(Flex)`
+  flex: 1;
+  justify-content: flex-end;
   gap: 24px;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     gap: 16px;
   }
 `;
@@ -140,12 +148,11 @@ export const HeaderSearchInput = styled(Input)`
     box-shadow: none !important;
   }
 
-  @media (max-width: 768px) {
-    width: 120px; /* Smaller input on mobile to prevent squishing */
+  @media (max-width: 992px) {
+    width: 120px;
   }
 `;
 
-/* --- Interactive Icons & Typography --- */
 export const ActionIcon = styled.div`
   color: #00009c;
   font-size: 1.4rem;
@@ -159,11 +166,11 @@ export const ActionIcon = styled.div`
 `;
 
 export const CartIcon = styled(ActionIcon)`
-  font-size: 1.6rem; /* Slightly larger cart icon */
+  font-size: 1.6rem;
 `;
 
 export const RoleText = styled(Text)<{ $isAdmin?: boolean }>`
-  color: ${(props) => (props.$isAdmin ? '#d92323' : '#00009c')};
+  color: ${(props) => (props.$isAdmin ? "#d92323" : "#00009c")};
   text-transform: uppercase;
 `;
 
@@ -182,7 +189,6 @@ export const StyledDrawer = styled(Drawer)`
   }
 `;
 
-// Extends your existing DesktopMenu to override its mobile hidden state
 export const MobileDrawerMenu = styled(DesktopMenu)`
   display: block !important;
   border-right: none !important;

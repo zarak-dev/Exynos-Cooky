@@ -1,23 +1,37 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, Badge, message, Image, Typography, Flex } from "antd";
-import { 
-  SearchOutlined, 
-  UserOutlined, 
-  ShoppingOutlined, 
-  MenuOutlined 
+import { Dropdown, Badge, message, Image, Typography } from "antd";
+import {
+  SearchOutlined,
+  UserOutlined,
+  ShoppingOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
 
-import { toggleAuthModal, logoutUser } from "../../../../store/slices/authSlice";
+import {
+  toggleAuthModal,
+  logoutUser,
+} from "../../../../store/slices/authSlice";
 import { type RootState } from "../../../../store";
 import { useSearch } from "../../../../context/searchContext";
 import logoSvg from "../../../../assets/images/exynos-cooky.svg";
 
 import {
-  StyledHeader, LogoContainer, DesktopMenu, MobileMenuButton, 
-  IconActions, SearchWrapper, HeaderSearchInput, ActionIcon, 
-  CartIcon, RoleText, AdminMenuText, DrawerTitleText, StyledDrawer, MobileDrawerMenu
+  StyledHeader,
+  LeftContainer,
+  LogoContainer,
+  DesktopMenu,
+  MobileMenuButton,
+  IconActions,
+  SearchWrapper,
+  HeaderSearchInput,
+  ActionIcon,
+  CartIcon,
+  AdminMenuText,
+  DrawerTitleText,
+  StyledDrawer,
+  MobileDrawerMenu,
 } from "./styles";
 
 const { Text } = Typography;
@@ -26,11 +40,11 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const totalCartCount = cartItems ? cartItems.length : 0;
   const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
-  
+
   const { searchQuery, setSearchQuery } = useSearch();
   const [showInput, setShowInput] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -38,14 +52,15 @@ const Header: React.FC = () => {
   const userMenu = {
     items: [
       {
-        key: "profile",
+        key: "profile-info",
         label: (
           <Text>
-            Role: <RoleText strong $isAdmin={user?.role === "admin"}>{user?.role}</RoleText>
+            Hi, <Text strong>{user?.name}</Text>
           </Text>
         ),
         disabled: true,
       },
+      { type: "divider" as const },
       ...(user?.role === "admin"
         ? [
             {
@@ -54,7 +69,13 @@ const Header: React.FC = () => {
               onClick: () => navigate("/admin"),
             },
           ]
-        : []),
+        : [
+            {
+              key: "customer-profile",
+              label: "👤 My Profile & Orders",
+              onClick: () => navigate("/profile"),
+            },
+          ]),
       { type: "divider" as const },
       {
         key: "logout",
@@ -63,6 +84,7 @@ const Header: React.FC = () => {
         onClick: () => {
           dispatch(logoutUser());
           message.info("Logged out smoothly.");
+          navigate("/");
         },
       },
     ],
@@ -77,37 +99,30 @@ const Header: React.FC = () => {
 
   const handleNavClick = (path: string) => {
     navigate(path);
-    setIsMobileMenuOpen(false); 
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <StyledHeader>
-      
-     <Flex align="center" gap="middle">
-        <MobileMenuButton 
-          icon={<MenuOutlined />} 
-          onClick={() => setIsMobileMenuOpen(true)} 
+      <LeftContainer gap="middle">
+        <MobileMenuButton
+          icon={<MenuOutlined />}
+          onClick={() => setIsMobileMenuOpen(true)}
         />
 
         <LogoContainer to="/">
-          <Image 
-            src={logoSvg} 
-            alt="logo" 
-            preview={false}
-            width={140}
-          />
+          <Image src={logoSvg} alt="logo" preview={false} width={140} />
         </LogoContainer>
-      </Flex>
+      </LeftContainer>
 
-      {/* 🌟 3. Desktop Menu (Hidden on mobile) */}
       <DesktopMenu
         mode="horizontal"
         selectedKeys={[location.pathname]}
         items={navItems}
         onClick={(info) => handleNavClick(info.key)}
+        disabledOverflow
       />
 
-      {/* 🌟 4. Action Icons (Cart, User, Search) */}
       <IconActions>
         <SearchWrapper>
           {showInput && (
@@ -129,8 +144,15 @@ const Header: React.FC = () => {
         </SearchWrapper>
 
         {isLoggedIn ? (
-          <Dropdown menu={userMenu} placement="bottomRight" arrow>
-            <ActionIcon><UserOutlined /></ActionIcon>
+          <Dropdown
+            menu={userMenu}
+            placement="bottomRight"
+            arrow
+            trigger={["click"]}
+          >
+            <ActionIcon>
+              <UserOutlined />
+            </ActionIcon>
           </Dropdown>
         ) : (
           <ActionIcon onClick={() => dispatch(toggleAuthModal())}>
@@ -138,11 +160,11 @@ const Header: React.FC = () => {
           </ActionIcon>
         )}
 
-        <Badge 
-          count={totalCartCount} 
-          size="small" 
-          offset={[2, 0]} 
-          color="#fa8c16" 
+        <Badge
+          count={totalCartCount}
+          size="small"
+          offset={[2, 0]}
+          color="#fa8c16"
         >
           <CartIcon onClick={() => navigate("/cart")}>
             <ShoppingOutlined />
@@ -150,22 +172,20 @@ const Header: React.FC = () => {
         </Badge>
       </IconActions>
 
-      {/* 🌟 5. Mobile Slide-out Drawer */}
       <StyledDrawer
         title={<DrawerTitleText strong>Menu</DrawerTitleText>}
         placement="left"
         onClose={() => setIsMobileMenuOpen(false)}
         open={isMobileMenuOpen}
-        width={250}
+        size={250}
       >
         <MobileDrawerMenu
-          mode="vertical" 
+          mode="vertical"
           selectedKeys={[location.pathname]}
           items={navItems}
           onClick={(info) => handleNavClick(info.key)}
         />
       </StyledDrawer>
-
     </StyledHeader>
   );
 };

@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 
 export const StyledFooter = styled.footer`
   background-color: #ffffff;
   border-top: 1px solid #f0f0f0;
   padding: 60px 40px 20px 40px;
-  margin-top: auto; 
+  margin-top: auto;
 `;
 
 export const LogoImage = styled.img`
@@ -43,7 +43,7 @@ export const FooterBrand = styled.h2`
   font-size: 1.5rem;
   font-weight: 800;
   color: #00009c;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   margin: 0;
   display: flex;
   align-items: center;

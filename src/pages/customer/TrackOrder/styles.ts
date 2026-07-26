@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Card, Button, Typography, Flex } from 'antd';
+import styled from "styled-components";
+import { Card, Button, Typography, Flex } from "antd";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -28,11 +28,10 @@ export const PageSubtitle = styled(Paragraph)`
 `;
 
 export const SearchCard = styled(Card)`
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   margin-bottom: 24px;
 `;
 
-// Upgraded to Antd Flex
 export const SearchWrapper = styled(Flex)`
   gap: 12px;
 `;
@@ -49,10 +48,9 @@ export const SearchButton = styled(Button)`
 `;
 
 export const ResultCard = styled(Card)`
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 `;
 
-// Upgraded to Antd Flex
 export const ResultHeader = styled(Flex)`
   justify-content: space-between;
   align-items: flex-start;
@@ -86,6 +84,6 @@ export const DetailsCard = styled(Card)`
 
 export const DetailRow = styled(Paragraph)<{ $isLast?: boolean }>`
   &.ant-typography {
-    margin-bottom: ${props => props.$isLast ? '0' : '1em'};
+    margin-bottom: ${(props) => (props.$isLast ? "0" : "1em")};
   }
 `;

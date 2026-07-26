@@ -1,13 +1,18 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Table, Tag, Button, Space } from "antd";
+import { Table, Tag, Button, Popconfirm } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   CheckCircleOutlined,
   SyncOutlined,
   ClockCircleOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
-import { updateOrderStatus, type Order } from "../../../../../store/slices/orderSlice";
+import {
+  updateOrderStatus,
+  type Order,
+  deleteOrder,
+} from "../../../../../store/slices/orderSlice";
 import { type RootState } from "../../../../../store";
 import {
   OrdersContainer,
@@ -16,25 +21,28 @@ import {
   OrderIdText,
   CustomerNameText,
   PriceText,
-  CompleteText
+  CompleteText,
+  ActionWrapper,
+  StatusActionContainer,
 } from "./styles";
 
 export const AdminOrders: React.FC = () => {
   const dispatch = useDispatch();
 
   const orders = useSelector((state: RootState) => state.orders.orders);
-  
+
   const advanceOrderStatus = (orderId: string, currentStatus: string) => {
-    // Map your status progression (e.g. Pending -> Baking -> Dispatched)
     let nextStatus: "Pending" | "Baking" | "Dispatched" | "Delivered" =
       "Pending";
 
     if (currentStatus === "Pending") nextStatus = "Baking";
     else if (currentStatus === "Baking") nextStatus = "Dispatched";
     else if (currentStatus === "Dispatched") nextStatus = "Delivered";
-    
-    // Dispatch directly to Redux!
     dispatch(updateOrderStatus({ id: orderId, status: nextStatus }));
+  };
+
+  const handleDeleteOrder = (orderId: string) => {
+    dispatch(deleteOrder(orderId));
   };
 
   const columns: ColumnsType<Order> = [
@@ -42,9 +50,7 @@ export const AdminOrders: React.FC = () => {
       title: "ORDER ID",
       dataIndex: "id",
       key: "id",
-      render: (text) => (
-        <OrderIdText code>{text}</OrderIdText>
-      ),
+      render: (text) => <OrderIdText code>{text}</OrderIdText>,
     },
     {
       title: "CUSTOMER",
@@ -100,8 +106,9 @@ export const AdminOrders: React.FC = () => {
       },
     },
     {
-      title: "PIPELINE ACTIONS",
+      title: "ACTIONS",
       key: "actions",
+      width: 200,
       render: (_, record) => {
         const nextActionLabel: Partial<Record<Order["status"], string>> = {
           Pending: "Start Baking",
@@ -110,21 +117,38 @@ export const AdminOrders: React.FC = () => {
         };
 
         return (
-          <Space size="middle">
-            {record.status !== "Delivered" ? (
+          <ActionWrapper>
+            <StatusActionContainer>
+              {record.status !== "Delivered" ? (
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => advanceOrderStatus(record.id, record.status)}
+                  block
+                >
+                  {nextActionLabel[record.status]}
+                </Button>
+              ) : (
+                <CompleteText>Complete ✓</CompleteText>
+              )}
+            </StatusActionContainer>
+
+            <Popconfirm
+              title="Delete Order"
+              description={`Are you sure you want to delete order ${record.id}?`}
+              onConfirm={() => handleDeleteOrder(record.id)}
+              okText="Delete"
+              cancelText="Cancel"
+              okButtonProps={{ danger: true }}
+              placement="left"
+            >
               <Button
-                type="primary"
-                size="small"
-                onClick={() => advanceOrderStatus(record.id, record.status)}
-              >
-                {nextActionLabel[record.status]}
-              </Button>
-            ) : (
-              <CompleteText>
-                Complete ✓
-              </CompleteText>
-            )}
-          </Space>
+                type="text"
+                danger
+                icon={<DeleteOutlined style={{ fontSize: "1.2rem" }} />}
+              />
+            </Popconfirm>
+          </ActionWrapper>
         );
       },
     },
@@ -132,16 +156,15 @@ export const AdminOrders: React.FC = () => {
 
   return (
     <OrdersContainer>
-      <PageTitle level={1}>
-        CUSTOMER ORDERS STREAM
-      </PageTitle>
+      <PageTitle level={1}>CUSTOMER ORDERS STREAM</PageTitle>
 
-      <OrdersCard bordered={false}>
+      <OrdersCard variant="borderless">
         <Table
           columns={columns}
           dataSource={orders}
           rowKey="id"
           pagination={false}
+          scroll={{ x: "900px" }}
         />
       </OrdersCard>
     </OrdersContainer>
