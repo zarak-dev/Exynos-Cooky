@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { type RootState } from "../../../store";
-import { Input, Steps, Result, message, Badge, Typography } from "antd";
+import { Input, Steps, Result, message, Badge, Typography } from "antd"; // 🌟 message is still imported
 import {
   SearchOutlined,
   LoadingOutlined,
@@ -32,13 +32,16 @@ export const TrackOrder: React.FC = () => {
   const [orderId, setOrderId] = useState("");
   const [searchedOrder, setSearchedOrder] = useState<any>(null);
 
+  // Initialize the hook to get the API and the context element
+  const [messageApi, contextHolder] = message.useMessage();
+
   // Grab live orders from our global Redux store
   const orders = useSelector((state: RootState) => state.orders.orders);
 
   const handleSearch = () => {
     const trimmedId = orderId.trim();
     if (!trimmedId) {
-      message.warning("Please enter an Order ID to track!");
+      messageApi.warning("Please enter an Order ID to track!");
       return;
     }
 
@@ -49,10 +52,10 @@ export const TrackOrder: React.FC = () => {
 
     if (foundOrder) {
       setSearchedOrder(foundOrder);
-      message.success("Order status retrieved successfully!");
+      messageApi.success("Order status retrieved successfully!");
     } else {
       setSearchedOrder(null);
-      message.error("Order ID not found. Please check your spelling.");
+      messageApi.error("Order ID not found. Please check your spelling.");
     }
   };
 
@@ -74,11 +77,12 @@ export const TrackOrder: React.FC = () => {
 
   return (
     <TrackContainer>
+      {contextHolder}{" "}
+      {/*  Renders the hidden context holder so the messages can access the theme */}
       <PageTitle level={1}>TRACK YOUR BAKE</PageTitle>
       <PageSubtitle>
         Enter your unique Order ID to track your custom cookie box live.
       </PageSubtitle>
-
       {/* SEARCH BAR */}
       <SearchCard variant="borderless">
         <SearchWrapper>
@@ -98,7 +102,6 @@ export const TrackOrder: React.FC = () => {
           </SearchButton>
         </SearchWrapper>
       </SearchCard>
-
       {/* TRACKING RESULTS */}
       {searchedOrder ? (
         <ResultCard variant="borderless">
@@ -154,7 +157,7 @@ export const TrackOrder: React.FC = () => {
               <Text strong>Cookies Selected:</Text> {searchedOrder.contents}
             </DetailRow>
             <DetailRow $isLast>
-              <Text strong>Total Paid:</Text> Rs. {searchedOrder.totalPrice}
+              <Text strong>Total to be Paid:</Text> Rs. {searchedOrder.totalPrice}
             </DetailRow>
           </DetailsCard>
         </ResultCard>

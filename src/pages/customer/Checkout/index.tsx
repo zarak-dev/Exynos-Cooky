@@ -57,6 +57,9 @@ export const CheckoutPage: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
+  // Initialize the hook to get the API and the context element
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [isOrdered, setIsOrdered] = useState(false);
   const [confirmedOrderId, setConfirmedOrderId] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -66,7 +69,6 @@ export const CheckoutPage: React.FC = () => {
   );
   const boxSize = useSelector((state: RootState) => state.cart.boxSize);
 
-  // Groups duplicate items together
   const groupedCartItems = useMemo(() => {
     const map = new Map<
       string,
@@ -108,7 +110,6 @@ export const CheckoutPage: React.FC = () => {
   const onFinish = (values: any) => {
     const generatedOrderId = `EXY-${Math.floor(10000 + Math.random() * 90000)}`;
 
-    // Clean data mapping with strict types
     const cookieCounts = cartItems.reduce(
       (acc: Record<string, number>, item) => {
         acc[item.name] = (acc[item.name] || 0) + 1;
@@ -125,7 +126,6 @@ export const CheckoutPage: React.FC = () => {
       placeNewOrder({
         id: generatedOrderId,
         customerName: `${values.firstName} ${values.lastName}`,
-        // customerEmail: values.email,
         boxSize: `${boxSize}-Pack Custom Box`,
         contents: contentsString,
         totalPrice: totalAmount,
@@ -137,12 +137,15 @@ export const CheckoutPage: React.FC = () => {
     setConfirmedOrderId(generatedOrderId);
     setIsOrdered(true);
     dispatch(clearBox());
-    message.success("Order dispatched successfully! 🍪");
+
+    // Use the extracted messageApi instead of the static call
+    messageApi.success("Order dispatched successfully! 🍪");
   };
 
   if (isOrdered) {
     return (
       <CenteredContainer>
+        {contextHolder}
         <SuccessCard variant="borderless">
           <Result
             status="success"
@@ -186,6 +189,7 @@ export const CheckoutPage: React.FC = () => {
   if (cartItems.length === 0) {
     return (
       <CenteredContainer>
+        {contextHolder}
         <Result
           status="warning"
           title="Your Cart is Empty"
@@ -205,8 +209,8 @@ export const CheckoutPage: React.FC = () => {
 
   return (
     <CheckoutContainer>
+      {contextHolder} {/* Renders the hidden context holder */}
       <SectionTitle level={2}>DELIVERY & CHECKOUT</SectionTitle>
-
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Row gutter={[24, 24]}>
           <Col xs={24} lg={14}>
@@ -340,7 +344,6 @@ export const CheckoutPage: React.FC = () => {
               }
               variant="borderless"
             >
-              {/*  Renders the grouped items here */}
               {groupedCartItems.map((item) => (
                 <SummaryRow key={item.name} justify="space-between">
                   <Text type="secondary">

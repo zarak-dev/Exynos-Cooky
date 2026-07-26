@@ -11,12 +11,21 @@ export const chartConfig = {
   data: chartData,
   xField: "month",
   yField: "revenue",
-  colorField: "#1890ff",
-  style: { radius: [4, 4, 0, 0] },
+  color: "#00009c",
+
+  style: {
+    radiusTopLeft: 6,
+    radiusTopRight: 6,
+  },
+
   label: {
-    text: (d: any) => `${d.revenue}`,
+    text: "revenue",
     position: "top",
-    style: { fill: "#8c8c8c", opacity: 0.6 },
+    style: {
+      fill: "#8c8c8c",
+      opacity: 0.8,
+      fontWeight: 600,
+    },
   },
 };
 

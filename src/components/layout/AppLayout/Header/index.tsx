@@ -83,7 +83,7 @@ const Header: React.FC = () => {
         danger: true,
         onClick: () => {
           dispatch(logoutUser());
-          message.info("Logged out smoothly.");
+          message.info("Logged out!");
           navigate("/");
         },
       },
