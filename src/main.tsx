@@ -24,7 +24,7 @@ createRoot(rootElement).render(
           },
         }}
       >
-        <AntApp> // i use this to avoid the any error or misbehave of antd hooked based apis like message, nofication.
+        <AntApp> {/* i use this to avoid the any error or misbehave of antd hooked based apis like message, nofication.*/}
           <App />
         </AntApp>
       </ConfigProvider>

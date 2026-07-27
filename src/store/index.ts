@@ -9,7 +9,7 @@ import inventoryReducer from "../store/slices/inventorySlice";
 import orderReducer from "../store/slices/orderSlice";
 import userHistoryReducer from "./slices/userHistorySlice"; //
 
-// 2. Import Sagas
+// Import Sagas
 import { watchUserHistory } from "./sagas/userHistorySaga"; //
 
 //  Centralized Root Saga
@@ -30,8 +30,7 @@ export const store = configureStore({
     orders: orderReducer,
     userHistory: userHistoryReducer,
   },
-  // Disable default thunk middleware if you are strictly using sagas,
-  // and concatenate your saga middleware
+  //concatenate saga middleware
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 });
