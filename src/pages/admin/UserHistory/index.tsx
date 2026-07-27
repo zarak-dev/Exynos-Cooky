@@ -2,8 +2,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Input, Avatar, Tag, Typography, Flex } from "antd";
 import { UserOutlined, SearchOutlined } from "@ant-design/icons";
-import { type RootState } from "../../../../../store";
-import { fetchUsersStart } from "../../../../../store/slices/userHistorySlice";
+import { type RootState } from "../../../store";
+import { fetchUsersStart } from "../../../store/slices/userHistorySlice";
 import { HistoryCardWrapper, SearchContainer } from "./styles";
 
 const { Text } = Typography;

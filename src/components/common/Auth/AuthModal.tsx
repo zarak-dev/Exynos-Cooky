@@ -23,6 +23,7 @@ import {
 
 export const AuthModal: React.FC = () => {
   const dispatch = useDispatch();
+  //  Hook is properly initialized
   const [messageApi, contextHolder] = message.useMessage();
   const isOpen = useSelector((state: RootState) => state.auth.isAuthModalOpen);
   const registeredUsers = useSelector(
@@ -49,7 +50,7 @@ export const AuthModal: React.FC = () => {
       );
 
       if (userExists) {
-        message.error("This email is already registered. Please log in.");
+        messageApi.error("This email is already registered. Please log in.");
         return;
       }
 
@@ -66,14 +67,14 @@ export const AuthModal: React.FC = () => {
       };
 
       dispatch(registerUser(newUser));
-      message.success("Account created successfully! Please log in.");
+      messageApi.success("Account created successfully! Please log in.");
 
       form.resetFields();
       setIsSignUp(false);
     } else {
       if (trimmedEmail.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
         if (password !== SECRET_ADMIN_PASS) {
-          message.error("Access Denied: Invalid Administrative Password!");
+          messageApi.error("Access Denied: Invalid Administrative Password!");
           return;
         }
         dispatch(loginUser({ name: "System Admin", email: trimmedEmail }));
@@ -90,10 +91,10 @@ export const AuthModal: React.FC = () => {
 
       if (foundUser) {
         dispatch(loginUser({ name: foundUser.name, email: foundUser.email }));
-        message.success(`Welcome back, ${foundUser.name}! 🍪`);
+        messageApi.success(`Welcome back, ${foundUser.name}! 🍪`);
         handleModalClose();
       } else {
-        message.error("Invalid email or password. Please try again.");
+        messageApi.error("Invalid email or password. Please try again.");
       }
     }
   };

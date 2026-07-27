@@ -12,8 +12,8 @@ import {
   updateOrderStatus,
   type Order,
   deleteOrder,
-} from "../../../../../store/slices/orderSlice";
-import { type RootState } from "../../../../../store";
+} from "../../../store/slices/orderSlice";
+import { type RootState } from "../../../store";
 import {
   OrdersContainer,
   PageTitle,
