@@ -55,19 +55,6 @@ export const StockItem = styled.div<{ $isLast: boolean }>`
   padding: 12px 0;
   border-bottom: ${(props) => (props.$isLast ? "none" : "1px solid #f0f0f0")};
 `;
-export const PrimaryStatistic = styled(Statistic)`
-  .ant-statistic-content {
-    color: #00009c;
-    font-weight: 700;
-  }
-`;
-
-export const SuccessStatistic = styled(Statistic)`
-  .ant-statistic-content {
-    color: #3f8600;
-    font-weight: 700;
-  }
-`;
 
 export const StockItemHeader = styled(Flex)`
   margin-bottom: 6px;

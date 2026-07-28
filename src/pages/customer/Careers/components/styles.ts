@@ -11,37 +11,22 @@ export const CareersContainer = styled.div`
   font-family: "Poppins", sans-serif;
 `;
 
-export const HeroSection = styled.div`
-  text-align: center;
-  margin-bottom: 60px;
-  padding: 40px 20px;
-  border-bottom: 1px solid #f0f0f0;
-`;
+// export const HeroSection = styled.div`
+//   text-align: center;
+//   margin-bottom: 60px;
+//   padding: 40px 20px;
+//   border-bottom: 1px solid #f0f0f0;
+// `;
 
-export const HeroTitle = styled(Title)`
-  &.ant-typography {
-    font-size: 3rem;
-    font-weight: 800;
-    color: #00009c;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-
-    @media (max-width: 768px) {
-      font-size: 2.2rem;
-    }
-  }
-`;
-
-export const HeroSubtitle = styled(Paragraph)`
-  &.ant-typography {
-    font-size: 1.2rem;
-    color: #555;
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-`;
+// export const HeroSubtitle = styled(Paragraph)`
+//   &.ant-typography {
+//     font-size: 1.2rem;
+//     color: #555;
+//     max-width: 600px;
+//     margin: 0 auto;
+//     line-height: 1.6;
+//   }
+// `;
 
 export const SectionTitle = styled(Title)`
   &.ant-typography {
@@ -92,11 +77,6 @@ export const JobCollapse = styled(Collapse)`
     margin-bottom: 16px;
     background: #fafafa;
     border: 1px solid #e8e8e8;
-
-    &:hover {
-      border-color: #00009c;
-    }
-  }
 
   .ant-collapse-header {
     align-items: center !important;

@@ -91,7 +91,7 @@ const Header: React.FC = () => {
   };
 
   const navItems = [
-    { key: "/", label: "Weekly Menu" },
+    { key: "/", label: "Home" },
     { key: "/about", label: "Our Story" },
     { key: "/track-order", label: "Track Order" },
     { key: "/careers", label: "Careers" },
@@ -124,25 +124,6 @@ const Header: React.FC = () => {
       />
 
       <IconActions>
-        <SearchWrapper>
-          {showInput && (
-            <HeaderSearchInput
-              placeholder="Search cookies..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
-              onBlur={() => {
-                if (!searchQuery.trim()) {
-                  setShowInput(false);
-                }
-              }}
-            />
-          )}
-          <ActionIcon onClick={() => setShowInput(!showInput)}>
-            <SearchOutlined />
-          </ActionIcon>
-        </SearchWrapper>
-
         {isLoggedIn ? (
           <Dropdown
             menu={userMenu}

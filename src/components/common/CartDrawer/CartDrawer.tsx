@@ -1,5 +1,5 @@
 import React from "react";
-import { Radio, List, Avatar, Button, Image } from "antd";
+import { Radio, List, Avatar, Button, Image, Drawer } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,20 +11,10 @@ import {
 } from "../../../store/slices/cartSlice";
 import { selectCartData } from "../../../store/selectors";
 
-import {
-  StyledDrawer,
-  DrawerHeaderTitle,
-  SectionLabel,
-  BoxTierWrapper,
-  SlotGrid,
-  CookieSlot,
-  EmptySlotText,
-  ItemNameText,
-  DrawerFooter,
-  TotalRow,
-  TotalText,
-  ActionButton,
-} from "./styles";
+import { SlotGrid, CookieSlot, DrawerFooter, TotalRow } from "./styles";
+import { StyledTitle } from "../../StyledTitle";
+import Text from "antd/es/typography/Text";
+import { Wrapper } from "../../Wrapper";
 
 export const CartDrawer: React.FC = () => {
   const dispatch = useDispatch();
@@ -47,15 +37,15 @@ export const CartDrawer: React.FC = () => {
   );
 
   return (
-    <StyledDrawer
-      title={<DrawerHeaderTitle level={4}>Your Cookie Box</DrawerHeaderTitle>}
+    <Drawer
+      title={<StyledTitle level={4}>Your Cookie Box</StyledTitle>}
       placement="right"
       size={400}
       onClose={() => dispatch(setCartOpen(false))}
       open={isCartOpen}
     >
-      <SectionLabel $noMarginTop>Select Box Size</SectionLabel>
-      <BoxTierWrapper>
+      <Text>Select Box Size</Text>
+      <Wrapper>
         <Radio.Group
           value={boxSize}
           onChange={(e) =>
@@ -67,11 +57,11 @@ export const CartDrawer: React.FC = () => {
           <Radio.Button value={6}>6-Pack</Radio.Button>
           <Radio.Button value={12}>12-Pack</Radio.Button>
         </Radio.Group>
-      </BoxTierWrapper>
+      </Wrapper>
 
-      <SectionLabel>
+      <Text>
         Box Progress ({items.length} / {boxSize} Slots Filled)
-      </SectionLabel>
+      </Text>
 
       <SlotGrid>
         {visualSlots.map((item, index) => (
@@ -84,13 +74,13 @@ export const CartDrawer: React.FC = () => {
             {item ? (
               <Image src={item.imageUrl} alt={item.name} preview={false} />
             ) : (
-              <EmptySlotText>+</EmptySlotText>
+              <Text>+</Text>
             )}
           </CookieSlot>
         ))}
       </SlotGrid>
 
-      <SectionLabel>Itemized Breakdown</SectionLabel>
+      <Text>Itemized Breakdown</Text>
       <List
         itemLayout="horizontal"
         dataSource={items}
@@ -108,7 +98,7 @@ export const CartDrawer: React.FC = () => {
           >
             <List.Item.Meta
               avatar={<Avatar src={item.imageUrl} shape="square" size={40} />}
-              title={<ItemNameText>{item.name}</ItemNameText>}
+              title={<Text>{item.name}</Text>}
               description={`Rs. ${item.price}`}
             />
           </List.Item>
@@ -117,17 +107,17 @@ export const CartDrawer: React.FC = () => {
 
       <DrawerFooter vertical>
         <TotalRow justify="space-between">
-          <TotalText>TOTAL PRICE:</TotalText>
-          <TotalText>Rs. {totalCost}</TotalText>
+          <Text>TOTAL PRICE:</Text>
+          <Text>Rs. {totalCost}</Text>
         </TotalRow>
-        <ActionButton
+        <Button
           type="primary"
           disabled={items.length === 0}
           onClick={handleReviewCart}
         >
           Review Box & Checkout
-        </ActionButton>
+        </Button>
       </DrawerFooter>
-    </StyledDrawer>
+    </Drawer>
   );
 };

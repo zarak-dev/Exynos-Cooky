@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
         {/* Column 2: Quick Explore links */}
         <FooterColumn>
           <FooterHeading>Explore</FooterHeading>
-          <FooterLink to="/">Weekly Menu</FooterLink>
+          <FooterLink to="/">Home</FooterLink>
           <FooterLink to="/about">Our Story</FooterLink>
           <FooterLink to="/track-order">Track Order</FooterLink>
           <FooterLink to="/careers">Careers</FooterLink>

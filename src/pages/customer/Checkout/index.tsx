@@ -80,6 +80,7 @@ export const CheckoutPage: React.FC = () => {
         totalPrice: number;
       }
     >();
+    
 
     cartItems.forEach((item) => {
       const existing = map.get(item.name);

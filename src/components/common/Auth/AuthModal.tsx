@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, message } from "antd";
+import { Input, Modal, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "../../../store";
 import {
@@ -9,27 +9,26 @@ import {
   ADMIN_EMAIL,
   type UserRole,
 } from "../../../store/slices/authSlice";
+import { StyledButton } from "../../StyledButton";
+import { StyledTitle } from "../../StyledTitle";
+import { StyledForm } from "../../StyledForm";
+import { StyledInput } from "../../StyledInput";
+import { Wrapper } from "../../Wrapper";
+import Text from "antd/es/typography/Text";
 
-import {
-  AuthTitle,
-  StyledForm,
-  StyledInput,
-  StyledPasswordInput,
-  SubmitFormItem,
-  StyledButton,
-  SwitchTextWrapper,
-  ActionText,
-} from "./styles";
+const { Password } = Input;
+const { Item } = StyledForm;
 
 export const AuthModal: React.FC = () => {
+  // Hooks
   const dispatch = useDispatch();
-  //  Hook is properly initialized
   const [messageApi, contextHolder] = message.useMessage();
+  // Selector
   const isOpen = useSelector((state: RootState) => state.auth.isAuthModalOpen);
   const registeredUsers = useSelector(
     (state: RootState) => state.auth.registeredUsers,
   );
-
+  // States
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
   const [form] = StyledForm.useForm();
 
@@ -46,7 +45,7 @@ export const AuthModal: React.FC = () => {
 
     if (isSignUp) {
       const userExists = registeredUsers.some(
-        (u) => u.email.toLowerCase() === trimmedEmail.toLowerCase(),
+        (text) => text.email.toLowerCase() === trimmedEmail.toLowerCase(),
       );
 
       if (userExists) {
@@ -84,9 +83,9 @@ export const AuthModal: React.FC = () => {
       }
 
       const foundUser = registeredUsers.find(
-        (u) =>
-          u.email.toLowerCase() === trimmedEmail.toLowerCase() &&
-          u.password === password,
+        (value) =>
+          value.email.toLowerCase() === trimmedEmail.toLowerCase() &&
+          value.password === password,
       );
 
       if (foundUser) {
@@ -104,15 +103,14 @@ export const AuthModal: React.FC = () => {
       {contextHolder}
       <Modal
         title={
-          <AuthTitle level={2}>
+          <StyledTitle level={2}>
             {isSignUp ? "Create Account" : "Welcome Back"}
-          </AuthTitle>
+          </StyledTitle>
         }
         open={isOpen}
         onCancel={handleModalClose}
         footer={null}
         centered
-        destroyOnHidden
       >
         <StyledForm
           form={form}
@@ -121,16 +119,16 @@ export const AuthModal: React.FC = () => {
           requiredMark={false}
         >
           {isSignUp && (
-            <StyledForm.Item
+            <Item
               name="name"
               label="FULL NAME"
               rules={[{ required: true, message: "Please enter your name" }]}
             >
               <StyledInput placeholder="John Doe" />
-            </StyledForm.Item>
+            </Item>
           )}
 
-          <StyledForm.Item
+          <Item
             name="email"
             label="EMAIL ADDRESS"
             rules={[
@@ -142,9 +140,9 @@ export const AuthModal: React.FC = () => {
             ]}
           >
             <StyledInput placeholder="you@example.com" />
-          </StyledForm.Item>
+          </Item>
 
-          <StyledForm.Item
+          <Item
             name="password"
             label="PASSWORD"
             rules={[
@@ -155,27 +153,27 @@ export const AuthModal: React.FC = () => {
               },
             ]}
           >
-            <StyledPasswordInput placeholder="••••••••" />
-          </StyledForm.Item>
+            <Password placeholder="Enter password" />
+          </Item>
 
-          <SubmitFormItem>
+          <StyledButton>
             <StyledButton type="primary" htmlType="submit">
               {isSignUp ? "Sign Up" : "Log In"}
             </StyledButton>
-          </SubmitFormItem>
+          </StyledButton>
         </StyledForm>
 
-        <SwitchTextWrapper>
+        <Wrapper>
           {isSignUp ? "Already have an account? " : "New to Exynos Cooky? "}
-          <ActionText
+          <Text
             onClick={() => {
               setIsSignUp(!isSignUp);
               form.resetFields();
             }}
           >
             {isSignUp ? "Log In" : "Sign Up"}
-          </ActionText>
-        </SwitchTextWrapper>
+          </Text>
+        </Wrapper>
       </Modal>
     </>
   );
