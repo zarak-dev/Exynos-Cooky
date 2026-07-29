@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Layout, Menu, Input, Button, Typography, Flex, Drawer } from "antd";
+import { Layout, Menu, Button, Typography, Flex, Drawer } from "antd";
 import { NavLink } from "react-router-dom";
 
 const { Header } = Layout;
@@ -50,7 +50,7 @@ export const DesktopMenu = styled(Menu)`
   flex: 1;
   justify-content: center;
   line-height: 64px;
-  min-width: max-content; /* Helps prevent internal crushing */
+  min-width: max-content;
 
   .ant-menu-item {
     color: #00009c !important;
@@ -133,25 +133,6 @@ export const SearchWrapper = styled(Flex)`
   gap: 8px;
 `;
 
-export const HeaderSearchInput = styled(Input)`
-  width: 160px;
-  border-radius: 0px;
-  border-color: #00009c;
-  font-family: "Poppins", sans-serif;
-  font-size: 0.85rem;
-  height: 32px;
-  transition: all 0.3s ease;
-
-  &:focus,
-  &:hover {
-    border-color: #000066 !important;
-    box-shadow: none !important;
-  }
-
-  @media (max-width: 992px) {
-    width: 120px;
-  }
-`;
 
 export const ActionIcon = styled.div`
   color: #00009c;
@@ -172,15 +153,6 @@ export const CartIcon = styled(ActionIcon)`
 export const RoleText = styled(Text)<{ $isAdmin?: boolean }>`
   color: ${(props) => (props.$isAdmin ? "#d92323" : "#00009c")};
   text-transform: uppercase;
-`;
-
-export const AdminMenuText = styled(Text)`
-  font-weight: 700;
-  color: #00009c;
-`;
-
-export const DrawerTitleText = styled(Typography.Text)`
-  color: #00009c;
 `;
 
 export const StyledDrawer = styled(Drawer)`

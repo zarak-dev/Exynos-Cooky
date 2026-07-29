@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, Badge, message, Image, Typography } from "antd";
 import {
-  SearchOutlined,
   UserOutlined,
   ShoppingOutlined,
   MenuOutlined,
@@ -14,7 +13,6 @@ import {
   logoutUser,
 } from "../../../../store/slices/authSlice";
 import { type RootState } from "../../../../store";
-import { useSearch } from "../../../../context/searchContext";
 import logoSvg from "../../../../assets/images/exynos-cooky.svg";
 
 import {
@@ -24,12 +22,8 @@ import {
   DesktopMenu,
   MobileMenuButton,
   IconActions,
-  SearchWrapper,
-  HeaderSearchInput,
   ActionIcon,
   CartIcon,
-  AdminMenuText,
-  DrawerTitleText,
   StyledDrawer,
   MobileDrawerMenu,
 } from "./styles";
@@ -44,9 +38,6 @@ const Header: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const totalCartCount = cartItems ? cartItems.length : 0;
   const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
-
-  const { searchQuery, setSearchQuery } = useSearch();
-  const [showInput, setShowInput] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   const userMenu = {
@@ -65,7 +56,7 @@ const Header: React.FC = () => {
         ? [
             {
               key: "admin-dashboard",
-              label: <AdminMenuText>🛠️ Admin Dashboard</AdminMenuText>,
+              label: <Text>Admin Dashboard</Text>,
               onClick: () => navigate("/admin"),
             },
           ]
@@ -154,7 +145,7 @@ const Header: React.FC = () => {
       </IconActions>
 
       <StyledDrawer
-        title={<DrawerTitleText strong>Menu</DrawerTitleText>}
+        title={<Text strong>Menu</Text>}
         placement="left"
         onClose={() => setIsMobileMenuOpen(false)}
         open={isMobileMenuOpen}

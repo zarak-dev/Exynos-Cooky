@@ -165,17 +165,26 @@ const Home: React.FC = () => {
           onChange={(event) => setSearchQuery(event.target.value)}
         />
       </ExploreSection>
-
+      
       <MenuTabs
         centered
         defaultActiveKey="1"
         tabBarExtraContent={
-          <Select
+          {
+         left: <Select disabled
             defaultValue="latest"
-            style={{ width: 150 }}
+            style={{ width: 150,}}
+            options={FILTER_OPTIONS}
+            onChange={handleFilterChange}
+          />,
+          right: <Select
+            defaultValue="Select box size "
+            style={{ width: 150, alignContent: "flex-start"}}
             options={FILTER_OPTIONS}
             onChange={handleFilterChange}
           />
+        
+          }
         }
         items={[
           {
@@ -190,6 +199,7 @@ const Home: React.FC = () => {
           },
         ]}
       />
+      
     </HomeContainer>
   );
 };

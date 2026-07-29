@@ -63,7 +63,6 @@ export const AdminOverview: React.FC = () => {
     <>
       <StyledPageHeader
         title="OPERATIONAL METRICS"
-        breadcrumbs={[{ title: "Home" }]}
       />
       <Row gutter={[16, 16]}>
         {stats.map((item, index) => {
