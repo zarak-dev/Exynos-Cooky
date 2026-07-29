@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../Header";
 import Footer from "../Footer";
-import { AuthModal } from "../../../common/Auth/AuthModal";
+import { AuthModal } from "../../../common/Auth";
 import { CartDrawer } from "../../../common/CartDrawer/CartDrawer";
 import { LayoutWrapper, ContentArea } from "./styles";
 

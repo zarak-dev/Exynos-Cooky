@@ -171,7 +171,7 @@ const Home: React.FC = () => {
         defaultActiveKey="1"
         tabBarExtraContent={
           {
-         left: <Select disabled
+         left: <Select
             defaultValue="latest"
             style={{ width: 150,}}
             options={FILTER_OPTIONS}

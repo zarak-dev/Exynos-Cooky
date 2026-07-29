@@ -159,9 +159,9 @@ export const CheckoutPage: React.FC = () => {
                 </Paragraph>
                 <TrackingBox vertical align="center">
                   <TrackingLabel type="secondary">
-                    YOUR TRACKING NUMBER:
+                    YOUR TRACKING NUMBER: 
                   </TrackingLabel>
-                  <TrackingNumber>{confirmedOrderId}</TrackingNumber>
+                  <TrackingNumber copyable>{confirmedOrderId}</TrackingNumber>
                   <TrackingSubtext type="secondary">
                     Copy this code to track your bake status live!
                   </TrackingSubtext>
