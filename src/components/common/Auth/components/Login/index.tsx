@@ -6,15 +6,16 @@ import {
   setOpenAuthModal,
 } from "../../../../../store/slices/authSlice";
 import { type RootState } from "../../../../../store";
+import type { LoginFormValues } from "../../Types";
 
-const SECRET_ADMIN_PASS = "galaxy98";
+const SECRET_ADMIN_PASS = "123456";
 
 export const LoginForm = () => {
   const dispatch = useDispatch();
 
   const users = useSelector((state: RootState) => state.auth.registeredUsers);
 
-  const onFinish = ({ email, password }: any) => {
+  const onFinish = ({ email, password }: LoginFormValues) => {
     email = email.trim();
 
     if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
@@ -44,8 +45,6 @@ export const LoginForm = () => {
     message.success(`Welcome back, ${user.name}!`);
   };
 
-  
-
   return (
     <Form layout="vertical" onFinish={onFinish}>
       <Form.Item
@@ -64,7 +63,7 @@ export const LoginForm = () => {
         <Input.Password />
       </Form.Item>
 
-      <Button type="primary" htmlType="submit" block >
+      <Button type="primary" htmlType="submit" block>
         Login
       </Button>
     </Form>

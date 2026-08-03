@@ -1,218 +1,66 @@
-import React, { useState, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Radio,
-  Result,
-  Divider,
-  message,
-  Typography,
-} from "antd";
-import {
-  ShoppingCartOutlined,
-  CreditCardOutlined,
-  CarOutlined,
-} from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { type RootState } from "../../../store";
-import { clearBox } from "../../../store/slices/cartSlice";
-import { placeNewOrder } from "../../../store/slices/orderSlice";
-
+import React from "react";
+import { Col, Form, Input, Radio, Row } from "antd";
+import { CarOutlined, CreditCardOutlined } from "@ant-design/icons";
+import { OrderSummary } from "./components/OrderSummary";
+import { OrderConfirmed } from "./components/OrderConfirmed";
+import { EmptyCart } from "./components/EmptyCart";
+import { useCheckout } from "./components/useCheckout";
+import { type FormValues } from "./types";
 import {
   CheckoutContainer,
-  CenteredContainer,
-  StyledCard,
-  OrderSummarySticky,
-  SuccessCard,
-  SectionTitle,
-  SuccessTitle,
-  TotalText,
-  BrandButton,
-  SubmitButton,
-  TrackingBox,
-  TrackingLabel,
-  TrackingNumber,
-  TrackingSubtext,
-  SummaryRow,
-  TotalRow,
   FullWidthRadioGroup,
-  PaymentMethodCard,
   PaymentLabel,
+  PaymentMethodCard,
+  SectionTitle,
+  StyledCard,
 } from "./styles";
 
-const { Text, Paragraph } = Typography;
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-}
-
 export const CheckoutPage: React.FC = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormValues>();
+  const {
+    contextHolder,
+    confirmedOrderId,
+    isOrdered,
+    paymentMethod,
+    setPaymentMethod,
+    cartItems,
+    groupedCartItems,
+    boxSize,
+    subtotal,
+    deliveryFee,
+    totalAmount,
+    handleSubmit,
+    navigate,
+  } = useCheckout();
 
-  // Initialize the hook to get the API and the context element
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const [isOrdered, setIsOrdered] = useState(false);
-  const [confirmedOrderId, setConfirmedOrderId] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("cod");
-
-  const cartItems = useSelector(
-    (state: RootState) => state.cart.items as CartItem[],
-  );
-  const boxSize = useSelector((state: RootState) => state.cart.boxSize);
-
-  const groupedCartItems = useMemo(() => {
-    const map = new Map<
-      string,
-      {
-        id: number;
-        name: string;
-        price: number;
-        quantity: number;
-        totalPrice: number;
-      }
-    >();
-    
-
-    cartItems.forEach((item) => {
-      const existing = map.get(item.name);
-      if (existing) {
-        existing.quantity += 1;
-        existing.totalPrice += Number(item.price) || 0;
-      } else {
-        map.set(item.name, {
-          id: item.id,
-          name: item.name,
-          price: Number(item.price) || 0,
-          quantity: 1,
-          totalPrice: Number(item.price) || 0,
-        });
-      }
-    });
-
-    return Array.from(map.values());
-  }, [cartItems]);
-
-  const subtotal = useMemo(() => {
-    return cartItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-  }, [cartItems]);
-
-  const deliveryFee = cartItems.length > 0 ? 150 : 0;
-  const totalAmount = subtotal + deliveryFee;
-
-  const onFinish = (values: any) => {
-    const generatedOrderId = `EXY-${Math.floor(10000 + Math.random() * 90000)}`;
-
-    const cookieCounts = cartItems.reduce(
-      (acc: Record<string, number>, item) => {
-        acc[item.name] = (acc[item.name] || 0) + 1;
-        return acc;
-      },
-      {},
-    );
-
-    const contentsString = Object.entries(cookieCounts)
-      .map(([name, count]) => `${count}x ${name}`)
-      .join(", ");
-
-    dispatch(
-      placeNewOrder({
-        id: generatedOrderId,
-        customerName: `${values.firstName} ${values.lastName}`,
-        boxSize: `${boxSize}-Pack Custom Box`,
-        contents: contentsString,
-        totalPrice: totalAmount,
-        status: "Pending",
-        timestamp: new Date().toISOString(),
-      }),
-    );
-
-    setConfirmedOrderId(generatedOrderId);
-    setIsOrdered(true);
-    dispatch(clearBox());
-
-    // Use the extracted messageApi instead of the static call
-    messageApi.success("Order dispatched successfully! 🍪");
-  };
-
-  if (isOrdered) {
+  if (isOrdered && confirmedOrderId) {
     return (
-      <CenteredContainer>
+      <>
         {contextHolder}
-        <SuccessCard variant="borderless">
-          <Result
-            status="success"
-            title={<SuccessTitle level={3}>Order Confirmed!</SuccessTitle>}
-            subTitle={
-              <>
-                <Paragraph>
-                  Your delicious cookie box is being prepared and will head your
-                  way shortly.
-                </Paragraph>
-                <TrackingBox vertical align="center">
-                  <TrackingLabel type="secondary">
-                    YOUR TRACKING NUMBER: 
-                  </TrackingLabel>
-                  <TrackingNumber copyable>{confirmedOrderId}</TrackingNumber>
-                  <TrackingSubtext type="secondary">
-                    Copy this code to track your bake status live!
-                  </TrackingSubtext>
-                </TrackingBox>
-              </>
-            }
-            extra={[
-              <BrandButton
-                type="primary"
-                key="track"
-                size="large"
-                onClick={() => navigate("/track-order")}
-              >
-                Track My Order
-              </BrandButton>,
-              <Button key="home" size="large" onClick={() => navigate("/")}>
-                Back to Shop
-              </Button>,
-            ]}
-          />
-        </SuccessCard>
-      </CenteredContainer>
+        <OrderConfirmed
+          orderId={confirmedOrderId}
+          onTrack={() => navigate("/track-order")}
+          onBackToShop={() => navigate("/")}
+        />
+      </>
     );
   }
 
   if (cartItems.length === 0) {
     return (
-      <CenteredContainer>
+      <>
         {contextHolder}
-        <Result
-          status="warning"
-          title="Your Cart is Empty"
-          extra={
-            <BrandButton
-              type="primary"
-              size="large"
-              onClick={() => navigate("/")}
-            >
-              Fill Your Box
-            </BrandButton>
-          }
-        />
-      </CenteredContainer>
+        <EmptyCart onFillBox={() => navigate("/")} />
+      </>
     );
   }
 
   return (
     <CheckoutContainer>
-      {contextHolder} {/* Renders the hidden context holder */}
-      <SectionTitle level={2}>DELIVERY & CHECKOUT</SectionTitle>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
+      {contextHolder}
+      <SectionTitle level={2}>Delivery & Checkout</SectionTitle>
+
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Row gutter={[24, 24]}>
           <Col xs={24} lg={14}>
             <StyledCard title="1. Delivery Address" variant="borderless">
@@ -247,26 +95,26 @@ export const CheckoutPage: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="email"
-                    label="Email Address"
+                    label="Email"
                     rules={[
                       { required: true, message: "Required" },
                       { type: "email", message: "Invalid email" },
                     ]}
                   >
-                    <Input size="large" placeholder="user@exynos.com" />
+                    <Input size="large" placeholder="you@example.com" />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
                     name="phone"
-                    label="Phone Number"
+                    label="Phone"
                     rules={[
                       { required: true, message: "Required" },
                       { pattern: /^[0-9]+$/, message: "Numbers only" },
                       { min: 10, message: "Too short" },
                     ]}
                   >
-                    <Input size="large" placeholder="e.g. 03001234567" />
+                    <Input size="large" placeholder="03001234567" />
                   </Form.Item>
                 </Col>
               </Row>
@@ -278,7 +126,7 @@ export const CheckoutPage: React.FC = () => {
               >
                 <Input.TextArea
                   rows={3}
-                  placeholder="Apartment, area, street..."
+                  placeholder="Apartment, area, street…"
                 />
               </Form.Item>
 
@@ -295,7 +143,7 @@ export const CheckoutPage: React.FC = () => {
                 </Col>
                 <Col span={12}>
                   <Form.Item name="zipCode" label="Postal Code">
-                    <Input size="large" placeholder="e.g. 44000" />
+                    <Input size="large" placeholder="44000" />
                   </Form.Item>
                 </Col>
               </Row>
@@ -326,7 +174,7 @@ export const CheckoutPage: React.FC = () => {
                     >
                       <Radio value="card">
                         <PaymentLabel strong>
-                          <CreditCardOutlined /> COD Card{" "}
+                          <CreditCardOutlined /> Card on Delivery
                         </PaymentLabel>
                       </Radio>
                     </PaymentMethodCard>
@@ -337,49 +185,13 @@ export const CheckoutPage: React.FC = () => {
           </Col>
 
           <Col xs={24} lg={10}>
-            <OrderSummarySticky
-              title={
-                <>
-                  <ShoppingCartOutlined /> Order Summary Matrix
-                </>
-              }
-              variant="borderless"
-            >
-              {groupedCartItems.map((item) => (
-                <SummaryRow key={item.name} justify="space-between">
-                  <Text type="secondary">
-                    {item.quantity}x <Text strong>{item.name}</Text>
-                  </Text>
-                  <Text type="secondary">Rs. {item.totalPrice}</Text>
-                </SummaryRow>
-              ))}
-
-              <Divider />
-
-              <SummaryRow justify="space-between">
-                <Text>Selected Box Size:</Text>
-                <Text strong>{boxSize}-Pack Selection</Text>
-              </SummaryRow>
-              <SummaryRow justify="space-between">
-                <Text>Subtotal:</Text>
-                <Text strong>Rs. {subtotal}</Text>
-              </SummaryRow>
-              <SummaryRow justify="space-between">
-                <Text>Delivery Charges:</Text>
-                <Text>Rs. {deliveryFee}</Text>
-              </SummaryRow>
-
-              <Divider />
-
-              <TotalRow justify="space-between" align="center">
-                <TotalText level={4}>Total Amount:</TotalText>
-                <TotalText level={4}>Rs. {totalAmount}</TotalText>
-              </TotalRow>
-
-              <SubmitButton type="primary" htmlType="submit" block size="large">
-                PLACE SECURE ORDER (Rs. {totalAmount})
-              </SubmitButton>
-            </OrderSummarySticky>
+            <OrderSummary
+              groupedCartItems={groupedCartItems}
+              boxSize={boxSize}
+              subtotal={subtotal}
+              deliveryFee={deliveryFee}
+              totalAmount={totalAmount}
+            />
           </Col>
         </Row>
       </Form>

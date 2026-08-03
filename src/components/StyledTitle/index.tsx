@@ -10,4 +10,7 @@ export const StyledTitle = styled(Title)`
     text-transform: uppercase;
     margin-bottom: 16px;
   }
+     @media (max-width: 768px) {
+      font-size: 1.4rem;
+    }
 `;

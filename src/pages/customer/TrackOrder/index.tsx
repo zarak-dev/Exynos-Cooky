@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { type RootState } from "../../../store";
-import { Input, Steps, Result, message, Badge, Typography } from "antd"; // 🌟 message is still imported
+import { Input, Steps, Result, message, Badge, Typography, Space } from "antd"; // 🌟 message is still imported
 import {
   SearchOutlined,
   LoadingOutlined,
@@ -106,7 +106,7 @@ export const TrackOrder: React.FC = () => {
       {searchedOrder ? (
         <ResultCard variant="borderless">
           <ResultHeader>
-            <div>
+            <Space>
               <OrderTitle level={5}>
                 Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
               </OrderTitle>
@@ -116,7 +116,7 @@ export const TrackOrder: React.FC = () => {
                   ? new Date(searchedOrder.timestamp).toLocaleString()
                   : "Just now"}
               </OrderDateText>
-            </div>
+            </Space>
             <Badge
               status="processing"
               text={<BadgeText strong>{searchedOrder.status}</BadgeText>}

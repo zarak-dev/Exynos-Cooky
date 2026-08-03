@@ -5,19 +5,18 @@ import {
   registerUser,
 } from "../../../../../store/slices/authSlice";
 import { type RootState } from "../../../../../store";
+import type { SignUpFormValues } from "../../Types";
 
 export const SignUpForm = () => {
   const dispatch = useDispatch();
 
-  const users = useSelector(
-    (state: RootState) => state.auth.registeredUsers
-  );
+  const users = useSelector((state: RootState) => state.auth.registeredUsers);
 
-  const onFinish = ({ name, email, password }: any) => {
+  const onFinish = ({ name, email, password }: SignUpFormValues) => {
     email = email.trim();
 
     const exists = users.some(
-      (u) => u.email.toLowerCase() === email.toLowerCase()
+      (u) => u.email.toLowerCase() === email.toLowerCase(),
     );
 
     if (exists) {
@@ -33,7 +32,7 @@ export const SignUpForm = () => {
           email.toLowerCase() === ADMIN_EMAIL.toLowerCase()
             ? "admin"
             : "customer",
-      })
+      }),
     );
 
     message.success("Account created");
@@ -41,11 +40,7 @@ export const SignUpForm = () => {
 
   return (
     <Form layout="vertical" onFinish={onFinish}>
-      <Form.Item
-        name="name"
-        label="Full Name"
-        rules={[{ required: true }]}
-      >
+      <Form.Item name="name" label="Full Name" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
 

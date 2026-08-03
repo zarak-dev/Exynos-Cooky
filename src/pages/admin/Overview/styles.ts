@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Card, Statistic, Flex, Typography } from "antd";
+import { Card, Flex, Typography } from "antd";
 
 export const DashboardContainer = styled.div`
   display: flex;

@@ -17,6 +17,7 @@ import {
   FeatureCard,
   FoundationsTitle,
 } from "./styles";
+import { Space } from "antd";
 
 const AboutUs: React.FC = () => {
   return (
@@ -61,7 +62,7 @@ const AboutUs: React.FC = () => {
         </HeroSection>
 
         {/* Foundations Section */}
-        <div>
+        <Space>
           <FoundationsTitle>What Makes Us Special</FoundationsTitle>
 
           <CoreGrid>
@@ -89,7 +90,7 @@ const AboutUs: React.FC = () => {
               they taste.
             </FeatureCard>
           </CoreGrid>
-        </div>
+        </Space>
       </AboutContainer>
     </PageWrapper>
   );

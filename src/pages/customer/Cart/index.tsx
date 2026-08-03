@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { getCartColumns } from "./components/cartTableColumns";
 import {
   Table,
   Button,
@@ -9,15 +10,8 @@ import {
   message,
   Radio,
   Typography,
-  Flex,
-  Avatar,
 } from "antd";
-import {
-  DeleteOutlined,
-  ArrowLeftOutlined,
-  PlusOutlined,
-  MinusOutlined,
-} from "@ant-design/icons";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { type RootState } from "../../../store";
 import {
@@ -25,185 +19,114 @@ import {
   setBoxSize,
   addCookieToBox,
 } from "../../../store/slices/cartSlice";
-
+import type { GroupedCartItem } from "./types";
 import {
   CartContainer,
   EmptyCartContainer,
-  StyledCard,
-  PageTitle,
-  SummaryTitle,
-  BoxTierLabel,
   StyledRadioGroup,
   SummaryRow,
   TotalRow,
-  TotalText,
-  ActionButton,
   RadioGroupWrapper,
-  QuantityControl,
-  QuantityText,
-  CookieNameText,
   BoxCapacityText,
   SpacedDivider,
-  ContinueButton,
 } from "./styles";
+import { StyledTitle } from "../../../components/StyledTitle";
+import { StyledCard } from "../../../components/StyledCard";
 
 const { Text } = Typography;
 
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl?: string;
-}
-
-interface GroupedCartItem {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl?: string;
-  quantity: number;
-  totalPrice: number;
-  indices: number[];
-}
-
-export const CartPage: React.FC = () => {
+export const CartPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const boxSize = useSelector((state: RootState) => state.cart.boxSize);
-  const cartItems = useSelector(
-    (state: RootState) => state.cart.items as CartItem[],
+  const { boxSize, items: cartItems } = useSelector(
+    (state: RootState) => state.cart,
   );
 
   const groupedCartItems = useMemo(() => {
-    const map = new Map<string, GroupedCartItem>();
+    const grouped = new Map<string, GroupedCartItem>();
 
     cartItems.forEach((item, index) => {
-      const existing = map.get(item.name);
+      const price = Number(item.price);
+      const existing = grouped.get(item.name);
+
       if (existing) {
-        existing.quantity += 1;
-        existing.totalPrice += Number(item.price) || 0;
+        existing.quantity++;
+        existing.totalPrice += price;
         existing.indices.push(index);
       } else {
-        map.set(item.name, {
-          id: item.id,
-          name: item.name,
-          price: Number(item.price) || 0,
-          imageUrl: item.imageUrl,
+        grouped.set(item.name, {
+          ...item,
+          price,
           quantity: 1,
-          totalPrice: Number(item.price) || 0,
+          totalPrice: price,
           indices: [index],
         });
       }
     });
 
-    return Array.from(map.values());
+    return Array.from(grouped.values());
   }, [cartItems]);
 
-  const subtotal = useMemo(() => {
-    return cartItems.reduce((acc, item) => acc + (Number(item.price) || 0), 0);
-  }, [cartItems]);
+  const subtotal = cartItems.reduce((sum, item) => sum + Number(item.price), 0);
 
   const deliveryFee = subtotal > 0 ? 150 : 0;
   const totalAmount = subtotal + deliveryFee;
 
-  const columns = [
-    {
-      title: "COOKIE",
-      dataIndex: "name",
-      key: "name",
-      render: (text: string, record: GroupedCartItem) => (
-        <Flex align="center" gap="middle">
-          {record.imageUrl && (
-            <Avatar shape="square" size={60} src={record.imageUrl} />
-          )}
-          <CookieNameText strong>{text}</CookieNameText>
-        </Flex>
-      ),
-    },
-    {
-      title: "QTY",
-      dataIndex: "quantity",
-      key: "quantity",
-      align: "center" as const,
-      width: 160,
-      render: (quantity: number, record: GroupedCartItem) => (
-        <QuantityControl align="center" justify="space-between">
-          <Button
-            type="text"
-            size="small"
-            icon={<MinusOutlined />}
-            onClick={() => {
-              const indexToDelete = record.indices[record.indices.length - 1];
-              dispatch(removeCookieFromBox(indexToDelete));
-            }}
-          />
-          <QuantityText>{quantity}</QuantityText>
-          <Button
-            type="text"
-            size="small"
-            icon={<PlusOutlined />}
-            disabled={cartItems.length >= boxSize}
-            onClick={() => {
-              if (cartItems.length < boxSize) {
-                dispatch(
-                  addCookieToBox({
-                    id: record.id,
-                    name: record.name,
-                    price: record.price,
-                    imageUrl: record.imageUrl || "",
-                    description: "",
-                    isAvailable: false,
-                  }),
-                );
-              } else {
-                message.warning(`Your ${boxSize}-Pack is already full!`);
-              }
-            }}
-          />
-        </QuantityControl>
-      ),
-    },
-    {
-      title: "TOTAL",
-      dataIndex: "totalPrice",
-      key: "totalPrice",
-      render: (price: number) => <Text>Rs. {price}</Text>,
-    },
-    {
-      title: "REMOVE",
-      key: "action",
-      width: 140,
-      align: "center" as const,
-      render: (_: any, record: GroupedCartItem) => (
-        <Button
-          type="text"
-          danger
-          icon={<DeleteOutlined />}
-          onClick={() => {
-            const indexToDelete = record.indices[record.indices.length - 1];
-            dispatch(removeCookieFromBox(indexToDelete));
-            message.success(`One "${record.name}" removed from cart.`);
-          }}
-        />
-      ),
-    },
-  ];
+  const removeCookie = (record: GroupedCartItem, showMessage = false) => {
+    dispatch(removeCookieFromBox(record.indices.at(-1)!));
+
+    if (showMessage) {
+      message.success(`One "${record.name}" removed from cart.`);
+    }
+  };
+
+  const addCookie = (record: GroupedCartItem) => {
+    if (cartItems.length >= boxSize) {
+      message.warning(`Your ${boxSize}-Pack is already full!`);
+      return;
+    }
+
+    dispatch(
+      addCookieToBox({
+        id: record.id,
+        name: record.name,
+        price: record.price,
+        imageUrl: record.imageUrl ?? "",
+        description: "",
+        isAvailable: false,
+      }),
+    );
+  };
+
+  const checkoutButtonText =
+    cartItems.length === boxSize
+      ? "PROCEED TO CHECKOUT"
+      : `ADD ${boxSize - cartItems.length} MORE TO CHECKOUT`;
+
+  const columns = getCartColumns({
+    cartItemsLength: cartItems.length,
+    boxSize,
+    onAdd: addCookie,
+    onRemove: removeCookie,
+  });
 
   if (cartItems.length === 0) {
     return (
       <EmptyCartContainer vertical align="center" justify="center">
         <Empty description="Your shopping cart is empty!" />
-        <ContinueButton type="primary" onClick={() => navigate("/")}>
+        <Button type="primary" onClick={() => navigate("/")}>
           <ArrowLeftOutlined /> Continue Shopping
-        </ContinueButton>
+        </Button>
       </EmptyCartContainer>
     );
   }
-
+  const handleBoxSizeChange = (value: 4 | 6 | 12) => {
+    dispatch(setBoxSize(value));
+  };
   return (
     <CartContainer>
-      <PageTitle level={2}>YOUR CART</PageTitle>
+      <StyledTitle level={2}>YOUR CART</StyledTitle>
 
       <Row gutter={[24, 24]}>
         <Col xs={24} lg={16}>
@@ -220,17 +143,15 @@ export const CartPage: React.FC = () => {
 
         <Col xs={24} lg={8}>
           <StyledCard
-            title={<SummaryTitle>Order Summary</SummaryTitle>}
+            title={<StyledTitle>Order Summary</StyledTitle>}
             variant="borderless"
           >
             <RadioGroupWrapper vertical>
-              <BoxTierLabel type="secondary">BOX SIZE TIER:</BoxTierLabel>
+              <Text type="secondary">BOX SIZE TIER:</Text>
               <StyledRadioGroup
                 value={boxSize}
                 buttonStyle="solid"
-                onChange={(e) =>
-                  dispatch(setBoxSize(Number(e.target.value) as 4 | 6 | 12))
-                }
+                onChange={(e) => handleBoxSizeChange(e.target.value)}
               >
                 <Radio.Button value={4}>4-Pack</Radio.Button>
                 <Radio.Button value={6}>6-Pack</Radio.Button>
@@ -257,21 +178,19 @@ export const CartPage: React.FC = () => {
             <SpacedDivider />
 
             <TotalRow justify="space-between" align="center">
-              <TotalText strong>Total:</TotalText>
-              <TotalText strong>Rs. {totalAmount}</TotalText>
+              <Text strong>Total:</Text>
+              <Text strong>Rs. {totalAmount}</Text>
             </TotalRow>
 
-            <ActionButton
+            <Button
               type="primary"
               block
               size="large"
               disabled={cartItems.length !== boxSize}
               onClick={() => navigate("/checkout")}
             >
-              {cartItems.length === boxSize
-                ? "PROCEED TO CHECKOUT"
-                : `ADD ${boxSize - cartItems.length} MORE TO CHECKOUT`}
-            </ActionButton>
+              {checkoutButtonText}
+            </Button>
           </StyledCard>
         </Col>
       </Row>

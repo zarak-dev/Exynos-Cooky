@@ -10,9 +10,3 @@ export const HistoryCardWrapper = styled(Card)`
     font-weight: 700;
   }
 `;
-
-export const SearchContainer = styled.div`
-  margin-bottom: 24px;
-  max-width: 400px;
-  margin-left: auto;
-`;

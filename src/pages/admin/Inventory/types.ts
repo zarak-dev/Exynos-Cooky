@@ -1,3 +1,6 @@
+import type { Dispatch } from "@reduxjs/toolkit";
+import type { ColumnsType } from "antd/es/table";
+
 export interface CookieItem {
   id: number;
   name: string;
@@ -6,3 +9,16 @@ export interface CookieItem {
   imageUrl: string;
   description: string;
 }
+
+export interface HandleAvailabilityChangeParams {
+  id: number;
+  checked: boolean;
+}
+
+export interface InventoryColumnsProps {
+  onToggle: (id: number, checked: boolean) => void;
+}
+
+export type InventoryDispatch = Dispatch;
+
+export type InventoryColumns = ColumnsType<CookieItem>;

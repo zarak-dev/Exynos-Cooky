@@ -14,7 +14,7 @@ import CartPage from "../pages/customer/Cart";
 import { CheckoutPage } from "../pages/customer/Checkout";
 import TrackOrder from "../pages/customer/TrackOrder";
 import ScrollToTop from "../utils/scrollToTop";
-import { UserHistory } from "../pages/admin/UserHistory";
+import  UserHistory  from "../pages/admin/UserHistory";
 import CustomerProfile from "../pages/customer/Profile";
 import { PageTransitionLoader } from "../components/common/PageTransitionLoader";
 

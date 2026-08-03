@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Typography } from "antd";
+import { Modal, Space, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "../../../store";
 import { setOpenAuthModal } from "../../../store/slices/authSlice";
@@ -31,7 +31,7 @@ export const AuthModal = () => {
     >
       {isSignUp ? <SignUpForm /> : <LoginForm />}
 
-      <div style={{ marginTop: 16, textAlign: "center" }}>
+      <Space align="center">
         {isSignUp
           ? "Already have an account? "
           : "New here? "}
@@ -39,7 +39,7 @@ export const AuthModal = () => {
         <Text onClick={() => setIsSignUp(!isSignUp)}>
           {isSignUp ? "Login" : "Sign Up"}
         </Text>
-      </div>
+      </Space>
     </Modal>
   );
 };
