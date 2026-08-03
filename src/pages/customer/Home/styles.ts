@@ -1,39 +1,23 @@
 import styled from "styled-components";
 import { Card, Button, Tabs, Typography, Flex, Image } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
 
-const { Title, Text, Paragraph } = Typography;
+const { Text, Paragraph } = Typography;
 const { Meta } = Card;
 
 export const HomeContainer = styled.div`
   padding: 60px 20px;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #ffffff;
-`;
-
-export const PageTitle = styled(Title)`
-  &.ant-typography {
-    text-align: center;
-    font-size: 2.2rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-family: "Poppins", sans-serif;
-    color: #00009c;
-    margin-bottom: 50px;
-  }
 `;
 
 export const CoverImage = styled(Image)`
   height: 280px !important;
   object-fit: cover !important;
   padding: 12px !important;
-  background-color: #fafafa !important;
+  background: #fafafa !important;
 `;
 
 export const CardHeader = styled(Flex)`
-  width: 100%; /* Ensures the flex container doesn't collapse */
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
@@ -42,48 +26,13 @@ export const CardHeader = styled(Flex)`
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  text-transform: uppercase;
   height: 45px;
-  letter-spacing: 1px;
 `;
 
 export const ExploreSection = styled.div`
   max-width: 500px;
-  margin: 0 auto 40px auto;
+  margin: 0 auto 40px;
   text-align: center;
-`;
-
-export const ExploreTitle = styled(Title)`
-  &.ant-typography {
-    color: #00009c;
-    font-weight: 800;
-    font-size: 2rem;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-`;
-
-export const SearchBarButton = styled(Button)`
-  border: none !important;
-  border-radius: 0px !important;
-  height: 100% !important;
-  background-color: #00009c !important;
-  color: #ffffff !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 20px !important;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: #000066 !important;
-  }
-`;
-
-export const StyledSearchIcon = styled(SearchOutlined)`
-  font-size: 1.3rem;
-  color: #ffffff;
 `;
 
 export const MenuTabs = styled(Tabs)`
@@ -92,12 +41,9 @@ export const MenuTabs = styled(Tabs)`
   }
 
   .ant-tabs-tab {
-    font-family: "Poppins", sans-serif;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 1.1rem;
-    letter-spacing: 0.5px;
-    color: #555555;
     padding: 12px 24px !important;
 
     &:hover {
@@ -115,33 +61,23 @@ export const MenuTabs = styled(Tabs)`
   }
 `;
 
-export const CookieGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 30px;
-  margin-top: 20px;
-`;
-
 export const NoResults = styled(Paragraph)`
   &.ant-typography {
     text-align: center;
     padding: 60px 20px;
     font-size: 1.1rem;
     color: #666;
-    font-weight: 500;
   }
 `;
 
 export const RatingWrapper = styled(Flex)`
-  margin-bottom: 12px;
-  margin-top: -4px;
+  margin: -4px 0 12px;
 `;
 
 export const ReviewCountText = styled(Text)`
   margin-left: 8px;
   font-size: 0.8rem;
   color: #666;
-  font-weight: 600;
 `;
 
 export const StyledMeta = styled(Meta)`

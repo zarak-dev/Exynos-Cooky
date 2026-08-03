@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { type RootState } from "../../../store";
-import { Input, Steps, Result, message, Badge, Typography, Space } from "antd"; // 🌟 message is still imported
+import { type Order } from "../../../store/slices/orderSlice";
+import {
+  Input,
+  Steps,
+  Result,
+  message,
+  Badge,
+  Space,
+  Descriptions,
+} from "antd";
 import {
   SearchOutlined,
   LoadingOutlined,
@@ -14,7 +23,6 @@ import {
   PageTitle,
   PageSubtitle,
   SearchCard,
-  SearchWrapper,
   SearchButton,
   ResultCard,
   ResultHeader,
@@ -23,14 +31,37 @@ import {
   OrderDateText,
   BadgeText,
   DetailsCard,
-  DetailRow,
 } from "./styles";
 
-const { Text } = Typography;
+const TRACKING_STEPS = [
+  {
+    title: "Order Placed",
+    icon: <SolutionOutlined />,
+  },
+  {
+    title: "Baking",
+    icon: <LoadingOutlined />,
+  },
+  {
+    title: "Dispatched",
+    icon: <CarOutlined />,
+  },
+  {
+    title: "Delivered",
+    icon: <SmileOutlined />,
+  },
+];
+
+const STEP_INDEX = {
+  Pending: 0,
+  Baking: 1,
+  Dispatched: 2,
+  Delivered: 3,
+} as const;
 
 export const TrackOrder: React.FC = () => {
   const [orderId, setOrderId] = useState("");
-  const [searchedOrder, setSearchedOrder] = useState<any>(null);
+  const [searchedOrder, setSearchedOrder] = useState<Order | null>(null);
 
   // Initialize the hook to get the API and the context element
   const [messageApi, contextHolder] = message.useMessage();
@@ -39,15 +70,15 @@ export const TrackOrder: React.FC = () => {
   const orders = useSelector((state: RootState) => state.orders.orders);
 
   const handleSearch = () => {
-    const trimmedId = orderId.trim();
-    if (!trimmedId) {
+    const normalizedOrderId = orderId.trim().toUpperCase();
+    if (!normalizedOrderId) {
       messageApi.warning("Please enter an Order ID to track!");
       return;
     }
 
     // Search for the order in our global Redux state
     const foundOrder = orders.find(
-      (o) => o.id.toUpperCase() === trimmedId.toUpperCase(),
+      (o) => o.id.toUpperCase() === normalizedOrderId,
     );
 
     if (foundOrder) {
@@ -58,26 +89,13 @@ export const TrackOrder: React.FC = () => {
       messageApi.error("Order ID not found. Please check your spelling.");
     }
   };
-
-  // Maps order state status string to Steps index
-  const getStepStatusIndex = (status: string) => {
-    switch (status) {
-      case "Pending":
-        return 0;
-      case "Baking":
-        return 1;
-      case "Dispatched":
-        return 2;
-      case "Delivered":
-        return 3;
-      default:
-        return 0;
-    }
-  };
+  const formattedDate = searchedOrder?.timestamp
+    ? new Date(searchedOrder.timestamp).toLocaleString()
+    : "Just now";
 
   return (
     <TrackContainer>
-      {contextHolder}{" "}
+      {contextHolder}
       {/*  Renders the hidden context holder so the messages can access the theme */}
       <PageTitle level={1}>TRACK YOUR BAKE</PageTitle>
       <PageSubtitle>
@@ -85,37 +103,34 @@ export const TrackOrder: React.FC = () => {
       </PageSubtitle>
       {/* SEARCH BAR */}
       <SearchCard variant="borderless">
-        <SearchWrapper>
+        <Space.Compact style={{ width: "100%" }}>
           <Input
             size="large"
+            allowClear
             placeholder="Enter your Order ID (e.g., EXNS-12345)"
             value={orderId}
             onChange={(e) => setOrderId(e.target.value)}
             onPressEnter={handleSearch}
           />
           <SearchButton
+            disabled={!orderId.trim()}
             size="large"
             icon={<SearchOutlined />}
             onClick={handleSearch}
           >
             Search
           </SearchButton>
-        </SearchWrapper>
+        </Space.Compact>
       </SearchCard>
       {/* TRACKING RESULTS */}
       {searchedOrder ? (
         <ResultCard variant="borderless">
           <ResultHeader>
-            <Space>
+            <Space direction="vertical" size={2}>
               <OrderTitle level={5}>
                 Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
               </OrderTitle>
-              <OrderDateText>
-                Placed:{" "}
-                {searchedOrder.timestamp
-                  ? new Date(searchedOrder.timestamp).toLocaleString()
-                  : "Just now"}
-              </OrderDateText>
+              <OrderDateText>Placed: {formattedDate}</OrderDateText>
             </Space>
             <Badge
               status="processing"
@@ -125,40 +140,35 @@ export const TrackOrder: React.FC = () => {
 
           {/* STEP PROGRESS */}
           <Steps
-            current={getStepStatusIndex(searchedOrder.status)}
-            items={[
-              {
-                title: "Order Placed",
-                icon: <SolutionOutlined />,
-              },
-              {
-                title: "Baking",
-                icon: <LoadingOutlined />,
-              },
-              {
-                title: "Dispatched",
-                icon: <CarOutlined />,
-              },
-              {
-                title: "Delivered",
-                icon: <SmileOutlined />,
-              },
-            ]}
+            current={STEP_INDEX[searchedOrder.status] ?? 0}
+            items={TRACKING_STEPS}
           />
 
           <DetailsCard type="inner" title="Order details">
-            <DetailRow>
-              <Text strong>Customer:</Text> {searchedOrder.customerName}
-            </DetailRow>
-            <DetailRow>
-              <Text strong>Box Size:</Text> {searchedOrder.boxSize}
-            </DetailRow>
-            <DetailRow>
-              <Text strong>Cookies Selected:</Text> {searchedOrder.contents}
-            </DetailRow>
-            <DetailRow $isLast>
-              <Text strong>Total to be Paid:</Text> Rs. {searchedOrder.totalPrice}
-            </DetailRow>
+            <Descriptions
+              bordered
+              column={1}
+              labelStyle={{ fontWeight: 600 }}
+              size="small"
+              items={[
+                {
+                  label: "Customer",
+                  children: searchedOrder.customerName,
+                },
+                {
+                  label: "Box Size",
+                  children: searchedOrder.boxSize,
+                },
+                {
+                  label: "Cookies Selected",
+                  children: searchedOrder.contents,
+                },
+                {
+                  label: "Total to be Paid",
+                  children: `Rs. ${searchedOrder.totalPrice}`,
+                },
+              ]}
+            />
           </DetailsCard>
         </ResultCard>
       ) : (

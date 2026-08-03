@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo } from "react";
-import { Switch, Table, Empty, Grid } from "antd"; // 🌟 Added Grid here
-import { EnvironmentOutlined, MailOutlined } from "@ant-design/icons";
+import React, { useEffect } from "react";
+import { Switch, Table, Empty, Grid, Flex, Button} from "antd";
+import { EditOutlined, EnvironmentOutlined, MailOutlined, PlusOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { type RootState } from "../../../store";
@@ -10,19 +10,41 @@ import {
   SidebarTabs,
   ContentWrapper,
   SectionContainer,
-  SectionHeader,
-  SectionTitle,
-  InfoCard,
-  InfoRow,
-  IconRow,
-  LabelText,
-  ValueText,
-  OutlinedButton,
   SignOutWrapper,
   SignOutLink,
+  HeaderRow,
 } from "./styles";
+import Text from "antd/es/typography/Text";
+import { StyledCard } from "../Checkout/styles";
+import { StyledTitle } from "../../../components/StyledTitle";
 
 const { useBreakpoint } = Grid;
+
+const ORDER_COLUMNS = [
+  {
+    title: "Order ID",
+    dataIndex: "id",
+    key: "id",
+  },
+  {
+    title: "Date",
+    dataIndex: "timestamp",
+    key: "timestamp",
+    render: (value: string) =>
+      value ? new Date(value).toLocaleDateString() : "N/A",
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+  },
+  {
+    title: "Total",
+    dataIndex: "totalPrice",
+    key: "totalPrice",
+    render: (value: number) => `Rs. ${value}`,
+  },
+];
 
 const CustomerProfile: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,10 +55,9 @@ const CustomerProfile: React.FC = () => {
   const orders = useSelector((state: RootState) => state.orders.orders);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
-  const customerOrders = useMemo(() => {
-    if (!user?.name) return [];
-    return orders.filter((o) => o.customerName === user.name);
-  }, [orders, user?.name]);
+  const customerOrders = user
+    ? orders.filter((order) => order.customerName === user.name)
+    : [];
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -53,100 +74,6 @@ const CustomerProfile: React.FC = () => {
     return null;
   }
 
-  const renderProfile = () => (
-    <ContentWrapper>
-      {/* --- CONTACT SECTION --- */}
-      <SectionContainer>
-        <SectionHeader>
-          <SectionTitle level={4}>Contact</SectionTitle>
-          <OutlinedButton size="middle">Edit</OutlinedButton>
-        </SectionHeader>
-        <InfoCard>
-          <InfoRow>
-            <LabelText>Email</LabelText>
-            <ValueText>{user?.email}</ValueText>
-          </InfoRow>
-        </InfoCard>
-      </SectionContainer>
-
-      {/* --- ADDRESSES SECTION --- */}
-      <SectionContainer>
-        <SectionHeader>
-          <SectionTitle level={4}>Addresses</SectionTitle>
-          <OutlinedButton size="middle">Add</OutlinedButton>
-        </SectionHeader>
-        <InfoCard>
-          <IconRow>
-            <EnvironmentOutlined />
-            <LabelText>No addresses added</LabelText>
-          </IconRow>
-        </InfoCard>
-      </SectionContainer>
-
-      {/* --- MARKETING PREFERENCES SECTION --- */}
-      <SectionContainer>
-        <SectionHeader>
-          <SectionTitle level={4}>Marketing preferences</SectionTitle>
-        </SectionHeader>
-        <InfoCard>
-          <InfoRow>
-            <IconRow>
-              <MailOutlined />
-              <ValueText>Email</ValueText>
-            </IconRow>
-            <Switch defaultChecked={false} />
-          </InfoRow>
-        </InfoCard>
-      </SectionContainer>
-
-      {/* --- SIGN OUT SECTION --- */}
-      <SignOutWrapper>
-        <OutlinedButton size="large" onClick={handleLogout}>
-          Sign out
-        </OutlinedButton>
-        <SignOutLink onClick={handleLogout}>
-          Sign out of all devices
-        </SignOutLink>
-      </SignOutWrapper>
-    </ContentWrapper>
-  );
-
-  const renderOrders = () => (
-    <ContentWrapper>
-      {customerOrders.length > 0 ? (
-        <Table
-          dataSource={customerOrders}
-          rowKey="id"
-          pagination={false}
-          scroll={{ x: 600 }}
-          columns={[
-            { title: "Order ID", dataIndex: "id", key: "id" },
-            {
-              title: "Date",
-              dataIndex: "timestamp",
-              key: "timestamp",
-              render: (val) =>
-                val ? new Date(val).toLocaleDateString() : "N/A",
-            },
-            { title: "Status", dataIndex: "status", key: "status" },
-            {
-              title: "Total",
-              dataIndex: "totalPrice",
-              key: "total",
-              render: (val) => `Rs. ${val}`,
-            },
-          ]}
-        />
-      ) : (
-        <Empty
-          description={
-            <LabelText>You haven't placed any orders yet.</LabelText>
-          }
-        />
-      )}
-    </ContentWrapper>
-  );
-
   return (
     <ProfileContainer>
       <SidebarTabs
@@ -155,12 +82,83 @@ const CustomerProfile: React.FC = () => {
           {
             key: "orders",
             label: "Orders",
-            children: renderOrders(),
+            children: (
+              <ContentWrapper>
+                {customerOrders.length ? (
+                  <Table
+                    rowKey="id"
+                    columns={ORDER_COLUMNS}
+                    dataSource={customerOrders}
+                    pagination={false}
+                    scroll={{ x: 600 }}
+                  />
+                ) : (
+                  <Empty description="You haven't placed any orders yet" />
+                )}
+              </ContentWrapper>
+            ),
           },
+
           {
             key: "profile",
             label: "Profile",
-            children: renderProfile(),
+            children: (
+              <ContentWrapper>
+                <SectionContainer>
+                  <HeaderRow>
+                    <StyledTitle level={5}>Contact</StyledTitle>
+                    <Button icon={<EditOutlined />} disabled> Edit</Button>
+                  </HeaderRow>
+
+                  <StyledCard>
+                    <Flex justify="space-between" align="center">
+                      <Text strong>Email</Text>
+                      <Text>{user?.email}</Text>
+                    </Flex>
+                  </StyledCard>
+                </SectionContainer>
+
+                <SectionContainer>
+                  <Flex justify="space-between" align="center">
+                    <StyledTitle level={5}>Addresses</StyledTitle>
+                    <Button disabled icon={<PlusOutlined  />} >Add</Button>
+                  </Flex>
+
+                  <StyledCard>
+                    <Flex align="center" gap={5}>
+                      <EnvironmentOutlined />
+                      <Text>No addresses added</Text>
+                    </Flex>
+                  </StyledCard>
+                </SectionContainer>
+
+                <SectionContainer>
+                  <Flex justify="space-between" align="center">
+                    <StyledTitle level={5}>Marketing preferences</StyledTitle>
+                  </Flex>
+
+                  <StyledCard>
+                    <Flex justify="space-between" align="center">
+                      <Flex align="center" gap={5}>
+                        <MailOutlined />
+                        <Text type="secondary">Email</Text>
+                      </Flex>
+                      <Switch />
+                    </Flex>
+                  </StyledCard>
+                </SectionContainer>
+
+                <SignOutWrapper>
+                  <Button size="large" onClick={handleLogout}>
+                    Sign out
+                  </Button>
+
+                  <SignOutLink onClick={handleLogout}>
+                    Sign out of all devices
+                  </SignOutLink>
+                </SignOutWrapper>
+              </ContentWrapper>
+            ),
           },
         ]}
       />
