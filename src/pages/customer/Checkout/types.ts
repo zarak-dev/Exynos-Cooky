@@ -9,11 +9,3 @@ export interface FormValues {
 }
 
 export type PaymentMethod = "cod" | "card";
-
-export interface GroupedCartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  totalPrice: number;
-}
