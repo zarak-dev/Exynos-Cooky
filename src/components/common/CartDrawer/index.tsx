@@ -15,6 +15,7 @@ import { SlotGrid, CookieSlot, DrawerFooter, TotalRow } from "./styles";
 import { StyledTitle } from "../../StyledTitle";
 import Text from "antd/es/typography/Text";
 import { Wrapper } from "../../Wrapper";
+import type { Cookie } from "../../../utils/mockData";
 
 export const CartDrawer: React.FC = () => {
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ export const CartDrawer: React.FC = () => {
         itemLayout="horizontal"
         dataSource={items}
         locale={{ emptyText: "Your customized baking box is currently empty." }}
-        renderItem={(item: any, index) => (
+        renderItem={(item: Cookie, index) => (
           <List.Item
             actions={[
               <Button

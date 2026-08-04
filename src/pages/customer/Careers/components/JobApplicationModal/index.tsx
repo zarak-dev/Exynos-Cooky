@@ -1,21 +1,29 @@
 import React from "react";
 import { Modal, Form, Input, Upload, Button, Row, Col } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import type { FormValues } from "../../../Checkout/types";
+
+
+export interface JobApplicationValues {
+  fullName: string;
+  email: string;
+  phone: string;
+  portfolio?: string;
+  resume: unknown[];
+  coverLetter: string;
+}
 
 interface JobApplicationModalProps {
   open: boolean;
   jobTitle?: string;
   onCancel: () => void;
-  onSubmit: (values: FormValues) => void;
+  onSubmit: (values: JobApplicationValues) => void;
 }
 
-const normFile = (e: any) => {
+const normFile = (e: { fileList: unknown[] } | unknown[]) => {
   if (Array.isArray(e)) {
     return e;
   }
-
-  return e?.fileList;
+  return (e as { fileList: unknown[] })?.fileList;
 };
 
 const JobApplicationModal: React.FC<JobApplicationModalProps> = ({

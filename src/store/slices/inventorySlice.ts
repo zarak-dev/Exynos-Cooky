@@ -1,16 +1,8 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { COOKIE_MOCK_DATA } from '../../utils/mockData';
+import { type Cookie } from '../../utils/mockData';
 
-interface CookieItem {
-  id: number;
-  name: string;
-  price: number;
-  isAvailable: boolean;
-  imageUrl: string;
-  description: string;
-}
-
-const loadInventoryFromStorage = () => {
+const loadInventoryFromStorage = (): Cookie[] => {
   try {
     const savedInventory = localStorage.getItem('exynos_inventory');
     return savedInventory ? JSON.parse(savedInventory) : COOKIE_MOCK_DATA;
@@ -20,7 +12,7 @@ const loadInventoryFromStorage = () => {
 };
 
 interface InventoryState {
-  items: CookieItem[];
+  items: Cookie[];
 }
 
 const initialState: InventoryState = {

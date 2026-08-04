@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Header from "../Header";
 import Footer from "../Footer";
 import { AuthModal } from "../../../common/Auth";
-import { CartDrawer } from "../../../common/CartDrawer/CartDrawer";
+import { CartDrawer } from "../../../common/CartDrawer";
 import { LayoutWrapper, ContentArea } from "./styles";
 
 const MainLayout: React.FC = () => {
