@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Card } from "antd";
+import { Card, Input } from "antd";
 
 export const HistoryCardWrapper = styled(Card)`
   margin-top: 24px;
@@ -9,4 +9,9 @@ export const HistoryCardWrapper = styled(Card)`
     color: #00009c;
     font-weight: 700;
   }
+`;
+export const SearchInput= styled(Input.Search)`
+max-width: 400px;
+margin-bottom: 16px;
+margin-left: 769px;
 `;

@@ -47,6 +47,7 @@ const orderSlice = createSlice({
     deleteOrder: (state, action: PayloadAction<string>) => {
       state.orders = state.orders.filter(
         (order) => order.id !== action.payload,
+        localStorage.setItem("exynos_orders", JSON.stringify(state.orders))
       );
     },
   },

@@ -19,7 +19,7 @@ import {
   setBoxSize,
   addCookieToBox,
 } from "../../../store/slices/cartSlice";
-import type { GroupedCartItem } from "./types";
+import { groupCartItems, type GroupedCartItem } from "../../../utils/cartUtils";
 import {
   CartContainer,
   EmptyCartContainer,
@@ -32,6 +32,7 @@ import {
 } from "./styles";
 import { StyledTitle } from "../../../components/StyledTitle";
 import { StyledCard } from "../../../components/StyledCard";
+import { DELIVERY_FEE } from "../../../constants/pricing";
 
 const { Text } = Typography;
 
@@ -43,38 +44,21 @@ export const CartPage = () => {
     (state: RootState) => state.cart,
   );
 
-  const groupedCartItems = useMemo(() => {
-    const grouped = new Map<string, GroupedCartItem>();
-
-    cartItems.forEach((item, index) => {
-      const price = Number(item.price);
-      const existing = grouped.get(item.name);
-
-      if (existing) {
-        existing.quantity++;
-        existing.totalPrice += price;
-        existing.indices.push(index);
-      } else {
-        grouped.set(item.name, {
-          ...item,
-          price,
-          quantity: 1,
-          totalPrice: price,
-          indices: [index],
-        });
-      }
-    });
-
-    return Array.from(grouped.values());
-  }, [cartItems]);
+  const groupedCartItems = useMemo(
+    () => groupCartItems(cartItems),
+    [cartItems],
+  );
 
   const subtotal = cartItems.reduce((sum, item) => sum + Number(item.price), 0);
 
-  const deliveryFee = subtotal > 0 ? 150 : 0;
+  const deliveryFee = subtotal > 0 ? DELIVERY_FEE : 0;
   const totalAmount = subtotal + deliveryFee;
 
   const removeCookie = (record: GroupedCartItem, showMessage = false) => {
-    dispatch(removeCookieFromBox(record.indices.at(-1)!));
+    const lastIndex = [...cartItems]
+      .map((i) => i.name)
+      .lastIndexOf(record.name);
+    dispatch(removeCookieFromBox(lastIndex));
 
     if (showMessage) {
       message.success(`One "${record.name}" removed from cart.`);

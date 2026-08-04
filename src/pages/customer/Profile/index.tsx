@@ -15,7 +15,7 @@ import {
   HeaderRow,
 } from "./styles";
 import Text from "antd/es/typography/Text";
-import { StyledCard } from "../Checkout/styles";
+import { StyledCard } from "../../../components/StyledCard";
 import { StyledTitle } from "../../../components/StyledTitle";
 
 const { useBreakpoint } = Grid;

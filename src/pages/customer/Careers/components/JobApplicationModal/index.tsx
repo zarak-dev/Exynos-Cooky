@@ -1,12 +1,13 @@
 import React from "react";
 import { Modal, Form, Input, Upload, Button, Row, Col } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import type { FormValues } from "../../../Checkout/types";
 
 interface JobApplicationModalProps {
   open: boolean;
   jobTitle?: string;
   onCancel: () => void;
-  onSubmit: (values: any) => void;
+  onSubmit: (values: FormValues) => void;
 }
 
 const normFile = (e: any) => {

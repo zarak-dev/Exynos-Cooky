@@ -1,17 +1,9 @@
 import { Avatar, Flex, Tag, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-
+import type { UserHistoryRow } from "../../../../store/slices/userHistorySlice";
 const { Text } = Typography;
 
-export interface UserHistoryRow {
-  uuid: string;
-  index: number;
-  name: string;
-  email: string;
-  country: string;
-  thumbnail: string;
-}
 
 export const userHistoryColumns: ColumnsType<UserHistoryRow> = [
   {

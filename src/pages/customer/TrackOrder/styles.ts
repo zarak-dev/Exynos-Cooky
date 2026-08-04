@@ -40,11 +40,12 @@ export const SearchButton = styled(Button)`
   background: #00009c !important;
   border-color: #00009c !important;
   color: #ffffff !important;
-
+  margin-left: 8px;
   &:hover {
     background-color: #000066 !important;
     border-color: #000066 !important;
   }
+    
 `;
 
 export const ResultCard = styled(Card)`

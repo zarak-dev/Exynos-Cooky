@@ -29,9 +29,9 @@ export const AppRoute: React.FC = () => {
         <Routes>
           {/*  STOREFRONT LAYOUT GROUP */}
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path="about" element={<AboutUs />} />
+            <Route index  element={<Home />} />
             <Route path="track-order" element={<TrackOrder />} />
+            <Route path="about" element={<AboutUs />} />
             <Route path="careers" element={<Careers />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<CheckoutPage />} />

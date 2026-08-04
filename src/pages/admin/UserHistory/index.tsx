@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Input, Table } from "antd";
+import { Table } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 
 import { type RootState } from "../../../store";
 import { fetchUsersStart } from "../../../store/slices/userHistorySlice";
-import { HistoryCardWrapper } from "./styles";
+import { HistoryCardWrapper, SearchInput } from "./styles";
 import { userHistoryColumns } from "./components/userHistoryColumns";
 
 const UserHistory: React.FC = () => {
@@ -34,15 +34,15 @@ const UserHistory: React.FC = () => {
 
   return (
     <HistoryCardWrapper title="Customer History & Directory">
-      <Input>
-        <Input.Search
+        
+        <SearchInput
           placeholder="Search by customer name or index..."
           allowClear
           size="medium"
           enterButton={<SearchOutlined />}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </Input>
+  
 
       <Table
         rowKey="uuid"

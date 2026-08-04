@@ -12,8 +12,8 @@ export interface BreadcrumbItem {
 export interface StyledPageHeaderProps {
   title: string;
   breadcrumbs?: BreadcrumbItem[];
-  extra?: any;
-  children?: any;
+  extra?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const StyledPageHeader = ({

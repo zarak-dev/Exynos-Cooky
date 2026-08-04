@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-export interface UserProfile {
+export interface UserHistoryRow {
   index: number;
   uuid: string;
   name: string;
@@ -10,7 +10,7 @@ export interface UserProfile {
 }
 
 interface UserHistoryState {
-  users: UserProfile[];
+  users: UserHistoryRow[];
   loading: boolean;
   error: string | null;
 }
@@ -29,7 +29,7 @@ const userHistorySlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    fetchUsersSuccess(state, action: PayloadAction<UserProfile[]>) {
+    fetchUsersSuccess(state, action: PayloadAction<UserHistoryRow[]>) {
       state.users = action.payload;
       state.loading = false;
     },

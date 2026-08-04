@@ -106,6 +106,7 @@ export const TrackOrder: React.FC = () => {
         <Space.Compact style={{ width: "100%" }}>
           <Input
             size="large"
+            
             allowClear
             placeholder="Enter your Order ID (e.g., EXNS-12345)"
             value={orderId}

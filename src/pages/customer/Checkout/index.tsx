@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Form, Input, Radio, Row } from "antd";
+import { Col, Form, Input, Radio, Row, Tooltip } from "antd";
 import { CarOutlined, CreditCardOutlined } from "@ant-design/icons";
 import { OrderSummary } from "./components/OrderSummary";
 import { OrderConfirmed } from "./components/OrderConfirmed";
@@ -168,16 +168,15 @@ export const CheckoutPage: React.FC = () => {
                     </PaymentMethodCard>
                   </Col>
                   <Col span={12}>
-                    <PaymentMethodCard
-                      hoverable
-                      $isActive={paymentMethod === "card"}
-                    >
-                      <Radio value="card">
-                        <PaymentLabel strong>
-                          <CreditCardOutlined /> Card on Delivery
-                        </PaymentLabel>
-                      </Radio>
-                    </PaymentMethodCard>
+                    <Tooltip title="This payment method is currently unavailable">
+                      <PaymentMethodCard hoverable={false} $isActive={false}>
+                        <Radio value="card" disabled>
+                          <PaymentLabel disabled strong>
+                            <CreditCardOutlined /> Card on Delivery
+                          </PaymentLabel>
+                        </Radio>
+                      </PaymentMethodCard>
+                    </Tooltip>
                   </Col>
                 </Row>
               </FullWidthRadioGroup>

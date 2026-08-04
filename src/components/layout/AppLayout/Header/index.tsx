@@ -83,8 +83,8 @@ const Header: React.FC = () => {
 
   const navItems = [
     { key: "/", label: "Home" },
-    { key: "/about", label: "Our Story" },
     { key: "/track-order", label: "Track Order" },
+    { key: "/about", label: "Our Story" },
     { key: "/careers", label: "Careers" },
   ];
 

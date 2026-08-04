@@ -53,22 +53,14 @@ const Careers: React.FC = () => {
     setSelectedJob(null);
   }, []);
 
-  const handleSubmitApplication = useCallback(
-    (values: unknown) => {
-      message.success(
-        `Success! Your application for ${selectedJob?.title} has been received.`,
-      );
+  const handleSubmitApplication = useCallback(() => {
+    message.success(
+      `Success! Your application for ${selectedJob?.title} has been received.`,
+    );
 
-      console.log("Application:", {
-        job: selectedJob,
-        values,
-      });
-
-      setIsModalOpen(false);
-      setSelectedJob(null);
-    },
-    [selectedJob],
-  );
+    setIsModalOpen(false);
+    setSelectedJob(null);
+  }, [selectedJob]);
 
   const jobItems = useMemo(
     () =>
