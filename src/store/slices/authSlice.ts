@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { loadFromStorage } from "../../utils/storage";
 
 export type UserRole = "customer" | "admin";
 
@@ -23,21 +24,11 @@ interface AuthState {
 
 export const ADMIN_EMAIL = "admin@exynoscooky.com";
 
-// 🌟 Helper function to safely read our mock database from LocalStorage
-const loadUsersFromStorage = (): RegisteredUser[] => {
-  try {
-    const stored = localStorage.getItem("exynos_users");
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
-};
-
 const initialState: AuthState = {
   isAuthModalOpen: false,
   isLoggedIn: false,
   user: null,
-  registeredUsers: loadUsersFromStorage(), // Initialize from storage on app load
+  registeredUsers: loadFromStorage<RegisteredUser[]>("exynos_users", []),
 };
 
 const authSlice = createSlice({

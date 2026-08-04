@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { loadFromStorage } from "../../utils/storage";
 
 export interface Order {
   id: string;
@@ -9,21 +10,13 @@ export interface Order {
   status: "Pending" | "Baking" | "Dispatched" | "Delivered";
   timestamp: string;
 }
-const loadOrdersFromStorage = (): Order[] => {
-  try {
-    const saved = localStorage.getItem("exynos_orders");
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
-};
 
 interface OrderState {
   orders: Order[];
 }
 
 const initialState: OrderState = {
-  orders: loadOrdersFromStorage(),
+  orders: loadFromStorage<Order[]>("exynos_orders", []),
 };
 
 const orderSlice = createSlice({
