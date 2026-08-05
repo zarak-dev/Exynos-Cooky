@@ -4,6 +4,7 @@ import { loadFromStorage } from "../../utils/storage";
 export interface Order {
   id: string;
   customerName: string;
+  customerEmail: string;
   boxSize: string;
   contents: string;
   totalPrice: number;

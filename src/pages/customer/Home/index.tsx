@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Col, message, Rate, Row, Select, Tag } from "antd";
+import { Col, message, Rate, Row, Select, Tag, Grid, Flex } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 
 import { type Cookie } from "../../../utils/mockData";
 import { type RootState } from "../../../store";
-import { addCookieToBox } from "../../../store/slices/cartSlice";
+import { addCookieToBox, setBoxSize } from "../../../store/slices/cartSlice";
 
 import { StyledInput } from "../../../components/StyledInput";
 import { StyledTitle } from "../../../components/StyledTitle";
 import { StyledCard } from "../../../components/StyledCard";
-
+import { BOX_SIZES } from "../../../constants/pricing";
 import {
   HomeContainer,
   CoverImage,
@@ -25,8 +25,8 @@ import {
 } from "./styles";
 
 const FILTER_OPTIONS = [
-  { value: "popular", label: "Most Popular" },
-  { value: "latest", label: "Latest" },
+  { value: "latest", label: "Latest", disabled: true },
+  { value: "popular", label: "Most Popular", disabled: true },
   { value: "price-low", label: "Price: Low to High" },
   { value: "price-high", label: "Price: High to Low" },
 ];
@@ -47,11 +47,7 @@ const CookieGrid = ({
   onAdd: (cookie: Cookie) => void;
 }) => {
   if (!cookies.length) {
-    return (
-      <NoResults>
-        No delicious cookies match your search! 🍪
-      </NoResults>
-    );
+    return <NoResults>No delicious cookies match your search! 🍪</NoResults>;
   }
 
   return (
@@ -79,18 +75,14 @@ const CookieGrid = ({
                   color={cookie.isAvailable ? "blue" : "red"}
                   variant="solid"
                 >
-                  {cookie.isAvailable
-                    ? `Rs. ${cookie.price}`
-                    : "Sold Out"}
+                  {cookie.isAvailable ? `Rs. ${cookie.price}` : "Sold Out"}
                 </Tag>
               </CardHeader>
 
               {showRatings && rating && (
                 <RatingWrapper align="center">
                   <Rate disabled allowHalf defaultValue={rating.rating} />
-                  <ReviewCountText>
-                    ({rating.reviews})
-                  </ReviewCountText>
+                  <ReviewCountText>({rating.reviews})</ReviewCountText>
                 </RatingWrapper>
               )}
 
@@ -116,27 +108,35 @@ const CookieGrid = ({
 const Home: React.FC = () => {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
-
+  const screens = Grid.useBreakpoint();
   const [search, setSearch] = useState("");
-
-  const { items: cookies } = useSelector(
-    (state: RootState) => state.inventory
+  const [sortBy, setSortBy] = useState<"price-low" | "price-high" | undefined>(
+    undefined,
   );
+  const { items: cookies } = useSelector((state: RootState) => state.inventory);
 
   const { items: cartItems, boxSize } = useSelector(
-    (state: RootState) => state.cart
+    (state: RootState) => state.cart,
   );
 
-  const filteredCookies = cookies.filter((cookie) =>
-    cookie.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredCookies = cookies
+    .filter((cookie) =>
+      cookie.name.toLowerCase().includes(search.toLowerCase()),
+    )
+    .sort((a, b) =>
+      sortBy === "price-low"
+        ? a.price - b.price
+        : sortBy === "price-high"
+          ? b.price - a.price
+          : 0,
+    );
 
   const topRatedCookies = filteredCookies.slice(0, 3);
 
   const handleAddToCart = (cookie: Cookie) => {
     if (cartItems.length >= boxSize) {
       messageApi.error(
-        `Your ${boxSize}-Pack is full! Clear items or upgrade your box size.`
+        `Your ${boxSize}-Pack is full! Clear items or upgrade your box size.`,
       );
       return;
     }
@@ -161,24 +161,51 @@ const Home: React.FC = () => {
         />
       </ExploreSection>
 
-      <MenuTabs
-        centered
-        defaultActiveKey="1"
-        tabBarExtraContent={{
-          left: (
-            <Select
-              defaultValue="latest"
-              style={{ width: 150 }}
-              options={FILTER_OPTIONS}
-            />
-          ),
-          right: (
-            <Select
-              placeholder="Select box size"
-              style={{ width: 150 }}
-            />
-          ),
-        }}
+    {!screens.md && (
+  <Flex gap={12} style={{ marginBottom: 16 }}>
+    <Select
+      value={sortBy}
+      placeholder="Pricing"
+      onChange={(value) => setSortBy(value)}
+      style={{ flex: 1 }}
+      options={FILTER_OPTIONS}
+    />
+    <Select
+      value={boxSize}
+      onChange={(value) => dispatch(setBoxSize(value))}
+      style={{ flex: 1 }}
+      options={BOX_SIZES.map((size) => ({
+        value: size,
+        label: `${size}-Pack`,
+      }))}
+    />
+  </Flex>
+)}
+
+<MenuTabs
+  defaultActiveKey="1"
+  tabBarExtraContent={screens.md ? {
+    left: (
+      <Select
+        value={sortBy}
+        placeholder="Pricing"
+        onChange={(value) => setSortBy(value)}
+        style={{ width: 160, marginRight: 12 }}
+        options={FILTER_OPTIONS}
+      />
+    ),
+    right: (
+      <Select
+        value={boxSize}
+        onChange={(value) => dispatch(setBoxSize(value))}
+        style={{ width: 120, marginLeft: 12 }}
+        options={BOX_SIZES.map((size) => ({
+          value: size,
+          label: `${size}-Pack`,
+        }))}
+      />
+    ),
+  } : undefined}
         items={[
           {
             key: "1",
@@ -195,10 +222,7 @@ const Home: React.FC = () => {
             key: "2",
             label: "🍪 All Menu",
             children: (
-              <CookieGrid
-                cookies={filteredCookies}
-                onAdd={handleAddToCart}
-              />
+              <CookieGrid cookies={filteredCookies} onAdd={handleAddToCart} />
             ),
           },
         ]}

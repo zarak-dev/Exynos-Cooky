@@ -23,7 +23,7 @@ export function useCheckout() {
 
   const [confirmedOrderId, setConfirmedOrderId] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
-
+  const user = useSelector((state: RootState) => state.auth.user);
   const { items: cartItems, boxSize } = useSelector(
     (state: RootState) => state.cart,
   );
@@ -48,6 +48,7 @@ export function useCheckout() {
       placeNewOrder({
         id: orderId,
         customerName: `${values.firstName} ${values.lastName}`,
+        customerEmail: user?.email || "",
         boxSize: `${boxSize}-Pack Custom Box`,
         contents: buildContentsString(groupedCartItems),
         totalPrice: totalAmount,

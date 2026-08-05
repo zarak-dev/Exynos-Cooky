@@ -59,6 +59,7 @@ export const MenuTabs = styled(Tabs)`
     background: #00009c !important;
     height: 3px !important;
   }
+
 `;
 
 export const NoResults = styled(Paragraph)`

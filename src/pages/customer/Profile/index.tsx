@@ -56,7 +56,7 @@ const CustomerProfile: React.FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const customerOrders = user
-    ? orders.filter((order) => order.customerName === user.name)
+    ? orders.filter((order) => order.customerEmail === user.email)
     : [];
 
   useEffect(() => {
