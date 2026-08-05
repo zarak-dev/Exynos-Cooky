@@ -105,9 +105,7 @@ export const CartPage = () => {
       </EmptyCartContainer>
     );
   }
-  const handleBoxSizeChange = (value: 4 | 6 | 12) => {
-    dispatch(setBoxSize(value));
-  };
+
   return (
     <CartContainer>
       <StyledTitle level={2}>YOUR CART</StyledTitle>
@@ -135,7 +133,7 @@ export const CartPage = () => {
               <StyledRadioGroup
                 value={boxSize}
                 buttonStyle="solid"
-                onChange={(e) => handleBoxSizeChange(e.target.value)}
+                onChange={(e) => dispatch(setBoxSize(e.target.value))}
               >
                 <Radio.Button value={4}>4-Pack</Radio.Button>
                 <Radio.Button value={6}>6-Pack</Radio.Button>

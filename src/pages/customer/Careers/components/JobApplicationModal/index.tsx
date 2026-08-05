@@ -76,7 +76,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
         style={{ marginTop: "20px" }}
       >
         <Row gutter={16}>
-          <Col xs={24} sm={12}>
+          <Col span={24} sm={12}>
             <Form.Item
               name="fullName"
               label="Full Name"
@@ -91,7 +91,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
             </Form.Item>
           </Col>
 
-          <Col xs={24} sm={12}>
+          <Col span={24} sm={12}>
             <Form.Item
               name="email"
               label="Email"
@@ -112,7 +112,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
         </Row>
 
         <Row gutter={16}>
-          <Col xs={24} sm={12}>
+          <Col span={24} sm={12}>
             <Form.Item
               name="phone"
               label="Phone Number"
@@ -127,7 +127,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
             </Form.Item>
           </Col>
 
-          <Col xs={24} sm={12}>
+          <Col span={24} sm={12}>
             <Form.Item name="portfolio" label="LinkedIn / Portfolio URL">
               <Input placeholder="https://linkedin.com/in/..." />
             </Form.Item>

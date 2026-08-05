@@ -25,8 +25,6 @@ import {
 } from "./styles";
 
 const FILTER_OPTIONS = [
-  { value: "latest", label: "Latest", disabled: true },
-  { value: "popular", label: "Most Popular", disabled: true },
   { value: "price-low", label: "Price: Low to High" },
   { value: "price-high", label: "Price: High to Low" },
 ];
