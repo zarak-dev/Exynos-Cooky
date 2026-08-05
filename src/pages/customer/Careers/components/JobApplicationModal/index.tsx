@@ -2,7 +2,6 @@ import React from "react";
 import { Modal, Form, Input, Upload, Button, Row, Col } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
-
 export interface JobApplicationValues {
   fullName: string;
   email: string;
@@ -35,7 +34,10 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
   const [form] = Form.useForm();
 
   const handleSubmit = () => {
-    form.submit();
+    form.validateFields().then((values) => {
+      onSubmit(values);
+      form.resetFields();
+    });
   };
 
   return (

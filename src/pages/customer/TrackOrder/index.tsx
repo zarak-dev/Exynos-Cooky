@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "../../../store";
-import { type Order } from "../../../store/slices/orderSlice";
+import { type Order, deleteOrder } from "../../../store/slices/orderSlice";
 import {
   Input,
   Steps,
@@ -10,6 +10,8 @@ import {
   Badge,
   Space,
   Descriptions,
+  Button,
+  Popconfirm,
 } from "antd";
 import {
   SearchOutlined,
@@ -17,6 +19,7 @@ import {
   SmileOutlined,
   CarOutlined,
   SolutionOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import {
   TrackContainer,
@@ -62,7 +65,16 @@ const STEP_INDEX = {
 export const TrackOrder: React.FC = () => {
   const [orderId, setOrderId] = useState("");
   const [searchedOrder, setSearchedOrder] = useState<Order | null>(null);
-
+  const dispatch = useDispatch();
+  const handleDelete = () => {
+      if (searchedOrder) {
+        dispatch(deleteOrder(searchedOrder.id));
+        setSearchedOrder(null);
+        setOrderId("");
+        messageApi.success("Order cancelled successfully.");
+      }
+    };
+    
   // Initialize the hook to get the API and the context element
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -75,7 +87,6 @@ export const TrackOrder: React.FC = () => {
       messageApi.warning("Please enter an Order ID to track!");
       return;
     }
-
     // Search for the order in our global Redux state
     const foundOrder = orders.find(
       (o) => o.id.toUpperCase() === normalizedOrderId,
@@ -106,7 +117,6 @@ export const TrackOrder: React.FC = () => {
         <Space.Compact style={{ width: "100%" }}>
           <Input
             size="large"
-            
             allowClear
             placeholder="Enter your Order ID (e.g., EXNS-12345)"
             value={orderId}
@@ -127,17 +137,32 @@ export const TrackOrder: React.FC = () => {
       {searchedOrder ? (
         <ResultCard variant="borderless">
           <ResultHeader>
-            <Space direction="vertical" size={2}>
-              <OrderTitle level={5}>
-                Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
-              </OrderTitle>
-              <OrderDateText>Placed: {formattedDate}</OrderDateText>
-            </Space>
-            <Badge
-              status="processing"
-              text={<BadgeText strong>{searchedOrder.status}</BadgeText>}
-            />
-          </ResultHeader>
+  <Space direction="vertical" size={2}>
+    <OrderTitle level={5}>
+      Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
+    </OrderTitle>
+    <OrderDateText>Placed: {formattedDate}</OrderDateText>
+  </Space>
+
+  <Space>
+    <Badge
+      status="processing"
+      text={<BadgeText strong>{searchedOrder.status}</BadgeText>}
+    />
+    <Popconfirm
+      title="Cancel Order"
+      description="Are you sure you want to cancel this order?"
+      onConfirm={handleDelete}
+      okText="Yes, Cancel"
+      cancelText="Keep Order"
+      okButtonProps={{ danger: true }}
+    >
+      <Button danger icon={<DeleteOutlined />} size="small">
+        Cancel Order
+      </Button>
+    </Popconfirm>
+  </Space>
+</ResultHeader>
 
           {/* STEP PROGRESS */}
           <Steps
