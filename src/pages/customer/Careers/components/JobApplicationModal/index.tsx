@@ -71,7 +71,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
       <Form
         form={form}
         layout="vertical"
-        requiredMark="optional"
+        requiredMark
         onFinish={onSubmit}
         style={{ marginTop: "20px" }}
       >

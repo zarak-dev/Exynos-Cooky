@@ -172,7 +172,7 @@ export const CheckoutPage: React.FC = () => {
                       <PaymentMethodCard hoverable={false} $isActive={false}>
                         <Radio value="card" disabled>
                           <PaymentLabel disabled strong>
-                            <CreditCardOutlined /> Card on Delivery
+                            <CreditCardOutlined /> Card Payment
                           </PaymentLabel>
                         </Radio>
                       </PaymentMethodCard>

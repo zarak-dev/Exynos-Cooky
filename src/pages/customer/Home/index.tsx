@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Col, message, Rate, Row, Select, Tag, Grid, Flex } from "antd";
+import {
+  Col,
+  message,
+  Rate,
+  Row,
+  Select,
+  Tag,
+  Grid,
+  Flex,
+  Tooltip,
+} from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -159,51 +169,59 @@ const Home: React.FC = () => {
         />
       </ExploreSection>
 
-    {!screens.md && (
-  <Flex gap={12} style={{ marginBottom: 16 }}>
-    <Select
-      value={sortBy}
-      placeholder="Pricing"
-      onChange={(value) => setSortBy(value)}
-      style={{ flex: 1 }}
-      options={FILTER_OPTIONS}
-    />
-    <Select
-      value={boxSize}
-      onChange={(value) => dispatch(setBoxSize(value))}
-      style={{ flex: 1 }}
-      options={BOX_SIZES.map((size) => ({
-        value: size,
-        label: `${size}-Pack`,
-      }))}
-    />
-  </Flex>
-)}
+      {!screens.md && (
+        <Flex gap={12} style={{ marginBottom: 16 }}>
+          <Select
+            value={sortBy}
+            placeholder="Pricing"
+            onChange={(value) => setSortBy(value)}
+            style={{ flex: 1 }}
+            options={FILTER_OPTIONS}
+          />
+          <Tooltip title="Updates your cart automatically">
+            <Select
+              value={boxSize}
+              onChange={(value) => dispatch(setBoxSize(value))}
+              style={{ flex: 1 }}
+              options={BOX_SIZES.map((size) => ({
+                value: size,
+                label: `${size}-Pack`,
+              }))}
+            />
+          </Tooltip>
+        </Flex>
+      )}
 
-<MenuTabs
-  defaultActiveKey="1"
-  tabBarExtraContent={screens.md ? {
-    left: (
-      <Select
-        value={sortBy}
-        placeholder="Pricing"
-        onChange={(value) => setSortBy(value)}
-        style={{ width: 160, marginRight: 12 }}
-        options={FILTER_OPTIONS}
-      />
-    ),
-    right: (
-      <Select
-        value={boxSize}
-        onChange={(value) => dispatch(setBoxSize(value))}
-        style={{ width: 120, marginLeft: 12 }}
-        options={BOX_SIZES.map((size) => ({
-          value: size,
-          label: `${size}-Pack`,
-        }))}
-      />
-    ),
-  } : undefined}
+      <MenuTabs
+        defaultActiveKey="1"
+        tabBarExtraContent={
+          screens.md
+            ? {
+                left: (
+                  <Select
+                    value={sortBy}
+                    placeholder="Pricing"
+                    onChange={(value) => setSortBy(value)}
+                    style={{ width: 160, marginRight: 12 }}
+                    options={FILTER_OPTIONS}
+                  />
+                ),
+                right: (
+                  <Tooltip title="Select Your Box Size">
+                    <Select
+                      value={boxSize}
+                      onChange={(value) => dispatch(setBoxSize(value))}
+                      style={{ width: 120, marginLeft: 12 }}
+                      options={BOX_SIZES.map((size) => ({
+                        value: size,
+                        label: `${size}-Pack`,
+                      }))}
+                    />
+                  </Tooltip>
+                ),
+              }
+            : undefined
+        }
         items={[
           {
             key: "1",

@@ -1,9 +1,7 @@
-import { Button, Popconfirm } from "antd";
+import { Button, Popconfirm, Space } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-
 import { type Order } from "../../../../store/slices/orderSlice";
-import { Wrapper } from "../../../../components/Wrapper";
-import { CompleteText, StatusActionContainer } from "../styles";
+import { CompleteText } from "../styles";
 
 type Props = {
   order: Order;
@@ -20,21 +18,18 @@ const OrderActions = ({
   onStatusChange,
   onDelete,
 }: Props) => (
-  <Wrapper>
-    <StatusActionContainer>
-      {order.status === "Delivered" ? (
-        <CompleteText>Complete ✓</CompleteText>
-      ) : (
-        <Button
-          type="primary"
-          size="small"
-          block
-          onClick={() => onStatusChange(order.id, nextStatus!)}
-        >
-          {buttonLabel}
-        </Button>
-      )}
-    </StatusActionContainer>
+  <Space>
+    {order.status === "Delivered" ? (
+      <CompleteText>Complete ✓</CompleteText>
+    ) : (
+      <Button
+        type="primary"
+        size="small"
+        onClick={() => onStatusChange(order.id, nextStatus!)}
+      >
+        {buttonLabel}
+      </Button>
+    )}
 
     <Popconfirm
       title="Delete Order"
@@ -44,9 +39,9 @@ const OrderActions = ({
       cancelText="Cancel"
       okButtonProps={{ danger: true }}
     >
-      <Button type="text" danger icon={<DeleteOutlined />} />
+      <Button type="text" danger size="small" icon={<DeleteOutlined />} />
     </Popconfirm>
-  </Wrapper>
+  </Space>
 );
 
 export default OrderActions;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Tag } from "antd";
+import { Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import Text from "antd/es/typography/Text";
 import {
@@ -9,8 +9,6 @@ import {
 } from "@ant-design/icons";
 
 import { type Order } from "../../../../store/slices/orderSlice";
-
-import { PriceText } from "../styles";
 import OrderActions from "./orderActions";
 
 const NEXT_STATUS: Partial<Record<Order["status"], Order["status"]>> = {
@@ -79,7 +77,7 @@ export const getOrderColumns = ({
   {
     title: "TOTAL",
     dataIndex: "totalPrice",
-    render: (price) => <PriceText>Rs. {price}</PriceText>,
+    render: (price) => <Typography.Text strong>Rs. {price}</Typography.Text>,
   },
   {
     title: "STATUS",

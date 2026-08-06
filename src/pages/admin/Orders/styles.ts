@@ -19,15 +19,7 @@ export const OrdersCard = styled(Card)`
   }
 `;
 
-export const PriceText = styled(Text)``;
-
 export const CompleteText = styled(Text)`
   color: #8c8c8c;
   font-size: 0.85rem;
-`;
-
-export const StatusActionContainer = styled.div`
-  width: 130px;
-  display: flex;
-  align-items: center;
 `;
