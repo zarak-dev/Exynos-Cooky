@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, Badge, message, Image, Typography } from "antd";
+import { Dropdown, Badge, message, Image, Typography, Tooltip } from "antd";
 import {
   UserOutlined,
   ShoppingOutlined,
   MenuOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -17,13 +18,17 @@ import logoSvg from "../../../../../public/exynos-favicon.png";
 
 import {
   StyledHeader,
-  LeftContainer,
   LogoContainer,
-  DesktopMenu,
+  LogoWrapper,
+  LeftMenu,
+  LeftMenuWrapper,
+  RightMenu,
+  RightMenuWrapper,
   MobileMenuButton,
   IconActions,
   ActionIcon,
   CartIcon,
+  TrackIcon,
   StyledDrawer,
   MobileDrawerMenu,
 } from "./styles";
@@ -81,13 +86,17 @@ const Header: React.FC = () => {
     ],
   };
 
-  const navItems = [
+  const leftNavItems = [
     { key: "/", label: "Home" },
     { key: "/buy-cooky", label: "Buy Cooky" },
-    { key: "/track-order", label: "Track Order" },
+  ];
+
+  const rightNavItems = [
     { key: "/about", label: "Our Story" },
     { key: "/careers", label: "Careers" },
   ];
+
+  const allNavItems = [...leftNavItems, ...rightNavItems];
 
   const handleNavClick = (path: string) => {
     navigate(path);
@@ -96,24 +105,36 @@ const Header: React.FC = () => {
 
   return (
     <StyledHeader>
-      <LeftContainer gap="middle">
-        <MobileMenuButton
-          icon={<MenuOutlined />}
-          onClick={() => setIsMobileMenuOpen(true)}
-        />
+      <MobileMenuButton
+        icon={<MenuOutlined />}
+        onClick={() => setIsMobileMenuOpen(true)}
+      />
 
+      <LeftMenuWrapper>
+        <LeftMenu
+          mode="horizontal"
+          selectedKeys={[location.pathname]}
+          items={leftNavItems}
+          onClick={(info) => handleNavClick(info.key)}
+          disabledOverflow
+        />
+      </LeftMenuWrapper>
+
+      <LogoWrapper>
         <LogoContainer to="/">
           <Image src={logoSvg} alt="logo" preview={false} width={140} />
         </LogoContainer>
-      </LeftContainer>
+      </LogoWrapper>
 
-      <DesktopMenu
-        mode="horizontal"
-        selectedKeys={[location.pathname]}
-        items={navItems}
-        onClick={(info) => handleNavClick(info.key)}
-        disabledOverflow
-      />
+      <RightMenuWrapper>
+        <RightMenu
+          mode="horizontal"
+          selectedKeys={[location.pathname]}
+          items={rightNavItems}
+          onClick={(info) => handleNavClick(info.key)}
+          disabledOverflow
+        />
+      </RightMenuWrapper>
 
       <IconActions>
         {isLoggedIn ? (
@@ -132,6 +153,12 @@ const Header: React.FC = () => {
             <UserOutlined />
           </ActionIcon>
         )}
+
+        <Tooltip title="Track Order">
+          <TrackIcon onClick={() => navigate("/track-order")}>
+            <AimOutlined />
+          </TrackIcon>
+        </Tooltip>
 
         <Badge
           count={totalCartCount}
@@ -155,7 +182,7 @@ const Header: React.FC = () => {
         <MobileDrawerMenu
           mode="vertical"
           selectedKeys={[location.pathname]}
-          items={navItems}
+          items={allNavItems}
           onClick={(info) => handleNavClick(info.key)}
         />
       </StyledDrawer>

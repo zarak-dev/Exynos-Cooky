@@ -64,6 +64,8 @@ const STEP_INDEX = {
 
 export const TrackOrder: React.FC = () => {
   const [orderId, setOrderId] = useState("");
+    // Initialize the hook to get the API and the context element
+  const [messageApi, contextHolder] = message.useMessage();
   const [searchedOrder, setSearchedOrder] = useState<Order | null>(null);
   const dispatch = useDispatch();
   const handleDelete = () => {
@@ -75,8 +77,7 @@ export const TrackOrder: React.FC = () => {
       }
     };
     
-  // Initialize the hook to get the API and the context element
-  const [messageApi, contextHolder] = message.useMessage();
+
 
   // Grab live orders from our global Redux store
   const orders = useSelector((state: RootState) => state.orders.orders);

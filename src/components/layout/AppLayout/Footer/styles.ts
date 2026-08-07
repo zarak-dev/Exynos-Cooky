@@ -2,8 +2,7 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
 export const StyledFooter = styled.footer`
-  background-color: #ffffff;
-  border-top: 1px solid #f0f0f0;
+  background-color: #00009c;
   padding: 60px 40px 20px 40px;
   margin-top: auto;
 `;
@@ -42,7 +41,7 @@ export const FooterColumn = styled.div`
 export const FooterBrand = styled.h2`
   font-size: 1.5rem;
   font-weight: 800;
-  color: #00009c;
+  color: #ffffff;
   font-family: "Poppins", sans-serif;
   margin: 0;
   display: flex;
@@ -51,7 +50,7 @@ export const FooterBrand = styled.h2`
 `;
 
 export const FooterText = styled.p`
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   line-height: 1.5;
   margin: 0;
@@ -60,20 +59,20 @@ export const FooterText = styled.p`
 export const FooterHeading = styled.h4`
   font-size: 0.9rem;
   font-weight: 700;
-  color: #00009c;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0;
 `;
 
 export const FooterLink = styled(NavLink)`
-  color: #555;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   text-decoration: none;
   transition: color 0.2s ease;
 
   &:hover {
-    color: #00009c;
+    color: #ffffff;
   }
 `;
 
@@ -81,7 +80,7 @@ export const CopyrightBar = styled.div`
   max-width: 1200px;
   margin: 40px auto 0 auto;
   padding-top: 20px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   justify-content: space-between;
   align-items: center;

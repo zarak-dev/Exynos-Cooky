@@ -6,7 +6,7 @@ import {
 } from "../../../../../store/slices/authSlice";
 import { type RootState } from "../../../../../store";
 import type { SignUpFormValues } from "../../Types";
-
+import { setOpenAuthModal } from "../../../../../store/slices/authSlice";
 export const SignUpForm = () => {
   const dispatch = useDispatch();
 
@@ -14,7 +14,7 @@ export const SignUpForm = () => {
 
   const onFinish = ({ name, email, password }: SignUpFormValues) => {
     email = email.trim();
-
+    const [form] = Form.useForm();
     const exists = users.some(
       (u) => u.email.toLowerCase() === email.toLowerCase(),
     );
@@ -36,6 +36,8 @@ export const SignUpForm = () => {
     );
 
     message.success("Account created");
+    form.resetFields();
+    dispatch(setOpenAuthModal(false));
   };
 
   return (

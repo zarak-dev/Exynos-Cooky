@@ -13,7 +13,7 @@ import { PageTransitionLoader } from "../components/common/PageTransitionLoader"
 import ProtectedRoute from "./ProtectedRoute";
 import { lazy, Suspense } from "react";
 import { Spin } from "antd";
-
+import BuyCooky from "../pages/customer/BuyCooky";
 const AdminOverview = lazy(() => import("../pages/admin/Overview/index"));
 const AdminInventory = lazy(() => import("../pages/admin/Inventory/index"));
 const AdminOrders = lazy(() => import("../pages/admin/Orders"));
@@ -28,6 +28,7 @@ const AppRoute = () => {
           {/* STOREFRONT LAYOUT GROUP */}
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
+            <Route path="buy-cooky" element={<BuyCooky />} />
             <Route path="about" element={<AboutUs />} />
             <Route path="track-order" element={<TrackOrder />} />
             <Route path="careers" element={<Careers />} />
