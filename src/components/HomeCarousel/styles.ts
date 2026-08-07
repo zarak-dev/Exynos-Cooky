@@ -9,14 +9,16 @@ export const StyledCarousel = styled(Carousel)`
   }
 
   .slick-dots li button {
-    background: #b7c4ff;
+    background: rgba(0, 0, 156, 0.95);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
   }
 
   .slick-dots li.slick-active button {
     background: #00009c;
   }
 
-  /* Force every slide to the same height */
   .slick-slide > div {
     height: 100%;
   }

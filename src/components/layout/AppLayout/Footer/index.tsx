@@ -1,5 +1,5 @@
 import React from "react";
-import logoSvg from "../../../../assets/images/exynos-cooky.svg";
+import logoSvg from "../../../../assets/images/exynos-icon-footer.png"
 import {
   StyledFooter,
   FooterGrid,
@@ -9,8 +9,6 @@ import {
   FooterText,
   FooterHeading,
   FooterLink,
-  CopyrightBar,
-  PolicyLinksWrapper,
 } from "./styles";
 
 const Footer: React.FC = () => {
@@ -22,10 +20,6 @@ const Footer: React.FC = () => {
           <FooterBrand>
             <LogoImage src={logoSvg} alt="Exynos Cooky Logo" />
           </FooterBrand>
-          <FooterText>
-            Bringing premium, freshly baked cookies directly to your screen. The
-            ultimate cookie experience.
-          </FooterText>
         </FooterColumn>
 
         {/* Column 2: Quick Explore links */}
@@ -33,7 +27,7 @@ const Footer: React.FC = () => {
           <FooterHeading>Explore</FooterHeading>
           <FooterLink to="/">Home</FooterLink>
           <FooterLink to="/about">Our Story</FooterLink>
-          <FooterLink to="/track-order">Track Order</FooterLink>
+          <FooterLink to="/buy-cooky">Buy Cooky</FooterLink>
           <FooterLink to="/careers">Careers</FooterLink>
         </FooterColumn>
 
@@ -52,14 +46,6 @@ const Footer: React.FC = () => {
           <FooterText>Phone: +92 (051) 123-4567</FooterText>
         </FooterColumn>
       </FooterGrid>
-
-      <CopyrightBar>
-        <FooterText>© 2026 Exynos Cooky. All rights reserved.</FooterText>
-        <PolicyLinksWrapper>
-          <FooterLink to="#">Privacy Policy</FooterLink>
-          <FooterLink to="#">Terms of Service</FooterLink>
-        </PolicyLinksWrapper>
-      </CopyrightBar>
     </StyledFooter>
   );
 };

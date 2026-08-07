@@ -56,7 +56,7 @@ export const COOKIE_MOCK_DATA: Cookie[] = [
   },
   {
     id: 6,
-    name: "Lotus Biscoff Lava",
+    name: "Lotus Biscoff",
     price: 1490,
     description:
       "Packed with Biscoff cookie pieces and drizzled with white chocolate.",

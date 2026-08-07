@@ -14,7 +14,7 @@ import {
   logoutUser,
 } from "../../../../store/slices/authSlice";
 import { type RootState } from "../../../../store";
-import logoSvg from "../../../../../public/exynos-favicon.png";
+import logoSvg from "../../../../assets/images/exynos-favicon.png";
 
 import {
   StyledHeader,

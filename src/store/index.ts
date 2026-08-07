@@ -7,15 +7,18 @@ import authReducer from "../store/slices/authSlice";
 import cartReducer from "../store/slices/cartSlice";
 import inventoryReducer from "../store/slices/inventorySlice";
 import orderReducer from "../store/slices/orderSlice";
-import userHistoryReducer from "./slices/userHistorySlice"; //
+import userHistoryReducer from "./slices/userHistorySlice";
+import reviewReducer from "./slices/reviewSlice"; //
 
 // Import Sagas
 import { watchUserHistory } from "./sagas/userHistorySaga"; //
+import { reviewSaga } from "./sagas/reviewSaga";
 
 //  Centralized Root Saga
 // As we add more features, just add their watchers here
 function* rootSaga() {
   yield all([fork(watchUserHistory)]);
+  yield all([fork(reviewSaga)]);
 }
 
 // Initialize Middleware
@@ -29,6 +32,7 @@ export const store = configureStore({
     inventory: inventoryReducer,
     orders: orderReducer,
     userHistory: userHistoryReducer,
+    reviews: reviewReducer,
   },
   //concatenate saga middleware
   middleware: (getDefaultMiddleware) =>

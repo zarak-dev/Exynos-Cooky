@@ -5,6 +5,7 @@ import Footer from "../Footer";
 import { AuthModal } from "../../../common/Auth";
 import { CartDrawer } from "../../../common/CartDrawer";
 import { LayoutWrapper, ContentArea } from "./styles";
+import InfoBar from "../../../InfoBar";
 
 const MainLayout: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const MainLayout: React.FC = () => {
       </ContentArea>
       <AuthModal />
       <CartDrawer />
+      <InfoBar />
       <Footer />
     </LayoutWrapper>
   );

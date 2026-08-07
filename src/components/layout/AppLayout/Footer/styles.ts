@@ -3,17 +3,14 @@ import { NavLink } from "react-router-dom";
 
 export const StyledFooter = styled.footer`
   background-color: #00009c;
-  padding: 60px 40px 20px 40px;
+  padding: 20px 40px 10px 40px;
   margin-top: auto;
 `;
 
 export const LogoImage = styled.img`
-  width: 225px;
-`;
-
-export const PolicyLinksWrapper = styled.div`
-  display: flex;
-  gap: 20px;
+  width: 125px;
+  border-radius: 8px;
+  margin-left: 38px;
 `;
 
 export const FooterGrid = styled.div`
@@ -73,22 +70,5 @@ export const FooterLink = styled(NavLink)`
 
   &:hover {
     color: #ffffff;
-  }
-`;
-
-export const CopyrightBar = styled.div`
-  max-width: 1200px;
-  margin: 40px auto 0 auto;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-    text-align: center;
   }
 `;
