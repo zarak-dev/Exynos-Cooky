@@ -13,7 +13,7 @@ import {
   logoutUser,
 } from "../../../../store/slices/authSlice";
 import { type RootState } from "../../../../store";
-import logoSvg from "../../../../assets/images/exynos-cooky.svg";
+import logoSvg from "../../../../../public/exynos-favicon.png";
 
 import {
   StyledHeader,
@@ -83,6 +83,7 @@ const Header: React.FC = () => {
 
   const navItems = [
     { key: "/", label: "Home" },
+    { key: "/buy-cooky", label: "Buy Cooky" },
     { key: "/track-order", label: "Track Order" },
     { key: "/about", label: "Our Story" },
     { key: "/careers", label: "Careers" },

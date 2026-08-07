@@ -12,7 +12,6 @@ import {
 } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-
 import { type Cookie } from "../../../utils/mockData";
 import { type RootState } from "../../../store";
 import { addCookieToBox, setBoxSize } from "../../../store/slices/cartSlice";
@@ -33,6 +32,7 @@ import {
   ReviewCountText,
   StyledMeta,
 } from "./styles";
+import HomeCarousel from "../../../components/HomeCarousel";
 
 const FILTER_OPTIONS = [
   { value: "price-low", label: "Price: Low to High" },
@@ -122,6 +122,7 @@ const Home: React.FC = () => {
     undefined,
   );
   const { items: cookies } = useSelector((state: RootState) => state.inventory);
+  const featuredCookies = cookies.slice(0, 6);
 
   const { items: cartItems, boxSize } = useSelector(
     (state: RootState) => state.cart,
@@ -154,96 +155,99 @@ const Home: React.FC = () => {
   };
 
   return (
-    <HomeContainer>
-      {contextHolder}
+    <>
+      <HomeCarousel cookies={featuredCookies} onAdd={handleAddToCart}/>
+      <HomeContainer>
+        {contextHolder}
 
-      <ExploreSection>
-        <StyledTitle level={1}>Explore Our Menu</StyledTitle>
+        <ExploreSection>
+          <StyledTitle level={1}>Explore Our Menu</StyledTitle>
 
-        <StyledInput
-          placeholder="Search a cookie"
-          allowClear
-          value={search}
-          suffix={<SearchOutlined />}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </ExploreSection>
-
-      {!screens.md && (
-        <Flex gap={12} style={{ marginBottom: 16 }}>
-          <Select
-            value={sortBy}
-            placeholder="Pricing"
-            onChange={(value) => setSortBy(value)}
-            style={{ flex: 1 }}
-            options={FILTER_OPTIONS}
+          <StyledInput
+            placeholder="Search a cookie"
+            allowClear
+            value={search}
+            suffix={<SearchOutlined />}
+            onChange={(e) => setSearch(e.target.value)}
           />
-          <Tooltip title="Updates your cart automatically">
-            <Select
-              value={boxSize}
-              onChange={(value) => dispatch(setBoxSize(value))}
-              style={{ flex: 1 }}
-              options={BOX_SIZES.map((size) => ({
-                value: size,
-                label: `${size}-Pack`,
-              }))}
-            />
-          </Tooltip>
-        </Flex>
-      )}
+        </ExploreSection>
 
-      <MenuTabs
-        defaultActiveKey="1"
-        tabBarExtraContent={
-          screens.md
-            ? {
-                left: (
-                  <Select
-                    value={sortBy}
-                    placeholder="Pricing"
-                    onChange={(value) => setSortBy(value)}
-                    style={{ width: 160, marginRight: 12 }}
-                    options={FILTER_OPTIONS}
-                  />
-                ),
-                right: (
-                  <Tooltip title="Select Your Box Size">
-                    <Select
-                      value={boxSize}
-                      onChange={(value) => dispatch(setBoxSize(value))}
-                      style={{ width: 120, marginLeft: 12 }}
-                      options={BOX_SIZES.map((size) => ({
-                        value: size,
-                        label: `${size}-Pack`,
-                      }))}
-                    />
-                  </Tooltip>
-                ),
-              }
-            : undefined
-        }
-        items={[
-          {
-            key: "1",
-            label: "🌟 Top Rated",
-            children: (
-              <CookieGrid
-                cookies={topRatedCookies}
-                showRatings
-                onAdd={handleAddToCart}
+        {!screens.md && (
+          <Flex gap={12} style={{ marginBottom: 16 }}>
+            <Select
+              value={sortBy}
+              placeholder="Pricing"
+              onChange={(value) => setSortBy(value)}
+              style={{ flex: 1 }}
+              options={FILTER_OPTIONS}
+            />
+            <Tooltip title="Updates your cart automatically">
+              <Select
+                value={boxSize}
+                onChange={(value) => dispatch(setBoxSize(value))}
+                style={{ flex: 1 }}
+                options={BOX_SIZES.map((size) => ({
+                  value: size,
+                  label: `${size}-Pack`,
+                }))}
               />
-            ),
-          },
-          {
-            key: "2",
-            label: "🍪 All Menu",
-            children: (
-              <CookieGrid cookies={filteredCookies} onAdd={handleAddToCart} />
-            ),
-          },
-        ]}
-      />
-    </HomeContainer>
+            </Tooltip>
+          </Flex>
+        )}
+
+        <MenuTabs
+          defaultActiveKey="1"
+          tabBarExtraContent={
+            screens.md
+              ? {
+                  left: (
+                    <Select
+                      value={sortBy}
+                      placeholder="Pricing"
+                      onChange={(value) => setSortBy(value)}
+                      style={{ width: 160, marginRight: 12 }}
+                      options={FILTER_OPTIONS}
+                    />
+                  ),
+                  right: (
+                    <Tooltip title="Select Your Box Size">
+                      <Select
+                        value={boxSize}
+                        onChange={(value) => dispatch(setBoxSize(value))}
+                        style={{ width: 120, marginLeft: 12 }}
+                        options={BOX_SIZES.map((size) => ({
+                          value: size,
+                          label: `${size}-Pack`,
+                        }))}
+                      />
+                    </Tooltip>
+                  ),
+                }
+              : undefined
+          }
+          items={[
+            {
+              key: "1",
+              label: "🌟 Top Rated",
+              children: (
+                <CookieGrid
+                  cookies={topRatedCookies}
+                  showRatings
+                  onAdd={handleAddToCart}
+                />
+              ),
+            },
+            {
+              key: "2",
+              label: "🍪 All Menu",
+              children: (
+                <CookieGrid cookies={filteredCookies} onAdd={handleAddToCart} />
+              ),
+            },
+          ]}
+        />
+      </HomeContainer>
+    </>
   );
 };
 
