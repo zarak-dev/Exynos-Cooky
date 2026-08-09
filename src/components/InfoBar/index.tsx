@@ -61,7 +61,9 @@ const InfoBar: React.FC = () => {
                 <Text strong style={{ color: "#00009c" }}>
                   {item.title}
                 </Text>
-                <Paragraph style={{ margin: 0, fontSize: "0.85rem", color: "#666" }}>
+                <Paragraph
+                  style={{ margin: 0, fontSize: "0.85rem", color: "#666" }}
+                >
                   {item.desc}
                 </Paragraph>
               </InfoBarText>

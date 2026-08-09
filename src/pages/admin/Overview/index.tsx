@@ -20,7 +20,6 @@ import {
 } from "./styles";
 import { StateCard } from "../../../components/StateCard";
 import StyledPageHeader from "../../../components/PageHeader";
-import { Wrapper } from "../../../components/Wrapper";
 
 const { Text } = Typography;
 
@@ -58,11 +57,13 @@ export const AdminOverview: React.FC = () => {
       wrapper: StyledMetricCard,
     },
   ];
-
+  const breadcrumbs = [{ title: "Admin", path: "/admin" }];
   return (
     <>
       <StyledPageHeader
         title="OPERATIONAL METRICS"
+        breadcrumbs={breadcrumbs}
+        extra=""
       />
       <Row gutter={[16, 16]}>
         {stats.map((item, index) => {

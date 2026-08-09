@@ -63,7 +63,7 @@ export const LoginForm = () => {
         <Input.Password />
       </Form.Item>
 
-      <Button type="primary" htmlType="submit" block>
+      <Button type="primary" shape="round" htmlType="submit" block>
         Login
       </Button>
     </Form>

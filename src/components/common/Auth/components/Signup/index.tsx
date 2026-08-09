@@ -16,9 +16,8 @@ export const SignUpForm = () => {
     email = email.trim();
     const [form] = Form.useForm();
     const exists = users.some(
-      (u) => u.email.toLowerCase() === email.toLowerCase(),
+      (value) => value.email.toLowerCase() === email.toLowerCase(),
     );
-
     if (exists) {
       return message.error("Email already registered");
     }
@@ -61,8 +60,8 @@ export const SignUpForm = () => {
       >
         <Input.Password />
       </Form.Item>
-
-      <Button type="primary" htmlType="submit" block>
+      {/* Use onClick instead of htmlType */}
+      <Button type="primary" shape="round" htmlType="submit" block>
         Sign Up
       </Button>
     </Form>

@@ -10,6 +10,7 @@ import {
   Tag,
 } from "antd";
 import Title from "antd/es/typography/Title";
+import { StyledTitle } from "../../../components/StyledTitle";
 
 const { Text, Paragraph } = Typography;
 const { Meta } = Card;
@@ -90,10 +91,6 @@ export const ReviewCountText = styled(Text)`
   color: #666;
 `;
 
-export const StyledMeta = styled(Meta)`
-  margin-bottom: 16px;
-  min-height: 60px;
-`;
 export const BestSection = styled.div`
   max-width: 1200px;
   margin: 48px auto 0;
@@ -112,15 +109,9 @@ export const BestSectionTitle = styled(Title)`
 `;
 
 export const BestCarousel = styled(Carousel)`
-  .slick-dots li button {
-    background: #b7c4ff;
-  }
-  .slick-dots li.slick-active button {
-    background: #00009c;
-  }
   .slick-prev,
   .slick-next {
-    color: #00009c !important;
+    color: #00009c;
     font-size: 18px;
     z-index: 1;
   }
@@ -136,14 +127,32 @@ export const BestCoverImage = styled(Image)`
   height: 160px !important;
   object-fit: cover !important;
   padding: 8px !important;
-  background: #fafafa !important;
+
 `;
 
+export const BestCardTitle = styled(StyledTitle)`
+  &.ant-typography {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+    margin: 0;
+  }
+`;
 export const BestCardHeader = styled(Flex)`
   justify-content: space-between;
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
+`;
+export const BestCardBody = styled(Flex)`
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+`;
+
+export const BestCardSlide = styled(Flex)`
+  padding: 0 10px;
 `;
 
 export const TrendingSection = styled.div`
@@ -165,7 +174,7 @@ export const TrendingSectionTitle = styled(Title)`
 
 export const TrendingStack = styled.div`
   position: relative;
-  height: 380px;
+  height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,13 +182,12 @@ export const TrendingStack = styled.div`
 
 export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
   position: absolute;
-  width: 300px;
+  width: 320px;
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   transition:
     transform 0.35s ease,
-    z-index 0s,
     box-shadow 0.35s ease;
   box-shadow: 0 8px 32px rgba(0, 0, 56, 0.13);
 
@@ -193,19 +201,19 @@ export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
   ${({ $pos }) =>
     $pos === "left" &&
     `
-    transform: translateX(-200px) scale(0.9) rotate(-4deg);
+    transform: translateX(-220px) scale(0.88) rotate(-4deg);
     z-index: 2;
   `}
 
   ${({ $pos }) =>
     $pos === "right" &&
     `
-    transform: translateX(200px) scale(0.9) rotate(4deg);
+    transform: translateX(220px) scale(0.88) rotate(4deg);
     z-index: 2;
   `}
 
   .ant-card-body {
-    padding: 14px 16px;
+    padding: 12px 14px;
   }
 
   img {
@@ -219,7 +227,24 @@ export const TrendingCardHeader = styled(Flex)`
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
+  flex-wrap: nowrap;
+`;
+
+export const TrendingMeta = styled(Meta)`
+  margin: 2px 0 6px;
+
+  .ant-card-meta-description {
+    font-size: 0.78rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+  }
+`;
+export const TrendingCardBody = styled(Flex)`
+  flex-direction: column;
+  gap: 6px;
 `;
 
 export const ReviewsSection = styled.div`
@@ -228,6 +253,9 @@ export const ReviewsSection = styled.div`
   padding: 0 20px;
 `;
 
+export const ReviewSlide = styled(Flex)`
+  padding: 0 10px;
+`;
 export const ReviewsSectionTitle = styled(Title)`
   &.ant-typography {
     text-align: center;
@@ -241,9 +269,6 @@ export const ReviewsSectionTitle = styled(Title)`
 
 export const ReviewCard = styled(Card)`
   border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 56, 0.08);
-  height: 220px;
-
   .ant-card-body {
     padding: 16px;
     height: 100%;
@@ -254,7 +279,6 @@ export const ReviewCard = styled(Card)`
   }
 `;
 
-// WITH this:
 export const ReviewText = styled(Paragraph)`
   &.ant-typography {
     font-size: 0.85rem;
@@ -293,5 +317,17 @@ export const SectionBadge = styled(Tag)`
     border: none;
     background: #00009c;
     color: #fff;
+  }
+`;
+
+export const StyledMeta = styled(Meta)`
+  margin-bottom: 16px;
+  min-height: 60px;
+
+  .ant-card-meta-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 `;

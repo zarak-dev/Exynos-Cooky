@@ -14,7 +14,6 @@ import {
   BestSectionTitle,
   BestCarousel,
   StyledButton,
-  StyledMeta,
   BestCoverImage,
   BestCardHeader,
   TrendingSection,
@@ -29,6 +28,13 @@ import {
   ReviewerName,
   ReviewEmail,
   SectionBadge,
+  BestCardSlide,
+  BestCardBody,
+  TrendingCardBody,
+  TrendingMeta,
+  ReviewSlide,
+  StyledMeta,
+  BestCardTitle,
 } from "./styles";
 
 const BEST_COOKIE_IDS = [2, 3, 6, 9, 10, 4];
@@ -168,7 +174,7 @@ const Home: React.FC = () => {
         </SectionBadge>
         <BestCarousel {...carouselSettings}>
           {bestCookies.map((cookie) => (
-            <div key={cookie.id} style={{ padding: "0 12px" }}>
+            <BestCardSlide key={cookie.id}>
               <StyledCard
                 hoverable
                 $isAvailable={cookie.isAvailable}
@@ -180,29 +186,32 @@ const Home: React.FC = () => {
                   />
                 }
               >
-                <BestCardHeader>
-                  <StyledTitle level={5}>{cookie.name}</StyledTitle>
-                  <Tag
-                    color={cookie.isAvailable ? "blue" : "red"}
-                    variant="solid"
+                <BestCardBody>
+                  <BestCardHeader>
+
+                    <BestCardTitle level={5}>{cookie.name}</BestCardTitle>
+                    <Tag
+                      color={cookie.isAvailable ? "blue" : "red"}
+                      variant="solid"
+                    >
+                      {cookie.isAvailable ? `Rs. ${cookie.price}` : "Sold Out"}
+                    </Tag>
+                  </BestCardHeader>
+                  <StyledMeta description={cookie.description} />
+
+                  <StyledButton
+                    type="primary"
+                    shape="round"
+                    size="small"
+                    disabled={!cookie.isAvailable}
+                    danger={!cookie.isAvailable}
+                    onClick={() => handleAddToCart(cookie)}
                   >
-                    {cookie.isAvailable ? `Rs. ${cookie.price}` : "Sold Out"}
-                  </Tag>
-                </BestCardHeader>
-
-                <StyledMeta description={cookie.description} />
-
-                <StyledButton
-                  type="primary"
-                  shape="round"
-                  disabled={!cookie.isAvailable}
-                  danger={!cookie.isAvailable}
-                  onClick={() => handleAddToCart(cookie)}
-                >
-                  {cookie.isAvailable ? "Add to Box" : "Unavailable"}
-                </StyledButton>
+                    {cookie.isAvailable ? "Add to Box" : "Unavailable"}
+                  </StyledButton>
+                </BestCardBody>
               </StyledCard>
-            </div>
+            </BestCardSlide>
           ))}
         </BestCarousel>
       </BestSection>
@@ -232,28 +241,36 @@ const Home: React.FC = () => {
                 onClick={() => setActiveTrending(idx)}
               >
                 <img src={cookie.imageUrl} alt={cookie.name} />
-                <TrendingCardHeader>
-                  <StyledTitle level={5}>{cookie.name}</StyledTitle>
-                  <Tag
-                    color={cookie.isAvailable ? "blue" : "red"}
-                    variant="solid"
+                <TrendingCardBody>
+                  <TrendingCardHeader>
+                    <StyledTitle level={5}>{cookie.name}</StyledTitle>
+                    <Tag
+                      color={cookie.isAvailable ? "blue" : "red"}
+                      variant="solid"
+                    >
+                      {cookie.isAvailable ? `Rs. ${cookie.price}` : "Sold Out"}
+                    </Tag>
+                  </TrendingCardHeader>
+                  <Rate
+                    disabled
+                    defaultValue={5}
+                    style={{ fontSize: 11, color: "#faad14" }}
+                  />
+                  <TrendingMeta description={cookie.description} />
+                  <StyledButton
+                    type="primary"
+                    shape="round"
+                    size="small"
+                    disabled={!cookie.isAvailable}
+                    danger={!cookie.isAvailable}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(cookie);
+                    }}
                   >
-                    {cookie.isAvailable ? `Rs. ${cookie.price}` : "Sold Out"}
-                  </Tag>
-                </TrendingCardHeader>
-                <StyledButton
-                  type="primary"
-                  shape="round"
-                  size="small"
-                  disabled={!cookie.isAvailable}
-                  danger={!cookie.isAvailable}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart(cookie);
-                  }}
-                >
-                  {cookie.isAvailable ? "Add to Box" : "Unavailable"}
-                </StyledButton>
+                    {cookie.isAvailable ? "Add to Box" : "Unavailable"}
+                  </StyledButton>
+                </TrendingCardBody>
               </TrendingCard>
             ) : null,
           )}
@@ -270,7 +287,7 @@ const Home: React.FC = () => {
           <BestCarousel
             slidesToShow={4}
             slidesToScroll={2}
-            dots={true}
+            dots={false}
             arrows={true}
             responsive={[
               {
@@ -288,7 +305,7 @@ const Home: React.FC = () => {
             ]}
           >
             {REVIEWS.map((review, i) => (
-              <Flex key={i} style={{ padding: "0 8px" }}>
+              <ReviewSlide key={i}>
                 <ReviewCard>
                   <Flex align="center" gap={10}>
                     <Avatar
@@ -308,7 +325,7 @@ const Home: React.FC = () => {
                   />
                   <ReviewText>"{review.comment}"</ReviewText>
                 </ReviewCard>
-              </Flex>
+              </ReviewSlide>
             ))}
           </BestCarousel>
         </Spin>

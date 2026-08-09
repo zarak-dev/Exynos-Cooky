@@ -5,13 +5,16 @@ export const InfoBarWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto 48px;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 `;
-
 export const InfoBarCard = styled(Card)<{ $clickable?: boolean }>`
   border-radius: 16px;
   box-shadow: 0 4px 16px rgba(0, 0, 56, 0.08);
   cursor: ${({ $clickable }) => ($clickable ? "pointer" : "default")};
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
   height: 100%;
 
   .ant-card-body {

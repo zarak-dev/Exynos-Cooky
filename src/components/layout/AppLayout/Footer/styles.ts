@@ -3,8 +3,21 @@ import { NavLink } from "react-router-dom";
 
 export const StyledFooter = styled.footer`
   background-color: #00009c;
-  padding: 20px 40px 10px 40px;
+  padding: 60px 40px 20px 40px;
   margin-top: auto;
+  position: relative;
+
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -30px;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    background-color: #00009c;
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
 `;
 
 export const LogoImage = styled.img`

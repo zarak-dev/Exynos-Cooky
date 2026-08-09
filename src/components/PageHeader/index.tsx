@@ -1,4 +1,4 @@
-import { Breadcrumb, Flex, Typography } from "antd";
+import { Breadcrumb, Typography } from "antd";
 import { Link } from "react-router-dom";
 
 const { Title } = Typography;
@@ -23,13 +23,8 @@ const StyledPageHeader = ({
   children,
 }: StyledPageHeaderProps) => {
   return (
-    <Flex
-      justify="space-between"
-      align="center"
-      wrap="wrap"
-      style={{ marginBottom: 24, gap: 16 }}
-    >
-      <div>
+    <>
+      <div style={{ background: "white" }}>
         <Breadcrumb
           style={{ marginBottom: 8 }}
           items={breadcrumbs.map((item) => ({
@@ -48,7 +43,7 @@ const StyledPageHeader = ({
         {children}
       </div>
       {extra && <div>{extra}</div>}
-    </Flex>
+    </>
   );
 };
 
