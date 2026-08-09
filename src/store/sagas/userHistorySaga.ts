@@ -10,6 +10,8 @@ interface RandomUser {
   login: { uuid: string };
   name: { first: string; last: string };
   email: string;
+  phone: string;
+  gender: string;
   location: { country: string };
   picture: { thumbnail: string };
 }
@@ -22,7 +24,11 @@ const fetchUsersApi = async () => {
   return response.json();
 };
 
-function* handleFetchUsers(): Generator<unknown, void, { results: RandomUser[] }> {
+function* handleFetchUsers(): Generator<
+  unknown,
+  void,
+  { results: RandomUser[] }
+> {
   try {
     const data = yield call(fetchUsersApi);
 
@@ -32,6 +38,8 @@ function* handleFetchUsers(): Generator<unknown, void, { results: RandomUser[] }
         uuid: user.login.uuid,
         name: `${user.name.first} ${user.name.last}`,
         email: user.email,
+        phone: user.phone,
+        gender: user.gender,
         country: user.location.country,
         thumbnail: user.picture.thumbnail,
       }),

@@ -1,33 +1,58 @@
-import { Avatar, Flex, Tag, Typography } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, Flex, Popconfirm, Tag, Typography } from "antd";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import type { UserHistoryRow } from "../../../../store/slices/userHistorySlice";
+
 const { Text } = Typography;
 
-
-export const userHistoryColumns: ColumnsType<UserHistoryRow> = [
+export const getUserHistoryColumns = (
+  onDelete: (uuid: string) => void
+): ColumnsType<UserHistoryRow> => [
   {
-    title: "#",
-    dataIndex: "index",
-    width: 70,
-    render: (index: number) => <Text type="secondary">{index}</Text>,
+    title: "Avatar",
+    width: 80,
+    render: (_, user) => (
+      <Avatar src={user.thumbnail} icon={<UserOutlined />} size={40} />
+    ),
   },
   {
-    title: "Customer",
+    title: "Name",
     render: (_, user) => (
-      <Flex align="center" gap="middle">
-        <Avatar src={user.thumbnail} icon={<UserOutlined />} />
+      <Flex vertical>
         <Text strong>{user.name}</Text>
+        <Text type="secondary" style={{ fontSize: "0.8rem" }}>
+          {user.gender}
+        </Text>
       </Flex>
     ),
   },
   {
-    title: "Email Address",
+    title: "Email",
     dataIndex: "email",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
   },
   {
     title: "Location",
     dataIndex: "country",
     render: (country: string) => <Tag color="blue">{country}</Tag>,
+  },
+  {
+    title: "Action",
+    width: 80,
+    render: (_, user) => (
+      <Popconfirm
+        title="Delete this customer?"
+        description="This action cannot be undone."
+        okText="Delete"
+        okType="danger"
+        cancelText="Cancel"
+        onConfirm={() => onDelete(user.uuid)}
+      >
+        <Button type="text" danger icon={<DeleteOutlined />} />
+      </Popconfirm>
+    ),
   },
 ];

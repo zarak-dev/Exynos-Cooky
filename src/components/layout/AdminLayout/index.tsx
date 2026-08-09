@@ -10,27 +10,27 @@ import {
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
-
 import {
   AdminLayoutWrapper,
   StyledSider,
   AdminLogo,
+  SiderFooter,
+  CollapseButton,
   MainContentWrapper,
   StyledHeader,
   StyledContent,
   HeaderTitle,
   HeaderSubtitle,
   HeaderLeft,
-  MenuToggleButton,
   AdminNameText,
 } from "./styles";
 
 const menuItems = [
-  { key: "/admin", icon: <DashboardOutlined />, label: "OVERVIEW" },
-  { key: "/admin/inventory", icon: <DatabaseOutlined />, label: "INVENTORY" },
-  { key: "/admin/orders", icon: <ShoppingOutlined />, label: "ORDERS QUEUE" },
-  { key: "/admin/history", icon: <TeamOutlined />, label: "CUSTOMER HISTORY" },
-  { key: "/", icon: <LogoutOutlined />, label: "EXIT" },
+  { key: "/admin", icon: <DashboardOutlined />, label: "Overview" },
+  { key: "/admin/inventory", icon: <DatabaseOutlined />, label: "Inventory" },
+  { key: "/admin/orders", icon: <ShoppingOutlined />, label: "Orders Queue" },
+  { key: "/admin/history", icon: <TeamOutlined />, label: "Customer History" },
+  { key: "/", icon: <LogoutOutlined />, label: "Exit" },
 ];
 
 export const AdminLayout: React.FC = () => {
@@ -40,9 +40,6 @@ export const AdminLayout: React.FC = () => {
 
   const handleMenuClick = ({ key }: { key: string }) => {
     navigate(key);
-    if (window.innerWidth <= 768) {
-      setCollapsed(true);
-    }
   };
 
   return (
@@ -51,12 +48,11 @@ export const AdminLayout: React.FC = () => {
         trigger={null}
         collapsible
         collapsed={collapsed}
-        breakpoint="md"
-        collapsedWidth={0}
-        onCollapse={(value) => setCollapsed(value)}
+        collapsedWidth={80}
+        width={200}
       >
         <AdminLogo justify="center" align="center">
-          {collapsed ? "EXNS" : "Exynos Admin"}
+          {collapsed ? "ADM" : "Admin"}
         </AdminLogo>
 
         <Menu
@@ -66,23 +62,27 @@ export const AdminLayout: React.FC = () => {
           items={menuItems}
           onClick={handleMenuClick}
         />
+
+        <SiderFooter justify="center">
+          <CollapseButton
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            {!collapsed && "Hide"}
+          </CollapseButton>
+        </SiderFooter>
       </StyledSider>
 
       <MainContentWrapper $collapsed={collapsed}>
         <StyledHeader>
           <HeaderLeft align="center">
-            <MenuToggleButton
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-            />
             <HeaderTitle>Operational Command Center</HeaderTitle>
           </HeaderLeft>
-
           <HeaderSubtitle>
             Logged in as: <AdminNameText strong>Admin</AdminNameText>
           </HeaderSubtitle>
         </StyledHeader>
+
         <StyledContent>
           <Outlet />
         </StyledContent>

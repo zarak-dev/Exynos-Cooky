@@ -1,12 +1,32 @@
-import { Breadcrumb, Typography } from "antd";
+import { Breadcrumb, Flex, Typography, Divider } from "antd";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const { Title } = Typography;
+
+const HeaderWrapper = styled(Flex)`
+  margin-bottom: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 56, 0.07);
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const StyledTitle = styled(Title)`
+  &.ant-typography {
+    margin: 0;
+    color: #00009c;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+`;
 
 export interface BreadcrumbItem {
   title: string;
   href?: string;
-  to?: string; // For React Router
+  to?: string;
 }
 
 export interface StyledPageHeaderProps {
@@ -23,27 +43,29 @@ const StyledPageHeader = ({
   children,
 }: StyledPageHeaderProps) => {
   return (
-    <>
-      <div style={{ background: "white" }}>
-        <Breadcrumb
-          style={{ marginBottom: 8 }}
-          items={breadcrumbs.map((item) => ({
-            title: item.to ? (
-              <Link to={item.to}>{item.title}</Link>
-            ) : item.href ? (
-              <a href={item.href}>{item.title}</a>
-            ) : (
-              item.title
-            ),
-          }))}
-        />
-        <Title level={2} style={{ margin: 0 }}>
-          {title}
-        </Title>
-        {children}
-      </div>
-      {extra && <div>{extra}</div>}
-    </>
+    <HeaderWrapper>
+      <Flex justify="space-between" align="center" wrap="wrap" gap={12}>
+        <Flex vertical gap={4}>
+          {breadcrumbs.length > 0 && (
+            <Breadcrumb
+              items={breadcrumbs.map((item) => ({
+                title: item.to ? (
+                  <Link to={item.to}>{item.title}</Link>
+                ) : item.href ? (
+                  <a href={item.href}>{item.title}</a>
+                ) : (
+                  item.title
+                ),
+              }))}
+            />
+          )}
+          <StyledTitle level={3}>{title}</StyledTitle>
+          {children}
+        </Flex>
+        {extra && <Flex>{extra}</Flex>}
+      </Flex>
+      <Divider style={{ margin: "12px 0 0" }} />
+    </HeaderWrapper>
   );
 };
 

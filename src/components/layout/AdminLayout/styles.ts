@@ -17,33 +17,77 @@ export const StyledSider = styled(Sider)`
   top: 0;
   bottom: 0;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+
+  .ant-layout-sider-children {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
   .ant-menu {
-    background: #00009c;
-    margin-top: 16px;
+    background: transparent;
+    margin-top: 8px;
+    flex: 1;
+  }
+
+  .ant-menu-item {
+    border-radius: 10px;
+    margin: 4px 8px;
+    width: calc(100% - 16px);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: background 0.2s ease;
+  }
+
+  .ant-menu-item-selected {
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .ant-menu-item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
   }
 `;
 
 export const AdminLogo = styled(Flex)`
   height: 64px;
-  background: #000066;
+  background: #000080;
   color: #ffffff;
   font-weight: 900;
   font-size: 1.1rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  border-bottom: 1px solid #00004d;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  padding: 0 16px;
+`;
+
+export const SiderFooter = styled(Flex)`
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+`;
+
+export const CollapseButton = styled(Button)`
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 600;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
 `;
 
 export const MainContentWrapper = styled(Layout)<{ $collapsed: boolean }>`
-  margin-left: ${(props) =>
-    props.$collapsed ? "0" : "200px"}; /* Drops to 0 when collapsed */
+  margin-left: ${(props) => (props.$collapsed ? "80px" : "200px")};
   transition: all 0.2s ease-in-out;
   height: 100vh;
-
-  @media (max-width: 768px) {
-    margin-left: 0;
-  }
 `;
 
 export const StyledHeader = styled(Header)`
@@ -53,15 +97,10 @@ export const StyledHeader = styled(Header)`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #e8e8e8;
-
-  @media (max-width: 768px) {
-    padding: 0 16px !important;
-  }
 `;
 
 export const HeaderLeft = styled(Flex)`
   align-items: center;
-  overflow: hidden; /* Prevents long titles from blowing out the flexbox */
 `;
 
 export const HeaderTitle = styled(Text)`
@@ -72,10 +111,6 @@ export const HeaderTitle = styled(Text)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-  }
 `;
 
 export const HeaderSubtitle = styled(Text)`
@@ -94,18 +129,6 @@ export const StyledContent = styled(Content)`
   background: #f5f5f5;
   overflow-y: auto;
   flex: 1;
-
-  @media (max-width: 768px) {
-    margin: 12px;
-    padding: 12px;
-  }
-`;
-export const MenuToggleButton = styled(Button)`
-  font-size: 18px;
-  width: 40px;
-  height: 40px;
-  color: #00009c;
-  margin-right: 16px;
 `;
 
 export const AdminNameText = styled(Text)`

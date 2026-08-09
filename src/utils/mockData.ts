@@ -299,4 +299,304 @@ export const COOKIE_MOCK_DATA: Cookie[] = [
       "https://images.unsplash.com/photo-1600147566401-c2056eb69479?w=800&q=80&auto=format&fit=crop",
     isAvailable: true,
   },
+  {
+    id: 31,
+    name: "Strawberry Cheesecake",
+    price: 1490,
+    description:
+      "Tangy cream cheese cookie swirled with fresh strawberry jam and a buttery graham cracker base.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 32,
+    name: "Matcha White Choc",
+    price: 1450,
+    description:
+      "Earthy Japanese matcha cookie studded with creamy white chocolate chips — elegant and unique.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 33,
+    name: "Salted Caramel Chunk",
+    price: 1470,
+    description:
+      "Gooey caramel pockets inside a buttery cookie base, finished with flaky sea salt on top.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1622467827417-bbe2237067a9?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 34,
+    name: "Red Velvet Crinkle",
+    price: 1380,
+    description:
+      "Vibrant red velvet cookie dusted in powdered sugar with a soft cream cheese centre.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1583743089695-4b816a340f82?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 35,
+    name: "Coconut Macaroon",
+    price: 1300,
+    description:
+      "Toasted coconut cookie with a chewy golden exterior and a soft moist centre.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1612845575953-f4b1e3d63160?w=800&q=80&auto=format&fit=crop",
+    isAvailable: false,
+  },
+  {
+    id: 36,
+    name: "Raspberry Jam Thumbprint",
+    price: 1340,
+    description:
+      "Buttery shortbread cookie with a pressed centre filled with bright, tart raspberry jam.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1576717585968-8ea8166b89b8?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 37,
+    name: "Smores Stack",
+    price: 1500,
+    description:
+      "Graham cracker cookie layered with toasted marshmallow and a thick dark chocolate slab.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1590080874088-eec64895b423?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 38,
+    name: "Churro Sugar",
+    price: 1280,
+    description:
+      "Cinnamon-sugar rolled cookie inspired by classic churros — crisp outside, pillowy inside.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1639678111962-88fffeb071cb?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 39,
+    name: "Nutella Stuffed",
+    price: 1520,
+    description:
+      "Thick chocolate cookie with a hidden Nutella centre that oozes out with every bite.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1557310717-d6bea9f36682?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 40,
+    name: "Blueberry Lemon Zest",
+    price: 1360,
+    description:
+      "Bright lemon zest cookie bursting with juicy blueberries and a light citrus glaze.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1600147566401-c2056eb69479?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 41,
+    name: "Tiramisu Cookie",
+    price: 1480,
+    description:
+      "Espresso-soaked cookie layered with mascarpone cream and a dusting of cocoa powder.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1598839950984-034f6dc7b495?w=800&q=80&auto=format&fit=crop",
+    isAvailable: false,
+  },
+  {
+    id: 42,
+    name: "Honey Walnut",
+    price: 1320,
+    description:
+      "Golden honey cookie packed with roasted walnuts and a drizzle of raw wildflower honey.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 43,
+    name: "Cardamom Rose",
+    price: 1400,
+    description:
+      "Delicate cardamom-spiced cookie with rose water glaze — inspired by South Asian mithai.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1634188023615-7e08901193b6?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 44,
+    name: "Triple Choc Bomb",
+    price: 1550,
+    description:
+      "White, milk and dark chocolate chips in one cookie — an absolute triple threat.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1583743089695-4b816a340f82?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 45,
+    name: "Almond Biscotti",
+    price: 1240,
+    description:
+      "Twice-baked crunchy almond biscotti with a vanilla base — perfect alongside coffee.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 46,
+    name: "Mango Chili Twist",
+    price: 1430,
+    description:
+      "Bold mango-flavoured cookie with a surprising chili kick — sweet heat in every bite.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?w=800&q=80&auto=format&fit=crop",
+    isAvailable: false,
+  },
+  {
+    id: 47,
+    name: "Pistachio Crunch",
+    price: 1460,
+    description:
+      "Buttery cookie loaded with crushed pistachios and finished with a white chocolate drizzle.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1622467827417-bbe2237067a9?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 48,
+    name: "Burnt Butter Toffee",
+    price: 1390,
+    description:
+      "Nutty brown butter cookie with toffee bits — deep, complex flavour with a caramelised finish.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1612845575953-f4b1e3d63160?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 49,
+    name: "Oreo Stuffed",
+    price: 1510,
+    description:
+      "A whole Oreo baked inside a chocolate chip cookie — the ultimate cookies-within-a-cookie.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1590080874088-eec64895b423?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 50,
+    name: "Tahini Sesame",
+    price: 1350,
+    description:
+      "Nutty tahini cookie rolled in sesame seeds with a subtle sweetness and earthy depth.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1576717585968-8ea8166b89b8?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 51,
+    name: "Maple Pecan",
+    price: 1420,
+    description:
+      "Pure maple syrup cookie with caramelised pecan halves pressed into a golden buttery top.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1639678111962-88fffeb071cb?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 52,
+    name: "Black Sesame Crinkle",
+    price: 1380,
+    description:
+      "Dramatic black sesame cookie with crinkled powdered sugar top — nutty, bold and beautiful.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1557310717-d6bea9f36682?w=800&q=80&auto=format&fit=crop",
+    isAvailable: false,
+  },
+  {
+    id: 53,
+    name: "Pumpkin Spice",
+    price: 1310,
+    description:
+      "Soft pumpkin cookie spiced with cinnamon, nutmeg and clove — autumn in every bite.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1600147566401-c2056eb69479?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 54,
+    name: "Cherry Choc Chip",
+    price: 1370,
+    description:
+      "Dark cherry pieces folded into a classic chocolate chip dough — fruity, rich and chewy.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1598839950984-034f6dc7b495?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 55,
+    name: "Lavender Shortbread",
+    price: 1290,
+    description:
+      "Delicate floral shortbread infused with dried lavender — subtle, refined and melt-in-mouth.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 56,
+    name: "Choco Pretzel",
+    price: 1440,
+    description:
+      "Chocolate cookie topped with crushed salted pretzels — the perfect sweet and salty combo.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1634188023615-7e08901193b6?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 57,
+    name: "Funfetti Birthday",
+    price: 1330,
+    description:
+      "Soft vanilla cookie loaded with rainbow sprinkles — tastes like a birthday party in a bite.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1583743089695-4b816a340f82?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 58,
+    name: "Mocha Chip",
+    price: 1400,
+    description:
+      "Rich mocha-flavoured cookie with dark chocolate chips and a hint of espresso bitterness.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=80&auto=format&fit=crop",
+    isAvailable: false,
+  },
+  {
+    id: 59,
+    name: "Caramel Apple",
+    price: 1360,
+    description:
+      "Spiced apple cookie with a thick caramel drizzle — inspired by the classic fair favourite.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1622467827417-bbe2237067a9?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
+  {
+    id: 60,
+    name: "Midnight Black",
+    price: 1530,
+    description:
+      "Ultra-dark activated charcoal cookie with dark chocolate ganache — mysterious and intense.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1612845575953-f4b1e3d63160?w=800&q=80&auto=format&fit=crop",
+    isAvailable: true,
+  },
 ];

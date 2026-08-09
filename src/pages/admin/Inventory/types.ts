@@ -17,6 +17,7 @@ export interface HandleAvailabilityChangeParams {
 
 export interface InventoryColumnsProps {
   onToggle: (id: number, checked: boolean) => void;
+  onDelete: (id: number) => void;
 }
 
 export type InventoryDispatch = Dispatch;

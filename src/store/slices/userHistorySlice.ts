@@ -5,6 +5,8 @@ export interface UserHistoryRow {
   uuid: string;
   name: string;
   email: string;
+  phone: string;
+  gender: string;
   country: string;
   thumbnail: string;
 }
@@ -37,9 +39,21 @@ const userHistorySlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    addUser(state, action: PayloadAction<UserHistoryRow>) {
+      state.users = [action.payload, ...state.users];
+    },
+    deleteUser(state, action: PayloadAction<string>) {
+      state.users = state.users.filter((u) => u.uuid !== action.payload);
+    },
   },
 });
 
-export const { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure } =
-  userHistorySlice.actions;
+export const {
+  fetchUsersStart,
+  fetchUsersSuccess,
+  fetchUsersFailure,
+  addUser,
+  deleteUser,
+} = userHistorySlice.actions;
+
 export default userHistorySlice.reducer;

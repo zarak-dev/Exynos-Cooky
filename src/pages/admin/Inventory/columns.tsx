@@ -1,10 +1,16 @@
-import { Space, Switch } from "antd";
+import { Button, Popconfirm, Space, Switch } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import Text from "antd/es/typography/Text";
 import { CookieImage, StatusTag } from "./styles";
-import type { InventoryColumnsProps, InventoryColumns, CookieItem } from "./types";
+import type {
+  InventoryColumnsProps,
+  InventoryColumns,
+  CookieItem,
+} from "./types";
 
 export const getInventoryColumns = ({
   onToggle,
+  onDelete,
 }: InventoryColumnsProps): InventoryColumns => [
   {
     title: "IMAGE",
@@ -38,7 +44,7 @@ export const getInventoryColumns = ({
     ),
   },
   {
-    title: "TOGGLE AVAILABILITY",
+    title: "ACTION",
     key: "action",
     width: 180,
     render: (_: unknown, record: CookieItem) => (
@@ -49,6 +55,16 @@ export const getInventoryColumns = ({
           checked={record.isAvailable}
           onChange={(checked) => onToggle(record.id, checked)}
         />
+        <Popconfirm
+          title="Delete this cookie?"
+          description="It will be removed from inventory permanently."
+          okText="Delete"
+          okType="danger"
+          cancelText="Cancel"
+          onConfirm={() => onDelete(record.id)}
+        >
+          <Button type="text" danger icon={<DeleteOutlined />} />
+        </Popconfirm>
       </Space>
     ),
   },
