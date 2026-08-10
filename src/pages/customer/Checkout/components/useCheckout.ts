@@ -42,13 +42,14 @@ export function useCheckout() {
   const deliveryFee = cartItems.length > 0 ? DELIVERY_FEE : 0;
   const totalAmount = subtotal + deliveryFee;
 
-  function handleSubmit(values: { firstName: string; lastName: string }) {
+  function handleSubmit(values: { firstName: string; lastName: string; email?: any }) {
     const orderId = generateOrderId();
-
+    console.log(values);
+    
     const order: Order = {
       id: orderId,
       customerName: `${values.firstName} ${values.lastName}`,
-      customerEmail: user?.email || "",
+      customerEmail: values.email || user?.email || "",
       boxSize: `${boxSize}-Pack Custom Box`,
       contents: buildContentsString(groupedCartItems),
       totalPrice: totalAmount,

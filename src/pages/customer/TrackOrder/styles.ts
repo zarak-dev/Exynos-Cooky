@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Card, Button, Typography, Flex } from "antd";
+import { Card, Typography, Flex } from "antd";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -36,17 +36,6 @@ export const SearchWrapper = styled(Flex)`
   gap: 12px;
 `;
 
-export const SearchButton = styled(Button)`
-  background: #00009c !important;
-  border-color: #00009c !important;
-  color: #ffffff !important;
-  margin-left: 8px;
-  &:hover {
-    background-color: #000066 !important;
-    border-color: #000066 !important;
-  }
-    
-`;
 
 export const ResultCard = styled(Card)`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);

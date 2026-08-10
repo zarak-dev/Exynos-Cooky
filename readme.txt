@@ -137,3 +137,5 @@ The final result should look like code written by a senior React developer:
 - consistent
 - no unnecessary abstractions
 - no over-engineering
+
+Exynos Cooky is a full-featured cookie e-commerce app built with React 19 + TypeScript + Vite, using Ant Design for UI, Redux Toolkit for state, Redux-Saga for async effects, and styled-components for custom styling...

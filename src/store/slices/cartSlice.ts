@@ -27,10 +27,21 @@ const cartSlice = createSlice({
       }
     },
     addCookieToBox: (state, action: PayloadAction<Cookie>) => {
-      // Prevent adding if the box is already full
+      const nextSize: Record<BoxSize, BoxSize | null> = {
+        4: 6,
+        6: 12,
+        12: null,
+      };
+
       if (state.items.length >= state.boxSize) {
-        return;
+        const upgraded = nextSize[state.boxSize];
+        if (upgraded) {
+          state.boxSize = upgraded;
+        } else {
+          return;
+        }
       }
+
       state.items.push(action.payload);
     },
     removeCookieFromBox: (state, action: PayloadAction<number>) => {

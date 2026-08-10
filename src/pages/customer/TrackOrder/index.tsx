@@ -26,7 +26,6 @@ import {
   PageTitle,
   PageSubtitle,
   SearchCard,
-  SearchButton,
   ResultCard,
   ResultHeader,
   OrderTitle,
@@ -64,20 +63,18 @@ const STEP_INDEX = {
 
 export const TrackOrder: React.FC = () => {
   const [orderId, setOrderId] = useState("");
-    // Initialize the hook to get the API and the context element
+  // Initialize the hook to get the API and the context element
   const [messageApi, contextHolder] = message.useMessage();
   const [searchedOrder, setSearchedOrder] = useState<Order | null>(null);
   const dispatch = useDispatch();
   const handleDelete = () => {
-      if (searchedOrder) {
-        dispatch(deleteOrder(searchedOrder.id));
-        setSearchedOrder(null);
-        setOrderId("");
-        messageApi.success("Order cancelled successfully.");
-      }
-    };
-    
-
+    if (searchedOrder) {
+      dispatch(deleteOrder(searchedOrder.id));
+      setSearchedOrder(null);
+      setOrderId("");
+      messageApi.success("Order cancelled successfully.");
+    }
+  };
 
   // Grab live orders from our global Redux store
   const orders = useSelector((state: RootState) => state.orders.orders);
@@ -115,55 +112,56 @@ export const TrackOrder: React.FC = () => {
       </PageSubtitle>
       {/* SEARCH BAR */}
       <SearchCard variant="borderless">
-        <Space.Compact style={{ width: "100%" }}>
+        <Space align="center">
           <Input
-            size="large"
+            style={{ width: 600, borderRadius:20 }}
             allowClear
             placeholder="Enter your Order ID (e.g., EXNS-12345)"
             value={orderId}
             onChange={(e) => setOrderId(e.target.value)}
             onPressEnter={handleSearch}
           />
-          <SearchButton
+          <Button
+            type="primary"
             disabled={!orderId.trim()}
-            size="large"
+            shape="round"
             icon={<SearchOutlined />}
             onClick={handleSearch}
           >
             Search
-          </SearchButton>
-        </Space.Compact>
+          </Button>
+        </Space>
       </SearchCard>
       {/* TRACKING RESULTS */}
       {searchedOrder ? (
         <ResultCard variant="borderless">
           <ResultHeader>
-  <Space direction="vertical" size={2}>
-    <OrderTitle level={5}>
-      Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
-    </OrderTitle>
-    <OrderDateText>Placed: {formattedDate}</OrderDateText>
-  </Space>
+            <Space direction="vertical" size={2}>
+              <OrderTitle level={5}>
+                Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
+              </OrderTitle>
+              <OrderDateText>Placed: {formattedDate}</OrderDateText>
+            </Space>
 
-  <Space>
-    <Badge
-      status="processing"
-      text={<BadgeText strong>{searchedOrder.status}</BadgeText>}
-    />
-    <Popconfirm
-      title="Cancel Order"
-      description="Are you sure you want to cancel this order?"
-      onConfirm={handleDelete}
-      okText="Yes, Cancel"
-      cancelText="Keep Order"
-      okButtonProps={{ danger: true }}
-    >
-      <Button danger icon={<DeleteOutlined />} size="small">
-        Cancel Order
-      </Button>
-    </Popconfirm>
-  </Space>
-</ResultHeader>
+            <Space>
+              <Badge
+                status="processing"
+                text={<BadgeText strong>{searchedOrder.status}</BadgeText>}
+              />
+              <Popconfirm
+                title="Cancel Order"
+                description="Are you sure you want to cancel this order?"
+                onConfirm={handleDelete}
+                okText="Yes, Cancel"
+                cancelText="Keep Order"
+                okButtonProps={{ danger: true }}
+              >
+                <Button danger icon={<DeleteOutlined />} size="small">
+                  Cancel Order
+                </Button>
+              </Popconfirm>
+            </Space>
+          </ResultHeader>
 
           {/* STEP PROGRESS */}
           <Steps

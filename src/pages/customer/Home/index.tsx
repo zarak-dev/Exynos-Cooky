@@ -143,14 +143,25 @@ const Home: React.FC = () => {
   ).filter((c): c is Cookie => !!c);
 
   const handleAddToCart = (cookie: Cookie) => {
-    if (cartItems.length >= boxSize) {
-      messageApi.error(
-        `Your ${boxSize}-Pack is full! Clear items or upgrade your box size.`,
-      );
+    const nextSize: Record<number, number | null> = { 4: 6, 6: 12, 12: null };
+    const willUpgrade =
+      cartItems.length >= boxSize && nextSize[boxSize] !== null;
+    const isFull = cartItems.length >= boxSize && nextSize[boxSize] === null;
+
+    if (isFull) {
+      messageApi.error("Your 12-Pack is full! Please checkout first.");
       return;
     }
+
     dispatch(addCookieToBox(cookie));
-    messageApi.success(`Added ${cookie.name} to your box! 🍪`);
+
+    if (willUpgrade) {
+      messageApi.info(
+        `Box upgraded to ${nextSize[boxSize]}-Pack to fit your cookie! 🍪`,
+      );
+    } else {
+      messageApi.success(`Added ${cookie.name} to your box! 🍪`);
+    }
   };
 
   const carouselSettings = {
