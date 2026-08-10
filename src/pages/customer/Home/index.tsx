@@ -5,7 +5,7 @@ import { fetchReviewUsers } from "../../../store/slices/reviewSlice";
 import { type Cookie } from "../../../utils/mockData";
 import { type RootState } from "../../../store";
 import { addCookieToBox } from "../../../store/slices/cartSlice";
-import HomeCarousel from "../../../components/HomeCarousel";
+import HomeCarousel from "./components/HomeCarousel";
 import { StyledCard } from "../../../components/StyledCard";
 import { StyledTitle } from "../../../components/StyledTitle";
 

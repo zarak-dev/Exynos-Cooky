@@ -11,23 +11,6 @@ export const CareersContainer = styled.div`
   font-family: "Poppins", sans-serif;
 `;
 
-// export const HeroSection = styled.div`
-//   text-align: center;
-//   margin-bottom: 60px;
-//   padding: 40px 20px;
-//   border-bottom: 1px solid #f0f0f0;
-// `;
-
-// export const HeroSubtitle = styled(Paragraph)`
-//   &.ant-typography {
-//     font-size: 1.2rem;
-//     color: #555;
-//     max-width: 600px;
-//     margin: 0 auto;
-//     line-height: 1.6;
-//   }
-// `;
-
 export const SectionTitle = styled(Title)`
   &.ant-typography {
     font-size: 1.8rem;

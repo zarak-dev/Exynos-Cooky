@@ -14,7 +14,7 @@ import {
   SlideContainer,
   StyledCarousel,
 } from "./styles";
-import { type Cookie } from "../../utils/mockData";
+import { type Cookie } from "../../../../../utils/mockData";
 
 interface HomeCarouselProps {
   cookies: Cookie[];
@@ -23,7 +23,7 @@ interface HomeCarouselProps {
 
 const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
   return (
-    <StyledCarousel autoplay autoplaySpeed={4000} infinite dots>
+    <StyledCarousel autoplay autoplaySpeed={4000} infinite>
       {cookies.map((cookie) => (
         <SlideContainer key={cookie.id}>
           <Row align="middle" gutter={[48, 0]} style={{ width: "100%", height: "100%" }}>

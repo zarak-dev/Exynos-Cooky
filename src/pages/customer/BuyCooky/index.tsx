@@ -91,10 +91,11 @@ const BuyCooky: React.FC = () => {
       {contextHolder}
 
       <ExploreSection>
-        <StyledTitle level={1}>Explore Our Menu</StyledTitle>
+        <StyledTitle level={1}>Our Beloved Cookies</StyledTitle>
         <StyledInput
           placeholder="Search a cookie"
           allowClear
+          size="large"
           value={search}
           suffix={<SearchOutlined />}
           onChange={(e) => {

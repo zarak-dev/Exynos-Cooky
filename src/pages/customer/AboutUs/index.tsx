@@ -55,32 +55,23 @@ const AboutUs: React.FC = () => {
         </HeroSection>
 
         {/* Foundations Section */}
+        <FoundationsTitle>What Makes Us Special</FoundationsTitle>
         <Space>
-          <FoundationsTitle>What Makes Us Special</FoundationsTitle>
-
           <CoreGrid>
             <FeatureCard title="Gourmet Ingredients" variant="borderless">
-              We never compromise on quality. We source only the highest quality
-              butter, premium chocolates, and fresh ingredients to craft the
-              perfect cookie.
+             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minima nisi qui dolore deleniti! Iste rem, eveniet non perspiciatis saepe tempora dolore, aperiam obcaecati nihil ad doloribus natus unde porro praesentium.
             </FeatureCard>
 
             <FeatureCard title="Weekly Rotating Menu" variant="borderless">
-              Boredom is not in our vocabulary. Our flavor lineup changes every
-              single week, bringing you exciting and innovative new cookie
-              creations to try.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda saepe sequi optio doloribus sapiente odit mollitia, magni, nisi molestias ut iure eveniet, dignissimos earum modi nihil est laborum rem fugit.
             </FeatureCard>
 
             <FeatureCard title="Baked Fresh Daily" variant="borderless">
-              Timing is everything. Every cookie is mixed, balled, and baked
-              in-house throughout the day to ensure ultimate freshness and that
-              perfect warm pull.
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, culpa. Dicta velit nostrum quasi. Culpa doloribus temporibus similique consequatur optio non rerum quidem repellendus sequi ab expedita accusamus, officia adipisci.
             </FeatureCard>
 
             <FeatureCard title="Signature Packaging" variant="borderless">
-              Whether it is a 4-pack or a party box, we perfectly pack our
-              signature boxes so your cookies arrive looking as beautiful as
-              they taste.
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum voluptatum, amet quos, ab libero adipisci distinctio recusandae eligendi itaque maiores molestiae maxime consequuntur eum provident ut error? Reiciendis, magnam qui.
             </FeatureCard>
           </CoreGrid>
         </Space>

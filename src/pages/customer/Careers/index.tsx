@@ -5,7 +5,6 @@ import { OPEN_POSITIONS } from "./constants";
 import type { JobOpening } from "./types";
 
 import JobApplicationModal from "./components/JobApplicationModal";
-import type { JobApplicationValues } from "./components/JobApplicationModal";
 import {
   CareersContainer,
   ValueGrid,
@@ -53,7 +52,7 @@ const Careers: React.FC = () => {
     setSelectedJob(null);
   }, []);
 
-  const handleSubmitApplication = useCallback((values: JobApplicationValues) => {
+  const handleSubmitApplication = useCallback(() => {
     message.success(
       `Success! Your application for ${selectedJob?.title} has been received.`,
     );

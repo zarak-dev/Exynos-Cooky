@@ -137,23 +137,6 @@ const Header: React.FC = () => {
       </RightMenuWrapper>
 
       <IconActions>
-        {isLoggedIn ? (
-          <Dropdown
-            menu={userMenu}
-            placement="bottomRight"
-            arrow
-            trigger={["click"]}
-          >
-            <ActionIcon>
-              <UserOutlined />
-            </ActionIcon>
-          </Dropdown>
-        ) : (
-          <ActionIcon onClick={() => dispatch(toggleAuthModal())}>
-            <UserOutlined />
-          </ActionIcon>
-        )}
-
         <Tooltip title="Track Order">
           <TrackIcon onClick={() => navigate("/track-order")}>
             <AimOutlined />
@@ -170,6 +153,23 @@ const Header: React.FC = () => {
             <ShoppingOutlined />
           </CartIcon>
         </Badge>
+
+        {isLoggedIn ? (
+          <Dropdown
+            menu={userMenu}
+            placement="bottomRight"
+            arrow
+            trigger={["click"]}
+          >
+            <ActionIcon>
+              <UserOutlined />
+            </ActionIcon>
+          </Dropdown>
+        ) : (
+          <ActionIcon onClick={() => dispatch(toggleAuthModal())}>
+            <UserOutlined />
+          </ActionIcon>
+        )}
       </IconActions>
 
       <StyledDrawer
