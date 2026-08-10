@@ -1,7 +1,6 @@
-import { Button, Popconfirm, Space } from "antd";
+import { Button, Popconfirm, Space, Tag } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { type Order } from "../../../../store/slices/orderSlice";
-import { CompleteText } from "../styles";
 
 type Props = {
   order: Order;
@@ -20,11 +19,12 @@ const OrderActions = ({
 }: Props) => (
   <Space>
     {order.status === "Delivered" ? (
-      <CompleteText>Complete ✓</CompleteText>
+      <Tag color="green">Order Complete</Tag>
     ) : (
       <Button
         type="primary"
         size="small"
+        shape="round"
         onClick={() => onStatusChange(order.id, nextStatus!)}
       >
         {buttonLabel}
@@ -39,7 +39,13 @@ const OrderActions = ({
       cancelText="Cancel"
       okButtonProps={{ danger: true }}
     >
-      <Button type="text" danger size="small" icon={<DeleteOutlined />} />
+      <Button
+        shape="round"
+        type="link"
+        danger
+        size="small"
+        icon={<DeleteOutlined />}
+      />
     </Popconfirm>
   </Space>
 );

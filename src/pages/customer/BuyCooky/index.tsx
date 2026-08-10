@@ -4,11 +4,11 @@ import {
   message,
   Row,
   Select,
-  Tag,
   Tooltip,
   Button,
   Flex,
   Modal,
+  Tag,
   Typography,
 } from "antd";
 import { SearchOutlined, DownCircleTwoTone } from "@ant-design/icons";
@@ -33,9 +33,13 @@ import {
   EqualCard,
   CardFooter,
   ModalImage,
+  ModalLeft,
+  ModalRight,
+  ModalCookieName,
+  BlinkingTag,
 } from "./styles";
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 const PAGE_SIZE = 6;
 
 const FILTER_OPTIONS = [
@@ -87,7 +91,7 @@ const BuyCooky: React.FC = () => {
       {contextHolder}
 
       <ExploreSection>
-        <StyledTitle level={1}>Our Beloved Cookies</StyledTitle>
+        <StyledTitle level={1}>Explore Our Menu</StyledTitle>
         <StyledInput
           placeholder="Search a cookie"
           allowClear
@@ -201,43 +205,72 @@ const BuyCooky: React.FC = () => {
       <Modal
         open={!!selectedCookie}
         onCancel={() => setSelectedCookie(null)}
-        footer={null}
-        width={420}
         closable={false}
+        width={580}
         centered
-      >
-        {selectedCookie && (
-          <Flex vertical gap={12}>
-            <ModalImage
-              src={selectedCookie.imageUrl}
-              alt={selectedCookie.name}
-              preview={false}
-            />
-            <Flex justify="space-between" align="center">
-              <StyledTitle level={4}>{selectedCookie.name}</StyledTitle>
-              <Tag
-                color={selectedCookie.isAvailable ? "blue" : "red"}
-                variant="solid"
-              >
-                {selectedCookie.isAvailable
-                  ? `Rs. ${selectedCookie.price}`
-                  : "Sold Out"}
-              </Tag>
-            </Flex>
-            <Text type="secondary">{selectedCookie.description}</Text>
-            <StyledButton
-              type="primary"
-              shape="round"
-              disabled={!selectedCookie.isAvailable}
-              danger={!selectedCookie.isAvailable}
-              onClick={() => {
+        style={{ position: "relative" }}
+        footer={[
+          <Button shape="round" key="cancel" onClick={() => setSelectedCookie(null)}>
+            Cancel
+          </Button>,
+          <Button
+            key="add"
+            type="primary"
+            shape="round"
+            disabled={!selectedCookie?.isAvailable}
+            danger={!selectedCookie?.isAvailable}
+            onClick={() => {
+              if (selectedCookie) {
                 handleAddToCart(selectedCookie);
                 setSelectedCookie(null);
-              }}
-            >
-              {selectedCookie.isAvailable ? "Add to Box" : "Unavailable"}
-            </StyledButton>
-          </Flex>
+              }
+            }}
+          >
+            Add to Box
+          </Button>,
+        ]}
+      >
+        {selectedCookie && (
+          <>
+            {selectedCookie.isAvailable && (
+              <BlinkingTag>🍪 Order Now</BlinkingTag>
+            )}
+            <Flex gap={16}>
+              <ModalLeft>
+                <ModalImage
+                  src={selectedCookie.imageUrl}
+                  alt={selectedCookie.name}
+                  preview={false}
+                />
+              </ModalLeft>
+
+              <ModalRight>
+                <ModalCookieName level={4}>
+                  {selectedCookie.name}
+                </ModalCookieName>
+
+                <Flex gap={8} align="center">
+                  <Text strong>Price:</Text>
+                  <Text>Rs. {selectedCookie.price}</Text>
+                </Flex>
+
+                <Flex gap={8} align="center">
+                  <Text strong>Available:</Text>
+                  <Text>{selectedCookie.isAvailable ? "Yes" : "No"}</Text>
+                  {selectedCookie.isAvailable && (
+                    <Tag color="green">{selectedCookie.stock} left</Tag>
+                  )}
+                </Flex>
+
+                <Flex gap={8} align="flex-start">
+                  <Text strong>Description:</Text>
+                </Flex>
+                <Paragraph style={{ margin: 0 }}>
+                  {selectedCookie.description}
+                </Paragraph>
+              </ModalRight>
+            </Flex>
+          </>
         )}
       </Modal>
     </MainContent>

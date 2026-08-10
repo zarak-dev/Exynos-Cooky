@@ -7,8 +7,7 @@ const { Title } = Typography;
 const HeaderWrapper = styled(Flex)`
   margin-bottom: 24px;
   background: #fff;
-  border-radius: 12px;
-  padding: 20px 24px;
+  padding: 20px 24px 0px;
   box-shadow: 0 2px 8px rgba(0, 0, 56, 0.07);
   flex-direction: column;
   gap: 4px;

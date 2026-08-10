@@ -1,6 +1,5 @@
 import React from "react";
-import { Modal, Form, Input, Upload, Button, Row, Col } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Modal, Form, Input, Button, Row, Col } from "antd";
 
 export interface JobApplicationValues {
   fullName: string;
@@ -17,13 +16,6 @@ interface JobApplicationModalProps {
   onCancel: () => void;
   onSubmit: (values: JobApplicationValues) => void;
 }
-
-const normFile = (e: { fileList: unknown[] } | unknown[]) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return (e as { fileList: unknown[] })?.fileList;
-};
 
 const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
   open,
@@ -133,30 +125,6 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
             </Form.Item>
           </Col>
         </Row>
-
-        <Form.Item
-          name="resume"
-          label="Resume / CV"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          rules={[
-            {
-              required: true,
-              message: "Please upload your CV",
-            },
-          ]}
-        >
-          <Upload
-            name="cv"
-            beforeUpload={() => false}
-            maxCount={1}
-            accept=".pdf,.doc,.docx"
-          >
-            <Button icon={<UploadOutlined />}>
-              Click to Upload (Max 1 File)
-            </Button>
-          </Upload>
-        </Form.Item>
 
         <Form.Item
           name="coverLetter"

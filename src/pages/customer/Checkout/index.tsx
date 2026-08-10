@@ -6,6 +6,7 @@ import { OrderConfirmed } from "./components/OrderConfirmed";
 import { EmptyCart } from "./components/EmptyCart";
 import { useCheckout } from "./components/useCheckout";
 import { type FormValues } from "./types";
+import { deleteOrder } from "../../../store/slices/orderSlice";
 import {
   CheckoutContainer,
   FullWidthRadioGroup,
@@ -14,13 +15,16 @@ import {
   SectionTitle,
   StyledCard,
 } from "./styles";
+import { useDispatch } from "react-redux";
 
 export const CheckoutPage: React.FC = () => {
   const [form] = Form.useForm<FormValues>();
+  const dispatch = useDispatch();
   const {
     contextHolder,
     confirmedOrderId,
     isOrdered,
+    confirmedOrder,
     paymentMethod,
     setPaymentMethod,
     cartItems,
@@ -33,18 +37,22 @@ export const CheckoutPage: React.FC = () => {
     navigate,
   } = useCheckout();
 
-  if (isOrdered && confirmedOrderId) {
-    return (
-      <>
-        {contextHolder}
-        <OrderConfirmed
-          orderId={confirmedOrderId}
-          onTrack={() => navigate("/track-order")}
-          onBackToShop={() => navigate("/")}
-        />
-      </>
-    );
-  }
+if (isOrdered && confirmedOrderId && confirmedOrder) {
+  return (
+    <>
+      {contextHolder}
+      <OrderConfirmed
+        orderId={confirmedOrderId}
+        order={confirmedOrder}
+        onBackToShop={() => navigate("/")}
+        onDelete={() => {
+          dispatch(deleteOrder(confirmedOrderId));
+          navigate("/");
+        }}
+      />
+    </>
+  );
+}
 
   if (cartItems.length === 0) {
     return (

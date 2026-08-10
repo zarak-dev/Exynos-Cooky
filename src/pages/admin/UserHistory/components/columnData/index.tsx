@@ -1,12 +1,12 @@
 import { Avatar, Button, Flex, Popconfirm, Tag, Typography } from "antd";
 import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import type { UserHistoryRow } from "../../../../store/slices/userHistorySlice";
+import type { UserHistoryRow } from "../../../../../store/slices/userHistorySlice";
 
 const { Text } = Typography;
 
 export const getUserHistoryColumns = (
-  onDelete: (uuid: string) => void
+  onDelete: (uuid: string) => void,
 ): ColumnsType<UserHistoryRow> => [
   {
     title: "Avatar",
@@ -17,6 +17,7 @@ export const getUserHistoryColumns = (
   },
   {
     title: "Name",
+    sorter: (a, b) => a.name.localeCompare(b.name),
     render: (_, user) => (
       <Flex vertical>
         <Text strong>{user.name}</Text>
@@ -29,6 +30,7 @@ export const getUserHistoryColumns = (
   {
     title: "Email",
     dataIndex: "email",
+    sorter: (a, b) => a.email.localeCompare(b.email),
   },
   {
     title: "Phone",
@@ -37,6 +39,8 @@ export const getUserHistoryColumns = (
   {
     title: "Location",
     dataIndex: "country",
+    sorter: (a, b) => a.country.localeCompare(b.country),
+    filters: [],
     render: (country: string) => <Tag color="blue">{country}</Tag>,
   },
   {

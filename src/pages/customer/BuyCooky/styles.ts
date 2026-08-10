@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Flex, Image } from "antd";
+import { Flex, Image, Tag, Typography } from "antd";
 import { StyledCard } from "../../../components/StyledCard";
 
 export const PageLayout = styled(Flex)`
@@ -42,7 +42,52 @@ export const CardFooter = styled(Flex)`
 
 export const ModalImage = styled(Image)`
   width: 100% !important;
-  height: 220px !important;
+  height: 100% !important;
   object-fit: cover !important;
-  border-radius: 12px !important;
+  border-radius: 12px 0 0 12px !important;
+`;
+
+export const ModalLeft = styled(Flex)`
+  width: 200px;
+  flex-shrink: 0;
+  min-height: 280px;
+`;
+
+export const ModalRight = styled(Flex)`
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0;
+`;
+
+export const ModalCookieName = styled(Typography.Title)`
+  &.ant-typography {
+    color: #00009c;
+    font-weight: 800;
+    margin: 0;
+  }
+`;
+
+export const BlinkingTag = styled(Tag)`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #00009c;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  animation: blink 1.2s step-start infinite;
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
 `;

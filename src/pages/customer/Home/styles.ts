@@ -121,13 +121,15 @@ export const BestCarousel = styled(Carousel)`
   .slick-next {
     right: -32px;
   }
+  .slick-slide {
+    background: transparent;
+  }
 `;
 
 export const BestCoverImage = styled(Image)`
   height: 160px !important;
   object-fit: cover !important;
   padding: 8px !important;
-
 `;
 
 export const BestCardTitle = styled(StyledTitle)`

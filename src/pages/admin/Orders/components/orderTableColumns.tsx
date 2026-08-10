@@ -1,29 +1,28 @@
-import React from "react";
 import { Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import Text from "antd/es/typography/Text";
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-
 import { type Order } from "../../../../store/slices/orderSlice";
 import OrderActions from "./orderActions";
 
-const NEXT_STATUS: Partial<Record<Order["status"], Order["status"]>> = {
+const { Text, Link } = Typography;
+
+const nextStatus: any = {
   Pending: "Baking",
   Baking: "Dispatched",
   Dispatched: "Delivered",
 };
 
-const ACTION_LABELS: Partial<Record<Order["status"], string>> = {
+const actionLabel: any = {
   Pending: "Start Baking",
   Baking: "Mark Dispatched",
   Dispatched: "Mark Delivered",
 };
 
-const STATUS_TAGS: Record<Order["status"], React.ReactNode> = {
+const statusTags: any = {
   Pending: (
     <Tag icon={<ClockCircleOutlined />} color="warning">
       PENDING QUEUE
@@ -46,6 +45,13 @@ const STATUS_TAGS: Record<Order["status"], React.ReactNode> = {
   ),
 };
 
+const STATUS_ORDER: Record<Order["status"], number> = {
+  Pending: 0,
+  Baking: 1,
+  Dispatched: 2,
+  Delivered: 3,
+};
+
 type Props = {
   onStatusChange: (id: string, status: Order["status"]) => void;
   onDelete: (id: string) => void;
@@ -58,16 +64,19 @@ export const getOrderColumns = ({
   {
     title: "ORDER ID",
     dataIndex: "id",
-    render: (id) => <Text code>{id}</Text>,
+    sorter: (a, b) => a.id.localeCompare(b.id),
+    render: (id) => <Link>{id}</Link>,
   },
   {
     title: "CUSTOMER",
     dataIndex: "customerName",
-    render: (name) => <Text strong>{name}</Text>,
+    sorter: (a, b) => a.customerName.localeCompare(b.customerName),
+    render: (name) => <Text>{name}</Text>,
   },
   {
     title: "BOX SELECTION",
     dataIndex: "boxSize",
+    sorter: (a, b) => a.boxSize.localeCompare(b.boxSize),
   },
   {
     title: "CONTENTS SUMMARY",
@@ -77,12 +86,21 @@ export const getOrderColumns = ({
   {
     title: "TOTAL",
     dataIndex: "totalPrice",
-    render: (price) => <Typography.Text strong>Rs. {price}</Typography.Text>,
+    sorter: (a, b) => a.totalPrice - b.totalPrice,
+    render: (price) => <Text strong>Rs. {price}</Text>,
   },
   {
     title: "STATUS",
     dataIndex: "status",
-    render: (status: Order["status"]) => STATUS_TAGS[status],
+    sorter: (a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status],
+    filters: [
+      { text: "Pending", value: "Pending" },
+      { text: "Baking", value: "Baking" },
+      { text: "Dispatched", value: "Dispatched" },
+      { text: "Delivered", value: "Delivered" },
+    ],
+    onFilter: (value, record) => record.status === value,
+    render: (status: Order["status"]) => statusTags[status],
   },
   {
     title: "ACTIONS",
@@ -90,8 +108,8 @@ export const getOrderColumns = ({
     render: (_, order) => (
       <OrderActions
         order={order}
-        buttonLabel={ACTION_LABELS[order.status]}
-        nextStatus={NEXT_STATUS[order.status]}
+        buttonLabel={actionLabel[order.status]}
+        nextStatus={nextStatus[order.status]}
         onStatusChange={onStatusChange}
         onDelete={onDelete}
       />

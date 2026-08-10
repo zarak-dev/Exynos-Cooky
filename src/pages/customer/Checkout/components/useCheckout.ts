@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { type RootState } from "../../../../store";
 import { DELIVERY_FEE } from "../../../../constants/pricing";
 import { clearBox } from "../../../../store/slices/cartSlice";
-import { placeNewOrder } from "../../../../store/slices/orderSlice";
+import { placeNewOrder, type Order } from "../../../../store/slices/orderSlice";
 import {
   groupCartItems,
   buildContentsString,
@@ -22,6 +22,7 @@ export function useCheckout() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [confirmedOrderId, setConfirmedOrderId] = useState<string | null>(null);
+  const [confirmedOrder, setConfirmedOrder] = useState<Order | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const user = useSelector((state: RootState) => state.auth.user);
   const { items: cartItems, boxSize } = useSelector(
@@ -44,27 +45,27 @@ export function useCheckout() {
   function handleSubmit(values: { firstName: string; lastName: string }) {
     const orderId = generateOrderId();
 
-    dispatch(
-      placeNewOrder({
-        id: orderId,
-        customerName: `${values.firstName} ${values.lastName}`,
-        customerEmail: user?.email || "",
-        boxSize: `${boxSize}-Pack Custom Box`,
-        contents: buildContentsString(groupedCartItems),
-        totalPrice: totalAmount,
-        status: "Pending",
-        timestamp: new Date().toISOString(),
-      }),
-    );
+    const order: Order = {
+      id: orderId,
+      customerName: `${values.firstName} ${values.lastName}`,
+      customerEmail: user?.email || "",
+      boxSize: `${boxSize}-Pack Custom Box`,
+      contents: buildContentsString(groupedCartItems),
+      totalPrice: totalAmount,
+      status: "Pending",
+      timestamp: new Date().toISOString(),
+    };
 
+    dispatch(placeNewOrder(order));
     dispatch(clearBox());
     setConfirmedOrderId(orderId);
+    setConfirmedOrder(order);
     messageApi.success("Order dispatched successfully! 🍪");
   }
-
   return {
     contextHolder,
     confirmedOrderId,
+    confirmedOrder,
     isOrdered: confirmedOrderId !== null,
     paymentMethod,
     setPaymentMethod,

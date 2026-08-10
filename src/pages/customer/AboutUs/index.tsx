@@ -32,26 +32,19 @@ const AboutUs: React.FC = () => {
 
             <NarrativeBlock>
               <Paragraph>
-                Welcome to <HighlightText>Exynos Cooky</HighlightText>, where
-                our passion for baking meets the pursuit of the perfect sweet
-                treat. What started as a simple idea in a home kitchen has
-                blossomed into a destination for the most delicious,
-                melt-in-your-mouth cookies you will ever experience.
-              </Paragraph>
-              <Paragraph>
-                We believe that baking is an art form. Our mission is to create
-                moments of pure joy through our carefully crafted, giant
-                cookies. Every recipe is meticulously tested, using only the
-                finest ingredients—from rich European butter to premium
-                chocolate chunks—to ensure every single bite brings a smile to
-                your face.
-              </Paragraph>
-              <Paragraph>
-                From our classic chilled sugar to our rotating weekly menu of
-                innovative flavors, our cookies are baked fresh daily to
-                guarantee that warm, gooey center. We are dedicated to
-                delivering not just a dessert, but an unforgettable sweet
-                experience right to your door.
+                Welcome to <HighlightText>Exynos Cooky</HighlightText>, Lorem
+                ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
+                atque sequi, excepturi rerum sapiente illum maiores culpa ipsa
+                tempora nemo nostrum iusto tempore? Iure dignissimos doloremque
+                nulla ipsam distinctio! Ipsam. Lorem, ipsum dolor sit amet
+                consectetur adipisicing elit. Ab tempore dolore doloremque
+                totam, non repellendus animi veniam cupiditate atque quibusdam
+                cum eveniet nostrum! Voluptatum, at tenetur omnis aliquam eaque
+                praesentium. Lorem ipsum dolor sit amet, consectetur adipisicing
+                elit. Voluptatibus itaque, obcaecati magni eaque laudantium
+                quaerat accusamus impedit aperiam doloremque magnam, ea
+                voluptatum similique assumenda, sed iure qui eligendi quod
+                dicta.
               </Paragraph>
             </NarrativeBlock>
           </LeftColumn>

@@ -2,11 +2,7 @@ import { Button, Popconfirm, Space, Switch } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import Text from "antd/es/typography/Text";
 import { CookieImage, StatusTag } from "./styles";
-import type {
-  InventoryColumnsProps,
-  InventoryColumns,
-  CookieItem,
-} from "./types";
+import type { InventoryColumnsProps, InventoryColumns, CookieItem } from "./types";
 
 export const getInventoryColumns = ({
   onToggle,
@@ -25,18 +21,26 @@ export const getInventoryColumns = ({
     title: "COOKIE NAME",
     dataIndex: "name",
     key: "name",
+    sorter: (a, b) => a.name.localeCompare(b.name),
     render: (text: string) => <Text strong>{text}</Text>,
   },
   {
     title: "PRICE",
     dataIndex: "price",
     key: "price",
+    sorter: (a, b) => a.price - b.price,
     render: (price: number) => <Text>Rs. {price}</Text>,
   },
   {
     title: "STATUS",
     dataIndex: "isAvailable",
     key: "isAvailable",
+    sorter: (a, b) => Number(b.isAvailable) - Number(a.isAvailable),
+    filters: [
+      { text: "Available", value: true },
+      { text: "Sold Out", value: false },
+    ],
+    onFilter: (value, record) => record.isAvailable === value,
     render: (isAvailable: boolean) => (
       <StatusTag color={isAvailable ? "success" : "error"}>
         {isAvailable ? "AVAILABLE" : "SOLD OUT"}

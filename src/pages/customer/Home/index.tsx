@@ -115,6 +115,7 @@ const REVIEWS = [
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
+  // move to saga
   const [messageApi, contextHolder] = message.useMessage();
 
   const { items: cookies } = useSelector((state: RootState) => state.inventory);
@@ -129,8 +130,10 @@ const Home: React.FC = () => {
   useEffect(() => {
     dispatch(fetchReviewUsers());
   }, [dispatch]);
+
   const carouselCookies = cookies.slice(0, 6);
 
+  // ?
   const bestCookies = BEST_COOKIE_IDS.map((id) =>
     cookies.find((c) => c.id === id),
   ).filter((c): c is Cookie => !!c);
@@ -188,7 +191,6 @@ const Home: React.FC = () => {
               >
                 <BestCardBody>
                   <BestCardHeader>
-
                     <BestCardTitle level={5}>{cookie.name}</BestCardTitle>
                     <Tag
                       color={cookie.isAvailable ? "blue" : "red"}

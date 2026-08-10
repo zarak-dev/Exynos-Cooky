@@ -124,8 +124,6 @@ export const HeaderSubtitle = styled(Text)`
 `;
 
 export const StyledContent = styled(Content)`
-  margin: 24px;
-  padding: 24px;
   background: #f5f5f5;
   overflow-y: auto;
   flex: 1;

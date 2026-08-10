@@ -11,6 +11,7 @@ import { OrdersCard, OrdersContainer, SearchWrapper } from "./styles";
 import { getOrderColumns } from "./components/orderTableColumns";
 import StyledPageHeader from "../../../components/PageHeader";
 import { StyledInput } from "../../../components/StyledInput";
+import { Wrapper } from "../../../components/Wrapper";
 
 const AdminOrders: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,32 +30,35 @@ const AdminOrders: React.FC = () => {
   );
 
   return (
-    <OrdersContainer>
+    <>
       <StyledPageHeader
         title="Customer Orders"
         breadcrumbs={[{ title: "Admin" }, { title: "Orders" }]}
       />
-
-      <SearchWrapper>
-        <StyledInput
-          placeholder="Search by name or order ID..."
-          allowClear
-          suffix={<SearchOutlined />}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </SearchWrapper>
-
-      <OrdersCard variant="borderless">
-        <Table
-          rowKey="id"
-          columns={columns}
-          dataSource={filteredOrders}
-          pagination={false}
-          scroll={{ x: 900 }}
-        />
-      </OrdersCard>
-    </OrdersContainer>
+      <Wrapper>
+        <OrdersCard
+          variant="borderless"
+          title="Customers Orders Details"
+          extra={
+            <StyledInput
+              placeholder="Search..."
+              allowClear
+              suffix={<SearchOutlined />}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          }
+        >
+          <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={filteredOrders}
+            pagination={false}
+            scroll={{ x: 900 }}
+          />
+        </OrdersCard>
+      </Wrapper>
+    </>
   );
 };
 
