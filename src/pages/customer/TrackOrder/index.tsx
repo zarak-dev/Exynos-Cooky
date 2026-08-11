@@ -99,7 +99,6 @@ export const TrackOrder: React.FC = () => {
   const formattedDate = searchedOrder?.timestamp
     ? new Date(searchedOrder.timestamp).toLocaleString()
     : "Just now";
-  console.log(searchedOrder?.status);
 
   return (
     <TrackContainer>
@@ -156,7 +155,7 @@ export const TrackOrder: React.FC = () => {
                 okButtonProps={{ danger: true }}
               >
                 <Button
-                  disabled={searchedOrder.status !== "Pending"}
+                  disabled={searchedOrder.status !== "Baking"}
                   danger
                   icon={<DeleteOutlined />}
                   size="small"
