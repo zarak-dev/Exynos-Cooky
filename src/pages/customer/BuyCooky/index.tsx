@@ -64,7 +64,7 @@ const BuyCooky: React.FC = () => {
   );
 
   const filteredCookies = cookies
-    .filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
+    .filter((cookie) => cookie.name.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) =>
       sortBy === "price-low"
         ? a.price - b.price

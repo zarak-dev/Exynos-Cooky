@@ -52,7 +52,7 @@ export const CartPage = () => {
 
   const removeCookie = (record: GroupedCartItem, showMessage = false) => {
     const lastIndex = [...cartItems]
-      .map((i) => i.name)
+      .map((item) => item.name)
       .lastIndexOf(record.name);
     dispatch(removeCookieFromBox(lastIndex));
 

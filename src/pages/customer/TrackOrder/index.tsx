@@ -85,7 +85,7 @@ export const TrackOrder: React.FC = () => {
     }
     // Search for the order in our global Redux state
     const foundOrder = orders.find(
-      (o) => o.id.toUpperCase() === normalizedOrderId,
+      (order) => order.id.toUpperCase() === normalizedOrderId,
     );
 
     if (foundOrder) {

@@ -32,7 +32,7 @@ const orderSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; status: Order["status"] }>,
     ) => {
-      const order = state.orders.find((o) => o.id === action.payload.id);
+      const order = state.orders.find((order) => order.id === action.payload.id);
       if (order) {
         order.status = action.payload.status;
         localStorage.setItem("exynos_orders", JSON.stringify(state.orders));

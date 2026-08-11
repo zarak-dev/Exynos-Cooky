@@ -30,9 +30,9 @@ export const LoginForm = () => {
     }
 
     const user = users.find(
-      (u) =>
-        u.email.toLowerCase() === email.toLowerCase() &&
-        u.password === password,
+      (user) =>
+        user.email.toLowerCase() === email.toLowerCase() &&
+        user.password === password,
     );
 
     if (!user) {

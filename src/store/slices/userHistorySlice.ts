@@ -43,7 +43,7 @@ const userHistorySlice = createSlice({
       state.users = [action.payload, ...state.users];
     },
     deleteUser(state, action: PayloadAction<string>) {
-      state.users = state.users.filter((u) => u.uuid !== action.payload);
+      state.users = state.users.filter((user) => user.uuid !== action.payload);
     },
   },
 });

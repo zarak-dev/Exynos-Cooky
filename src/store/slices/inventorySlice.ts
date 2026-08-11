@@ -18,14 +18,14 @@ const inventorySlice = createSlice({
       state,
       action: PayloadAction<{ id: number; isAvailable: boolean }>,
     ) => {
-      const item = state.items.find((i) => i.id === action.payload.id);
+      const item = state.items.find((item) => item.id === action.payload.id);
       if (item) {
         item.isAvailable = action.payload.isAvailable;
         localStorage.setItem("exynos_inventory", JSON.stringify(state.items));
       }
     },
     deleteItem: (state, action: PayloadAction<number>) => {
-      state.items = state.items.filter((i) => i.id !== action.payload);
+      state.items = state.items.filter((item) => item.id !== action.payload);
       localStorage.setItem("exynos_inventory", JSON.stringify(state.items));
     },
   },

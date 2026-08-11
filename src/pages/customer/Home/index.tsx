@@ -143,16 +143,17 @@ const Home: React.FC = () => {
 
   const carouselCookies = cookies.slice(0, 6);
   // Build a lookup table once — each cookie is instantly accessible by its id
-  const cookieMap = new Map(cookies.map((c) => [c.id, c]));
+  const cookieMap = new Map(cookies.map((cookie) => [cookie.id, cookie]));
   // Map over the ID list  replacign each id with its matching cookie from the table 
   // Filter out any undefined if id doesn't exist in the map, for  TypeScript the result is Cookie[]
   const bestCookies = BEST_COOKIE_IDS.map((id) => cookieMap.get(id)).filter(
-    (c): c is Cookie => !!c,
+    (cookie): cookie is Cookie => !!cookie,
   );
-
+  console.log(bestCookies);
+  
   const trendingCookies = TRENDING_COOKIE_IDS.map((id) =>
     cookieMap.get(id),
-  ).filter((c): c is Cookie => !!c);
+  ).filter((cookie): cookie is Cookie => !!cookie);
 
   const handleAddToCart = (cookie: Cookie) => {
     addCookieWithFeedback(
