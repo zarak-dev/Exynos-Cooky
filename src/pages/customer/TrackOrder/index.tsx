@@ -68,12 +68,10 @@ export const TrackOrder: React.FC = () => {
   const [searchedOrder, setSearchedOrder] = useState<Order | null>(null);
   const dispatch = useDispatch();
   const handleDelete = () => {
-    if (searchedOrder) {
-      dispatch(deleteOrder(searchedOrder.id));
-      setSearchedOrder(null);
-      setOrderId("");
-      messageApi.success("Order cancelled successfully.");
-    }
+    dispatch(deleteOrder(searchedOrder!.id));
+    setSearchedOrder(null);
+    setOrderId("");
+    messageApi.success("Order cancelled successfully.");
   };
 
   // Grab live orders from our global Redux store
@@ -114,7 +112,7 @@ export const TrackOrder: React.FC = () => {
       <SearchCard variant="borderless">
         <Space align="center">
           <Input
-            style={{ width: 600, borderRadius:20 }}
+            style={{ width: 600, borderRadius: 20 }}
             allowClear
             placeholder="Enter your Order ID (e.g., EXNS-12345)"
             value={orderId}

@@ -35,9 +35,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    toggleAuthModal: (state) => {
-      state.isAuthModalOpen = !state.isAuthModalOpen;
-    },
     setOpenAuthModal: (state, action: PayloadAction<boolean>) => {
       state.isAuthModalOpen = action.payload;
     },
@@ -80,7 +77,6 @@ const authSlice = createSlice({
 });
 
 export const {
-  toggleAuthModal,
   setOpenAuthModal,
   registerUser,
   loginUser,

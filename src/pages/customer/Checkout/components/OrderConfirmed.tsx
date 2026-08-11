@@ -36,8 +36,6 @@ export const OrderConfirmed: React.FC<OrderConfirmedProps> = ({
   onBackToShop,
   onDelete,
 }) => {
-  console.log(order)
-  
   return (
     <CenteredContainer>
       <SuccessCard variant="borderless">

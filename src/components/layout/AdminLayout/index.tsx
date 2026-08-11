@@ -38,9 +38,6 @@ export const AdminLayout: React.FC = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
 
-  const handleMenuClick = ({ key }: { key: string }) => {
-    navigate(key);
-  };
 
   return (
     <AdminLayoutWrapper>
@@ -60,7 +57,7 @@ export const AdminLayout: React.FC = () => {
           mode="inline"
           selectedKeys={[location.pathname]}
           items={menuItems}
-          onClick={handleMenuClick}
+          onClick={({ key }) => navigate(key)}
         />
 
         <SiderFooter justify="center">
@@ -68,7 +65,7 @@ export const AdminLayout: React.FC = () => {
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
           >
-            {!collapsed && "Hide"}
+            {!collapsed && ""}
           </CollapseButton>
         </SiderFooter>
       </StyledSider>

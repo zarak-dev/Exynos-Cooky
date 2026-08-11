@@ -7,14 +7,16 @@ import {
 import { type RootState } from "../../../../../store";
 import type { SignUpFormValues } from "../../Types";
 import { setOpenAuthModal } from "../../../../../store/slices/authSlice";
+
 export const SignUpForm = () => {
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
 
   const users = useSelector((state: RootState) => state.auth.registeredUsers);
 
   const onFinish = ({ name, email, password }: SignUpFormValues) => {
     email = email.trim();
-    const [form] = Form.useForm();
+
     const exists = users.some(
       (value) => value.email.toLowerCase() === email.toLowerCase(),
     );

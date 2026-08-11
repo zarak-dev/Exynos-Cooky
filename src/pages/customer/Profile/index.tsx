@@ -1,6 +1,11 @@
-import React, { useEffect } from "react";
-import { Switch, Table, Empty, Grid, Flex, Button} from "antd";
-import { EditOutlined, EnvironmentOutlined, MailOutlined, PlusOutlined } from "@ant-design/icons";
+import React from "react";
+import { Switch, Table, Empty, Grid, Flex, Button } from "antd";
+import {
+  EditOutlined,
+  EnvironmentOutlined,
+  MailOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { type RootState } from "../../../store";
@@ -59,12 +64,6 @@ const CustomerProfile: React.FC = () => {
     ? orders.filter((order) => order.customerEmail === user.email)
     : [];
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/");
-    }
-  }, [isLoggedIn, navigate]);
-
   const handleLogout = () => {
     dispatch(logoutUser());
     navigate("/");
@@ -107,7 +106,10 @@ const CustomerProfile: React.FC = () => {
                 <SectionContainer>
                   <HeaderRow>
                     <StyledTitle level={5}>Contact</StyledTitle>
-                    <Button icon={<EditOutlined />} disabled> Edit</Button>
+                    <Button icon={<EditOutlined />} disabled>
+                      {" "}
+                      Edit
+                    </Button>
                   </HeaderRow>
 
                   <StyledCard>
@@ -121,7 +123,9 @@ const CustomerProfile: React.FC = () => {
                 <SectionContainer>
                   <Flex justify="space-between" align="center">
                     <StyledTitle level={5}>Addresses</StyledTitle>
-                    <Button disabled icon={<PlusOutlined  />} >Add</Button>
+                    <Button disabled icon={<PlusOutlined />}>
+                      Add
+                    </Button>
                   </Flex>
 
                   <StyledCard>

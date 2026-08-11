@@ -17,8 +17,7 @@ import { reviewSaga } from "./sagas/reviewSaga";
 //  Centralized Root Saga
 // As we add more features, just add their watchers here
 function* rootSaga() {
-  yield all([fork(watchUserHistory)]);
-  yield all([fork(reviewSaga)]);
+  yield all([fork(watchUserHistory), fork(reviewSaga)]);
 }
 
 // Initialize Middleware

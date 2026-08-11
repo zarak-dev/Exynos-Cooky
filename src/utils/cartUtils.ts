@@ -1,7 +1,6 @@
 import type { Cookie } from "./mockData";
 
 export interface GroupedCartItem {
-  indices: any;
   imageUrl: string;
   id: number;
   name: string;
@@ -27,7 +26,6 @@ export function groupCartItems(items: Cookie[]): GroupedCartItem[] {
         price,
         quantity: 1,
         totalPrice: price,
-        indices: [],
         imageUrl: item.imageUrl || "",
       });
     }

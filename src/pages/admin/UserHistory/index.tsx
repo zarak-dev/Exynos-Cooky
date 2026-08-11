@@ -26,7 +26,7 @@ const UserHistory: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchUsersStart());
-  }, []);
+  }, [dispatch]);
 
   const filteredUsers = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -94,7 +94,6 @@ const UserHistory: React.FC = () => {
       </Wrapper>
 
       <HistoryModal
-        dispatch={dispatch}
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
         messageApi={messageApi}

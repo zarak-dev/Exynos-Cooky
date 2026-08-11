@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getCartColumns } from "./components/cartTableColumns";
 import {
@@ -39,15 +38,12 @@ const { Text } = Typography;
 export const CartPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const inventory = useSelector((state: RootState) => state.inventory.items);
   const { boxSize, items: cartItems } = useSelector(
     (state: RootState) => state.cart,
   );
 
-  const groupedCartItems = useMemo(
-    () => groupCartItems(cartItems),
-    [cartItems],
-  );
+  const groupedCartItems = groupCartItems(cartItems);
 
   const subtotal = cartItems.reduce((sum, item) => sum + Number(item.price), 0);
 
@@ -71,16 +67,10 @@ export const CartPage = () => {
       return;
     }
 
-    dispatch(
-      addCookieToBox({
-        id: record.id,
-        name: record.name,
-        price: record.price,
-        imageUrl: record.imageUrl ?? "",
-        description: "",
-        isAvailable: false,
-      }),
-    );
+    const originalCookie = inventory.find((c) => c.id === record.id);
+    if (!originalCookie) return;
+
+    dispatch(addCookieToBox(originalCookie));
   };
 
   const checkoutButtonText =

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchReviewUsers } from "../../../store/slices/reviewSlice";
 import { type Cookie } from "../../../utils/mockData";
 import { type RootState } from "../../../store";
-import { addCookieToBox } from "../../../store/slices/cartSlice";
 import HomeCarousel from "./components/HomeCarousel";
 import { StyledCard } from "../../../components/StyledCard";
 import { StyledTitle } from "../../../components/StyledTitle";
@@ -36,6 +35,7 @@ import {
   StyledMeta,
   BestCardTitle,
 } from "./styles";
+import { addCookieWithFeedback } from "../../../utils/cartActions";
 
 const BEST_COOKIE_IDS = [2, 3, 6, 9, 10, 4];
 const TRENDING_COOKIE_IDS = [13, 18, 17];
@@ -112,10 +112,20 @@ const REVIEWS = [
       "Best decision I made this month was trying Exynos Cooky. Highly recommend!",
   },
 ];
+const carouselSettings = {
+  slidesToShow: 4,
+  slidesToScroll: 2,
+  arrows: true,
+  dots: true,
+  responsive: [
+    { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 2 } },
+    { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 1 } },
+    { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
+  ],
+};
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
-  // move to saga
   const [messageApi, contextHolder] = message.useMessage();
 
   const { items: cookies } = useSelector((state: RootState) => state.inventory);
@@ -129,51 +139,29 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchReviewUsers());
-  }, [dispatch]);
+  }, []);
 
   const carouselCookies = cookies.slice(0, 6);
-
-  // ?
-  const bestCookies = BEST_COOKIE_IDS.map((id) =>
-    cookies.find((c) => c.id === id),
-  ).filter((c): c is Cookie => !!c);
+  // Build a lookup table once — each cookie is instantly accessible by its id
+  const cookieMap = new Map(cookies.map((c) => [c.id, c]));
+  // Map over the ID list  replacign each id with its matching cookie from the table 
+  // Filter out any undefined if id doesn't exist in the map, for  TypeScript the result is Cookie[]
+  const bestCookies = BEST_COOKIE_IDS.map((id) => cookieMap.get(id)).filter(
+    (c): c is Cookie => !!c,
+  );
 
   const trendingCookies = TRENDING_COOKIE_IDS.map((id) =>
-    cookies.find((c) => c.id === id),
+    cookieMap.get(id),
   ).filter((c): c is Cookie => !!c);
 
   const handleAddToCart = (cookie: Cookie) => {
-    const nextSize: Record<number, number | null> = { 4: 6, 6: 12, 12: null };
-    const willUpgrade =
-      cartItems.length >= boxSize && nextSize[boxSize] !== null;
-    const isFull = cartItems.length >= boxSize && nextSize[boxSize] === null;
-
-    if (isFull) {
-      messageApi.error("Your 12-Pack is full! Please checkout first.");
-      return;
-    }
-
-    dispatch(addCookieToBox(cookie));
-
-    if (willUpgrade) {
-      messageApi.info(
-        `Box upgraded to ${nextSize[boxSize]}-Pack to fit your cookie! 🍪`,
-      );
-    } else {
-      messageApi.success(`Added ${cookie.name} to your box! 🍪`);
-    }
-  };
-
-  const carouselSettings = {
-    slidesToShow: 4,
-    slidesToScroll: 2,
-    arrows: true,
-    dots: true,
-    responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 2 } },
-      { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 1 } },
-      { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
-    ],
+    addCookieWithFeedback(
+      cookie,
+      cartItems.length,
+      boxSize,
+      dispatch,
+      messageApi,
+    );
   };
 
   return (

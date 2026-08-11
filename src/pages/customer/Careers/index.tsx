@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Button, Card, Flex, Tag, Typography, message } from "antd";
 
 import { OPEN_POSITIONS } from "./constants";
@@ -38,62 +38,54 @@ const CORE_VALUES = [
   },
 ];
 
-const Careers: React.FC = () => {
+ const Careers: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobOpening | null>(null);
 
-  const handleOpenModal = useCallback((job: JobOpening) => {
+  const handleOpenModal = (job: JobOpening) => {
     setSelectedJob(job);
     setIsModalOpen(true);
-  }, []);
+  };
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     setIsModalOpen(false);
     setSelectedJob(null);
-  }, []);
+  };
 
-  const handleSubmitApplication = useCallback(() => {
+  const handleSubmitApplication = () => {
     message.success(
       `Success! Your application for ${selectedJob?.title} has been received.`,
     );
-
     setIsModalOpen(false);
     setSelectedJob(null);
-  }, [selectedJob]);
+  };
 
-  const jobItems = useMemo(
-    () =>
-      OPEN_POSITIONS.map((job) => ({
-        key: job.id,
-        label: (
-          <JobLabelWrapper>
-            <JobTitleText>{job.title}</JobTitleText>
-
-            <JobMeta>
-              <Tag color="blue">{job.department}</Tag>
-              <Tag>{job.location}</Tag>
-              <Tag color="purple">{job.type}</Tag>
-            </JobMeta>
-          </JobLabelWrapper>
-        ),
-
-        children: (
-          <JobContentWrapper>
-            <JobDescriptionText>{job.description}</JobDescriptionText>
-
-            <Button
-              type="primary"
-              shape="round"
-              onClick={() => handleOpenModal(job)}
-              icon={<PicCenterOutlined />}
-            >
-              Apply For Position
-            </Button>
-          </JobContentWrapper>
-        ),
-      })),
-    [handleOpenModal],
-  );
+  const jobItems = OPEN_POSITIONS.map((job) => ({
+    key: job.id,
+    label: (
+      <JobLabelWrapper>
+        <JobTitleText>{job.title}</JobTitleText>
+        <JobMeta>
+          <Tag color="blue">{job.department}</Tag>
+          <Tag>{job.location}</Tag>
+          <Tag color="purple">{job.type}</Tag>
+        </JobMeta>
+      </JobLabelWrapper>
+    ),
+    children: (
+      <JobContentWrapper>
+        <JobDescriptionText>{job.description}</JobDescriptionText>
+        <Button
+          type="primary"
+          shape="round"
+          onClick={() => handleOpenModal(job)}
+          icon={<PicCenterOutlined />}
+        >
+          Apply For Position
+        </Button>
+      </JobContentWrapper>
+    ),
+  }));
 
   return (
     <CareersContainer>

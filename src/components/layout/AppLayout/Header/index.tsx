@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 
 import {
-  toggleAuthModal,
+  setOpenAuthModal,
   logoutUser,
 } from "../../../../store/slices/authSlice";
 import { type RootState } from "../../../../store";
@@ -40,8 +40,9 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const totalCartCount = cartItems ? cartItems.length : 0;
+  const totalCartCount = useSelector(
+    (state: RootState) => state.cart.items.length,
+  );
   const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
@@ -95,8 +96,6 @@ const Header: React.FC = () => {
     { key: "/about", label: "Our Story" },
     { key: "/careers", label: "Careers" },
   ];
-
-  const allNavItems = [...leftNavItems, ...rightNavItems];
 
   const handleNavClick = (path: string) => {
     navigate(path);
@@ -166,7 +165,7 @@ const Header: React.FC = () => {
             </ActionIcon>
           </Dropdown>
         ) : (
-          <ActionIcon onClick={() => dispatch(toggleAuthModal())}>
+          <ActionIcon onClick={() => dispatch(setOpenAuthModal(true))}>
             <UserOutlined />
           </ActionIcon>
         )}
@@ -182,7 +181,7 @@ const Header: React.FC = () => {
         <MobileDrawerMenu
           mode="vertical"
           selectedKeys={[location.pathname]}
-          items={allNavItems}
+          items={[...leftNavItems, ...rightNavItems]}
           onClick={(info) => handleNavClick(info.key)}
         />
       </StyledDrawer>

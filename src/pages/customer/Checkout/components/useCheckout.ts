@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import {
   groupCartItems,
   buildContentsString,
 } from "../../../../utils/cartUtils";
-import type { PaymentMethod } from "../types";
+import type { FormValues, PaymentMethod } from "../types";
 
 function generateOrderId(): string {
   return `EXY-${Math.floor(10000 + Math.random() * 90000)}`;
@@ -29,10 +29,7 @@ export function useCheckout() {
     (state: RootState) => state.cart,
   );
 
-  const groupedCartItems = useMemo(
-    () => groupCartItems(cartItems),
-    [cartItems],
-  );
+ const groupedCartItems = groupCartItems(cartItems);
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + (Number(item.price) || 0),
@@ -42,10 +39,9 @@ export function useCheckout() {
   const deliveryFee = cartItems.length > 0 ? DELIVERY_FEE : 0;
   const totalAmount = subtotal + deliveryFee;
 
-  function handleSubmit(values: { firstName: string; lastName: string; email?: any }) {
+  function handleSubmit(values: FormValues) {
     const orderId = generateOrderId();
-    console.log(values);
-    
+
     const order: Order = {
       id: orderId,
       customerName: `${values.firstName} ${values.lastName}`,

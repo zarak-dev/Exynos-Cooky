@@ -17,7 +17,6 @@ import {
   FeatureCard,
   FoundationsTitle,
 } from "./styles";
-import { Space } from "antd";
 
 const AboutUs: React.FC = () => {
   return (
@@ -56,7 +55,7 @@ const AboutUs: React.FC = () => {
 
         {/* Foundations Section */}
         <FoundationsTitle>What Makes Us Special</FoundationsTitle>
-        <Space>
+        
           <CoreGrid>
             <FeatureCard title="Gourmet Ingredients" variant="borderless">
              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minima nisi qui dolore deleniti! Iste rem, eveniet non perspiciatis saepe tempora dolore, aperiam obcaecati nihil ad doloribus natus unde porro praesentium.
@@ -74,7 +73,7 @@ const AboutUs: React.FC = () => {
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum voluptatum, amet quos, ab libero adipisci distinctio recusandae eligendi itaque maiores molestiae maxime consequuntur eum provident ut error? Reiciendis, magnam qui.
             </FeatureCard>
           </CoreGrid>
-        </Space>
+       
       </AboutContainer>
     </PageWrapper>
   );

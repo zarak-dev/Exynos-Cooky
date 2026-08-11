@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import { Avatar, Button, Flex, Form, Input, Modal, Radio } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import React from "react";
+import { Button, Flex, Form, Input, Modal, Radio } from "antd";
+import { useDispatch } from "react-redux";
 import { addUser } from "../../../../../store/slices/userHistorySlice";
 import { v4 as uuidv4 } from "uuid";
+import type { MessageInstance } from "antd/es/message/interface";
 
-const HistoryModal: React.FC = ({
-  dispatch,
+interface HistoryModalProps {
+  modalOpen: boolean;
+  setModalOpen: (open: boolean) => void;
+  messageApi: MessageInstance;
+}
+
+const HistoryModal: React.FC<HistoryModalProps> = ({
   modalOpen,
   setModalOpen,
   messageApi,
-}: any) => {
+}) => {
+  const dispatch = useDispatch(); // ← moved here
   const [form] = Form.useForm();
-  const [avatarPreview, setAvatarPreview] = useState("");
 
   const handleAdd = () => {
     form.validateFields().then((values) => {
@@ -29,7 +35,7 @@ const HistoryModal: React.FC = ({
       );
       messageApi.success(`${values.name} added successfully!`);
       form.resetFields();
-      setAvatarPreview("");
+     
       setModalOpen(false);
     });
   };
@@ -49,7 +55,7 @@ const HistoryModal: React.FC = ({
           onClick={() => {
             setModalOpen(false);
             form.resetFields();
-            setAvatarPreview("");
+            
           }}
         >
           Cancel
@@ -64,7 +70,6 @@ const HistoryModal: React.FC = ({
           <Form.Item name="avatar" label="Avatar URL">
             <Input
               placeholder="Paste image URL (optional)"
-              onChange={(e) => setAvatarPreview(e.target.value)}
             />
           </Form.Item>
 

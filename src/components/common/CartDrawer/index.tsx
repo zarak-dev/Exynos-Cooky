@@ -9,18 +9,21 @@ import {
   removeCookieFromBox,
   type BoxSize,
 } from "../../../store/slices/cartSlice";
-import { selectCartData } from "../../../store/selectors";
 
 import { SlotGrid, CookieSlot, DrawerFooter, TotalRow } from "./styles";
 import { StyledTitle } from "../../StyledTitle";
 import Text from "antd/es/typography/Text";
 import { Wrapper } from "../../Wrapper";
 import type { Cookie } from "../../../utils/mockData";
+import type { RootState } from "../../../store";
 
 export const CartDrawer: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isCartOpen, items, boxSize } = useSelector(selectCartData);
+  const { isCartOpen, items, boxSize } = useSelector(
+    (state: RootState) => state.cart,
+  );
+  
 
   const handleReviewCart = () => {
     //Routes to the Cart for box validation, not Checkout

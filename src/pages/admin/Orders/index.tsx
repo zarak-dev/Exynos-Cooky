@@ -7,7 +7,7 @@ import {
   deleteOrder,
   updateOrderStatus,
 } from "../../../store/slices/orderSlice";
-import { OrdersCard, OrdersContainer, SearchWrapper } from "./styles";
+import { OrdersCard } from "./styles";
 import { getOrderColumns } from "./components/orderTableColumns";
 import StyledPageHeader from "../../../components/PageHeader";
 import { StyledInput } from "../../../components/StyledInput";

@@ -15,7 +15,7 @@ import { SearchOutlined, DownCircleTwoTone } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { type Cookie } from "../../../utils/mockData";
 import { type RootState } from "../../../store";
-import { addCookieToBox, setBoxSize } from "../../../store/slices/cartSlice";
+import { setBoxSize } from "../../../store/slices/cartSlice";
 import { StyledInput } from "../../../components/StyledInput";
 import { StyledTitle } from "../../../components/StyledTitle";
 import { BOX_SIZES } from "../../../constants/pricing";
@@ -38,6 +38,7 @@ import {
   ModalCookieName,
   BlinkingTag,
 } from "./styles";
+import { addCookieWithFeedback } from "../../../utils/cartActions";
 
 const { Text, Paragraph } = Typography;
 const PAGE_SIZE = 6;
@@ -76,25 +77,13 @@ const BuyCooky: React.FC = () => {
   const hasMore = visibleCount < filteredCookies.length;
 
   const handleAddToCart = (cookie: Cookie) => {
-    const nextSize: Record<number, number | null> = { 4: 6, 6: 12, 12: null };
-    const willUpgrade =
-      cartItems.length >= boxSize && nextSize[boxSize] !== null;
-    const isFull = cartItems.length >= boxSize && nextSize[boxSize] === null;
-
-    if (isFull) {
-      messageApi.error("Your 12-Pack is full! Please checkout first.");
-      return;
-    }
-
-    dispatch(addCookieToBox(cookie));
-
-    if (willUpgrade) {
-      messageApi.info(
-        `Box upgraded to ${nextSize[boxSize]}-Pack to fit your cookie! 🍪`,
-      );
-    } else {
-      messageApi.success(`Added ${cookie.name} to your box! 🍪`);
-    }
+    addCookieWithFeedback(
+      cookie,
+      cartItems.length,
+      boxSize,
+      dispatch,
+      messageApi,
+    );
   };
 
   return (
