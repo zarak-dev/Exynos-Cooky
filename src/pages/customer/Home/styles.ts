@@ -94,7 +94,7 @@ export const ReviewCountText = styled(Text)`
 export const BestSection = styled.div`
   max-width: 1200px;
   margin: 48px auto 0;
-  padding: 0 48px;
+  padding: 0 48px 30px;
 `;
 
 export const BestSectionTitle = styled(Title)`
@@ -125,7 +125,6 @@ export const BestCarousel = styled(Carousel)`
     background: transparent;
   }
 `;
-
 export const BestCoverImage = styled(Image)`
   height: 160px !important;
   object-fit: cover !important;
@@ -151,10 +150,11 @@ export const BestCardBody = styled(Flex)`
   flex-direction: column;
   gap: 10px;
   padding-top: 4px;
+  flex: 1;
 `;
 
 export const BestCardSlide = styled(Flex)`
-  padding: 0 10px;
+  padding: 0 10px 16px;
 `;
 
 export const TrendingSection = styled.div`
@@ -323,8 +323,8 @@ export const SectionBadge = styled(Tag)`
 `;
 
 export const StyledMeta = styled(Meta)`
-  margin-bottom: 16px;
-  min-height: 60px;
+  flex: 1;
+  min-height: 48px;
 
   .ant-card-meta-description {
     display: -webkit-box;
