@@ -41,14 +41,24 @@ export const SlideContainer = styled.div`
 
   @media (max-width: 576px) {
     height: auto;
-    padding: 32px 20px;
+    min-height: 420px;
+    padding: 24px 20px;
     flex-direction: column;
+  }
+  @media (max-width: 576px) {
+    .ant-row {
+      flex-direction: column-reverse;
+    }
   }
 `;
 
 export const HeroContent = styled(Flex)`
   height: 100%;
   flex: 1;
+
+  @media (max-width: 576px) {
+    width: 100%;
+  }
 `;
 
 export const HeroTitle = styled(Typography.Title)`
@@ -61,6 +71,9 @@ export const HeroTitle = styled(Typography.Title)`
 
     @media (max-width: 992px) {
       font-size: 1.8rem;
+    }
+    @media (max-width: 576px) {
+      font-size: 1.4rem;
     }
   }
 `;
@@ -116,7 +129,6 @@ export const OrderButton = styled(Button)`
   }
 `;
 
-/* Image side — fixed height, cover crop so all images look identical */
 export const ImageWrapper = styled.div`
   flex: 1;
   height: 100%;
@@ -127,11 +139,10 @@ export const ImageWrapper = styled.div`
 
   @media (max-width: 576px) {
     width: 100%;
-    height: 200px;
-    margin-top: 20px;
+    height: 180px;
+    margin-top: 16px;
   }
 `;
-
 export const HeroImage = styled.img`
   width: 100%;
   height: 100%;

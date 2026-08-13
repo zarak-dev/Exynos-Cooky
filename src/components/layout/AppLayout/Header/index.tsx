@@ -121,7 +121,13 @@ const Header: React.FC = () => {
 
       <LogoWrapper>
         <LogoContainer to="/">
-          <Image src={logoSvg} alt="logo" preview={false} width={140} />
+          <Image
+            src={logoSvg}
+            alt="logo"
+            preview={false}
+            width={140}
+            style={{ maxWidth: "110px" }}
+          />
         </LogoContainer>
       </LogoWrapper>
 

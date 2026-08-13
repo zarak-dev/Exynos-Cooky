@@ -34,8 +34,11 @@ export const SearchCard = styled(Card)`
 
 export const SearchWrapper = styled(Flex)`
   gap: 12px;
-`;
 
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+`;
 
 export const ResultCard = styled(Card)`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -45,6 +48,11 @@ export const ResultHeader = styled(Flex)`
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 24px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
 export const OrderTitle = styled(Title)`

@@ -18,10 +18,17 @@ export const StyledHeader = styled(Header)`
   background-color: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 2px 16px rgba(0, 0, 156, 0.08), 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 2px 16px rgba(0, 0, 156, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.06);
 
   @media (max-width: 992px) {
     padding: 0 20px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 0 14px;
+    height: 64px;
   }
 `;
 
@@ -119,6 +126,12 @@ export const LogoWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 0 16px;
+
+  @media (max-width: 576px) {
+    padding: 0 8px;
+    flex: 1;
+    justify-content: center;
+  }
 `;
 
 export const LogoContainer = styled(NavLink)`
@@ -152,8 +165,11 @@ export const MobileMenuButton = styled(Button)`
     align-items: center;
     justify-content: center;
   }
-`;
 
+  @media (max-width: 576px) {
+    padding: 0;
+  }
+`;
 export const IconActions = styled(Flex)`
   flex-shrink: 0;
   gap: 24px;
@@ -161,6 +177,10 @@ export const IconActions = styled(Flex)`
 
   @media (max-width: 992px) {
     gap: 16px;
+  }
+
+  @media (max-width: 576px) {
+    gap: 14px;
   }
 `;
 

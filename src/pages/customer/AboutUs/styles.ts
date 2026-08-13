@@ -12,6 +12,10 @@ export const AboutContainer = styled.div`
   margin: 0 auto;
   padding: 80px 20px;
   font-family: "Poppins", sans-serif;
+
+  @media (max-width: 768px) {
+    padding: 40px 16px;
+  }
 `;
 
 export const HeroSection = styled.div`
@@ -59,8 +63,11 @@ export const StoryTitle = styled.h1`
   color: #00009c;
   line-height: 1.2;
   margin-bottom: 16px;
-`;
 
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+  }
+`;
 export const NarrativeBlock = styled.div`
   display: flex;
   flex-direction: column;

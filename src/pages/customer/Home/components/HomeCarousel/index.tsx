@@ -26,18 +26,19 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
     <StyledCarousel autoplay autoplaySpeed={4000} infinite>
       {cookies.map((cookie) => (
         <SlideContainer key={cookie.id}>
-          <Row align="middle" gutter={[48, 0]} style={{ width: "100%", height: "100%" }}>
+          <Row
+            align="middle"
+            gutter={[48, 0]}
+            style={{ width: "100%", height: "100%" }}
+          >
             <Col xs={24} lg={12}>
               <HeroContent vertical justify="center">
                 <HeroTitle level={1}>{cookie.name}</HeroTitle>
-
                 <HeroDescription>{cookie.description}</HeroDescription>
-
                 <PriceWrapper>
                   <PriceLabel>Starting from</PriceLabel>
                   <Price level={2}>Rs {cookie.price.toLocaleString()}</Price>
                 </PriceWrapper>
-
                 <Flex gap={16}>
                   <OrderButton type="primary" onClick={() => onAdd(cookie)}>
                     Add to Box
@@ -46,7 +47,7 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
               </HeroContent>
             </Col>
 
-            <Col xs={0} lg={12}>
+            <Col xs={24} lg={12}>
               <ImageWrapper>
                 <HeroImage src={cookie.imageUrl} alt={cookie.name} />
               </ImageWrapper>

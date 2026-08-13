@@ -8,6 +8,11 @@ export const PageLayout = styled(Flex)`
   padding: 40px 20px;
   gap: 32px;
   align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 24px 16px;
+  }
 `;
 
 export const MainContent = styled(Flex)`
@@ -51,6 +56,11 @@ export const ModalLeft = styled(Flex)`
   width: 200px;
   flex-shrink: 0;
   min-height: 280px;
+
+  @media (max-width: 576px) {
+    width: 100%;
+    min-height: 180px;
+  }
 `;
 
 export const ModalRight = styled(Flex)`

@@ -24,8 +24,11 @@ export const LogoImage = styled.img`
   width: 125px;
   border-radius: 8px;
   margin-left: 38px;
-`;
 
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
+`;
 export const FooterGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);

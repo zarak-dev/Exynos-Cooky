@@ -37,22 +37,22 @@ export const CheckoutPage: React.FC = () => {
     navigate,
   } = useCheckout();
 
-if (isOrdered && confirmedOrderId && confirmedOrder) {
-  return (
-    <>
-      {contextHolder}
-      <OrderConfirmed
-        orderId={confirmedOrderId}
-        order={confirmedOrder}
-        onBackToShop={() => navigate("/")}
-        onDelete={() => {
-          dispatch(deleteOrder(confirmedOrderId));
-          navigate("/");
-        }}
-      />
-    </>
-  );
-}
+  if (isOrdered && confirmedOrderId && confirmedOrder) {
+    return (
+      <>
+        {contextHolder}
+        <OrderConfirmed
+          orderId={confirmedOrderId}
+          order={confirmedOrder}
+          onBackToShop={() => navigate("/")}
+          onDelete={() => {
+            dispatch(deleteOrder(confirmedOrderId));
+            navigate("/");
+          }}
+        />
+      </>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -73,7 +73,7 @@ if (isOrdered && confirmedOrderId && confirmedOrder) {
           <Col xs={24} lg={14}>
             <StyledCard title="1. Delivery Address" variant="borderless">
               <Row gutter={16}>
-                <Col span={12}>
+                <Col xs={24} sm={12}>
                   <Form.Item
                     name="firstName"
                     label="First Name"
@@ -85,7 +85,7 @@ if (isOrdered && confirmedOrderId && confirmedOrder) {
                     <Input size="large" placeholder="First Name" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} sm={12}>
                   <Form.Item
                     name="lastName"
                     label="Last Name"
@@ -100,7 +100,7 @@ if (isOrdered && confirmedOrderId && confirmedOrder) {
               </Row>
 
               <Row gutter={16}>
-                <Col span={12}>
+                <Col xs={24} sm={12}>
                   <Form.Item
                     name="email"
                     label="Email"
@@ -112,7 +112,7 @@ if (isOrdered && confirmedOrderId && confirmedOrder) {
                     <Input size="large" placeholder="you@example.com" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} sm={12}>
                   <Form.Item
                     name="phone"
                     label="Phone"
@@ -139,7 +139,7 @@ if (isOrdered && confirmedOrderId && confirmedOrder) {
               </Form.Item>
 
               <Row gutter={16}>
-                <Col span={12}>
+                <Col xs={24} sm={12}>
                   <Form.Item
                     name="city"
                     label="City"
@@ -149,7 +149,7 @@ if (isOrdered && confirmedOrderId && confirmedOrder) {
                     <Input size="large" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} sm={12}>
                   <Form.Item name="zipCode" label="Postal Code">
                     <Input size="large" placeholder="44000" />
                   </Form.Item>
@@ -163,7 +163,7 @@ if (isOrdered && confirmedOrderId && confirmedOrder) {
                 onChange={(e) => setPaymentMethod(e.target.value)}
               >
                 <Row gutter={[16, 16]}>
-                  <Col span={12}>
+                  <Col xs={24} sm={12}>
                     <PaymentMethodCard
                       hoverable
                       $isActive={paymentMethod === "cod"}
@@ -175,7 +175,7 @@ if (isOrdered && confirmedOrderId && confirmedOrder) {
                       </Radio>
                     </PaymentMethodCard>
                   </Col>
-                  <Col span={12}>
+                  <Col xs={24} sm={12}>
                     <Tooltip title="This payment method is currently unavailable">
                       <PaymentMethodCard hoverable={false} $isActive={false}>
                         <Radio value="card" disabled>

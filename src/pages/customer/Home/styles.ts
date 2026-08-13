@@ -95,6 +95,10 @@ export const BestSection = styled.div`
   max-width: 1200px;
   margin: 48px auto 0;
   padding: 0 48px 30px;
+
+  @media (max-width: 768px) {
+    padding: 0 16px 20px;
+  }
 `;
 
 export const BestSectionTitle = styled(Title)`
@@ -180,8 +184,13 @@ export const TrendingStack = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
 
+  @media (max-width: 768px) {
+    height: auto;
+    flex-direction: column;
+    gap: 16px;
+  }
+`;
 export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
   position: absolute;
   width: 320px;
@@ -194,37 +203,30 @@ export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
   box-shadow: 0 8px 32px rgba(0, 0, 56, 0.13);
 
   ${({ $pos }) =>
-    $pos === "center" &&
-    `
-    transform: translateX(0px) scale(1.05);
-    z-index: 3;
-  `}
-
+    $pos === "center" && `transform: translateX(0px) scale(1.05); z-index: 3;`}
   ${({ $pos }) =>
     $pos === "left" &&
-    `
-    transform: translateX(-220px) scale(0.88) rotate(-4deg);
-    z-index: 2;
-  `}
-
+    `transform: translateX(-220px) scale(0.88) rotate(-4deg); z-index: 2;`}
   ${({ $pos }) =>
     $pos === "right" &&
-    `
-    transform: translateX(220px) scale(0.88) rotate(4deg);
-    z-index: 2;
-  `}
+    `transform: translateX(220px) scale(0.88) rotate(4deg); z-index: 2;`}
 
   .ant-card-body {
     padding: 12px 14px;
   }
-
   img {
     height: 180px;
     object-fit: cover;
     width: 100%;
   }
-`;
 
+  @media (max-width: 768px) {
+    position: static;
+    width: 100%;
+    transform: none !important;
+    rotate: none;
+  }
+`;
 export const TrendingCardHeader = styled(Flex)`
   justify-content: space-between;
   align-items: center;
