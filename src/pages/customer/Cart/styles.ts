@@ -9,12 +9,21 @@ export const CartContainer = styled(Content)`
   max-width: 1200px;
   margin: 0 auto;
   background: transparent;
+
+  @media (max-width: 576px) {
+    padding: 24px 12px;
+  }
 `;
 
 export const EmptyCartContainer = styled(Flex)`
   padding: 60px 24px;
   background: #ffffff;
   border-radius: 8px;
+
+  @media (max-width: 576px) {
+    padding: 40px 16px;
+    text-align: center;
+  }
 `;
 
 export const SummaryRow = styled(Flex)`
@@ -37,6 +46,8 @@ export const StyledRadioGroup = styled(Radio.Group)`
     flex: 1;
     text-align: center;
     border-color: #00009c;
+    padding: 0 8px;
+    font-size: 0.85rem;
   }
 `;
 

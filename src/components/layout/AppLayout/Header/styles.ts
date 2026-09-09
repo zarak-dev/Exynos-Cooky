@@ -142,6 +142,10 @@ export const LogoContainer = styled(NavLink)`
   .ant-image-img {
     object-fit: contain;
     display: block;
+
+    @media (max-width: 576px) {
+      max-width: 95px !important;
+    }
   }
 
   &:hover {
@@ -180,7 +184,11 @@ export const IconActions = styled(Flex)`
   }
 
   @media (max-width: 576px) {
-    gap: 14px;
+    gap: 12px;
+  }
+
+  @media (max-width: 360px) {
+    gap: 8px;
   }
 `;
 

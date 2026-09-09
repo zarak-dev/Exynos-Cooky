@@ -35,19 +35,22 @@ export const SlideContainer = styled.div`
   box-sizing: border-box;
 
   @media (max-width: 992px) {
-    height: 340px;
-    padding: 0 24px;
+    height: auto;
+    min-height: 480px;
+    padding: 36px 32px 48px;
   }
 
   @media (max-width: 576px) {
     height: auto;
-    min-height: 420px;
-    padding: 24px 20px;
+    min-height: 460px;
+    padding: 24px 16px 44px;
     flex-direction: column;
   }
+
   @media (max-width: 576px) {
     .ant-row {
       flex-direction: column-reverse;
+      gap: 16px;
     }
   }
 `;
@@ -58,6 +61,8 @@ export const HeroContent = styled(Flex)`
 
   @media (max-width: 576px) {
     width: 100%;
+    align-items: center;
+    text-align: center;
   }
 `;
 
@@ -65,15 +70,16 @@ export const HeroTitle = styled(Typography.Title)`
   &.ant-typography {
     color: #00009c;
     font-size: 3rem;
-    line-height: 1.1;
+    line-height: 1.15;
     margin-bottom: 12px;
     font-weight: 800;
 
     @media (max-width: 992px) {
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
     @media (max-width: 576px) {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
+      text-align: center;
     }
   }
 `;
@@ -85,8 +91,11 @@ export const HeroDescription = styled(Typography.Paragraph)`
     margin-bottom: 20px;
 
     @media (max-width: 992px) {
-      font-size: 13px;
+      font-size: 14px;
       margin-bottom: 12px;
+    }
+    @media (max-width: 576px) {
+      text-align: center;
     }
   }
 `;
@@ -95,6 +104,11 @@ export const PriceWrapper = styled(Flex)`
   flex-direction: column;
   gap: 2px;
   margin: 8px 0 16px;
+
+  @media (max-width: 576px) {
+    align-items: center;
+    margin: 4px 0 14px;
+  }
 `;
 
 export const PriceLabel = styled(Typography.Text)`
@@ -139,8 +153,9 @@ export const ImageWrapper = styled.div`
 
   @media (max-width: 576px) {
     width: 100%;
-    height: 180px;
-    margin-top: 16px;
+    height: 200px;
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
 `;
 export const HeroImage = styled.img`
@@ -151,6 +166,10 @@ export const HeroImage = styled.img`
   border-radius: 20px;
 
   @media (max-width: 992px) {
-    max-height: 260px;
+    max-height: 280px;
+  }
+  @media (max-width: 576px) {
+    max-height: 190px;
+    max-width: 280px;
   }
 `;

@@ -8,6 +8,7 @@ import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import {
@@ -23,6 +24,8 @@ import {
   HeaderSubtitle,
   HeaderLeft,
   AdminNameText,
+  MobileAdminMenuBtn,
+  AdminMobileDrawer,
 } from "./styles";
 
 const menuItems = [
@@ -37,6 +40,12 @@ export const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleMenuClick = (key: string) => {
+    navigate(key);
+    setDrawerOpen(false);
+  };
 
 
   return (
@@ -73,6 +82,11 @@ export const AdminLayout: React.FC = () => {
       <MainContentWrapper $collapsed={collapsed}>
         <StyledHeader>
           <HeaderLeft align="center">
+            <MobileAdminMenuBtn
+              icon={<MenuOutlined />}
+              type="text"
+              onClick={() => setDrawerOpen(true)}
+            />
             <HeaderTitle>Operational Command Center</HeaderTitle>
           </HeaderLeft>
           <HeaderSubtitle>
@@ -84,6 +98,22 @@ export const AdminLayout: React.FC = () => {
           <Outlet />
         </StyledContent>
       </MainContentWrapper>
+
+      <AdminMobileDrawer
+        placement="left"
+        width={240}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        title={<span style={{ color: "#fff", fontWeight: 700 }}>Admin Menu</span>}
+      >
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[location.pathname]}
+          items={menuItems}
+          onClick={({ key }) => handleMenuClick(key)}
+        />
+      </AdminMobileDrawer>
     </AdminLayoutWrapper>
   );
 };

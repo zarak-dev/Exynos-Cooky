@@ -37,6 +37,7 @@ import {
   ModalRight,
   ModalCookieName,
   BlinkingTag,
+  ModalBodyWrapper,
 } from "./styles";
 import { addCookieWithFeedback } from "../../../utils/cartActions";
 
@@ -209,7 +210,7 @@ const BuyCooky: React.FC = () => {
         closable={false}
         width={580}
         centered
-        style={{ position: "relative" }}
+        style={{ maxWidth: "calc(100vw - 32px)", margin: "0 auto", position: "relative" }}
         footer={[
           <Button
             shape="round"
@@ -240,7 +241,7 @@ const BuyCooky: React.FC = () => {
             {selectedCookie.isAvailable && (
               <BlinkingTag>🍪 Order Now</BlinkingTag>
             )}
-            <Flex gap={16}>
+            <ModalBodyWrapper>
               <ModalLeft>
                 <ModalImage
                   src={selectedCookie.imageUrl}
@@ -274,7 +275,7 @@ const BuyCooky: React.FC = () => {
                   {selectedCookie.description}
                 </Paragraph>
               </ModalRight>
-            </Flex>
+            </ModalBodyWrapper>
           </>
         )}
       </Modal>

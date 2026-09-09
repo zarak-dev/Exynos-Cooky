@@ -95,9 +95,11 @@ export const BestSection = styled.div`
   max-width: 1200px;
   margin: 48px auto 0;
   padding: 0 48px 30px;
+  overflow: hidden;
 
   @media (max-width: 768px) {
-    padding: 0 16px 20px;
+    padding: 0 16px 24px;
+    margin: 32px auto 0;
   }
 `;
 
@@ -109,15 +111,26 @@ export const BestSectionTitle = styled(Title)`
     text-transform: uppercase;
     margin-bottom: 15px;
     font-size: 1.4rem;
+
+    @media (max-width: 576px) {
+      font-size: 1.25rem;
+    }
   }
 `;
 
 export const BestCarousel = styled(Carousel)`
+  width: 100%;
+  max-width: 100%;
+
   .slick-prev,
   .slick-next {
     color: #00009c;
     font-size: 18px;
     z-index: 1;
+
+    @media (max-width: 768px) {
+      display: none !important;
+    }
   }
   .slick-prev {
     left: -32px;
@@ -127,6 +140,10 @@ export const BestCarousel = styled(Carousel)`
   }
   .slick-slide {
     background: transparent;
+  }
+
+  .slick-dots {
+    bottom: -20px;
   }
 `;
 export const BestCoverImage = styled(Image)`
@@ -165,6 +182,11 @@ export const TrendingSection = styled.div`
   max-width: 1200px;
   margin: 60px auto;
   padding: 0 20px;
+
+  @media (max-width: 768px) {
+    margin: 40px auto;
+    padding: 0 16px;
+  }
 `;
 
 export const TrendingSectionTitle = styled(Title)`
@@ -175,6 +197,10 @@ export const TrendingSectionTitle = styled(Title)`
     text-transform: uppercase;
     margin-bottom: 15px;
     font-size: 1.4rem;
+
+    @media (max-width: 576px) {
+      font-size: 1.25rem;
+    }
   }
 `;
 
@@ -188,12 +214,14 @@ export const TrendingStack = styled.div`
   @media (max-width: 768px) {
     height: auto;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
+    width: 100%;
   }
 `;
 export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
   position: absolute;
   width: 320px;
+  max-width: 100%;
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
@@ -223,6 +251,8 @@ export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
   @media (max-width: 768px) {
     position: static;
     width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
     transform: none !important;
     rotate: none;
   }
@@ -255,6 +285,12 @@ export const ReviewsSection = styled.div`
   max-width: 1200px;
   margin: 60px auto;
   padding: 0 20px;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    margin: 40px auto;
+    padding: 0 16px 20px;
+  }
 `;
 
 export const ReviewSlide = styled(Flex)`

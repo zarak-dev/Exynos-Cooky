@@ -7,6 +7,11 @@ export const InfoBarWrapper = styled.div`
   padding: 0 20px;
   position: relative;
   z-index: 1;
+
+  @media (max-width: 576px) {
+    margin: 0 auto 32px;
+    padding: 0 16px;
+  }
 `;
 export const InfoBarCard = styled(Card)<{ $clickable?: boolean }>`
   border-radius: 16px;

@@ -21,6 +21,11 @@ export const MainContent = styled(Flex)`
   padding: 40px 20px;
   flex-direction: column;
   gap: 24px;
+
+  @media (max-width: 576px) {
+    padding: 24px 14px;
+    gap: 16px;
+  }
 `;
 
 export const LoadMoreWrapper = styled(Flex)`
@@ -45,11 +50,25 @@ export const CardFooter = styled(Flex)`
   gap: 8px;
 `;
 
+export const ModalBodyWrapper = styled(Flex)`
+  gap: 16px;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+    gap: 12px;
+  }
+`;
+
 export const ModalImage = styled(Image)`
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
   border-radius: 12px 0 0 12px !important;
+
+  @media (max-width: 576px) {
+    border-radius: 12px 12px 0 0 !important;
+    max-height: 200px;
+  }
 `;
 
 export const ModalLeft = styled(Flex)`
@@ -60,6 +79,7 @@ export const ModalLeft = styled(Flex)`
   @media (max-width: 576px) {
     width: 100%;
     min-height: 180px;
+    height: 200px;
   }
 `;
 
@@ -68,6 +88,11 @@ export const ModalRight = styled(Flex)`
   flex-direction: column;
   gap: 12px;
   padding: 8px 0;
+
+  @media (max-width: 576px) {
+    padding: 0 4px;
+    gap: 8px;
+  }
 `;
 
 export const ModalCookieName = styled(Typography.Title)`
@@ -75,6 +100,10 @@ export const ModalCookieName = styled(Typography.Title)`
     color: #00009c;
     font-weight: 800;
     margin: 0;
+
+    @media (max-width: 576px) {
+      font-size: 1.25rem !important;
+    }
   }
 `;
 
@@ -82,6 +111,7 @@ export const BlinkingTag = styled(Tag)`
   position: absolute;
   top: 16px;
   right: 16px;
+  z-index: 10;
   background: #00009c;
   color: #fff;
   border: none;
@@ -90,6 +120,13 @@ export const BlinkingTag = styled(Tag)`
   font-weight: 700;
   font-size: 0.85rem;
   animation: blink 1.2s step-start infinite;
+
+  @media (max-width: 576px) {
+    top: 12px;
+    right: 12px;
+    font-size: 0.75rem;
+    padding: 2px 10px;
+  }
 
   @keyframes blink {
     0%,

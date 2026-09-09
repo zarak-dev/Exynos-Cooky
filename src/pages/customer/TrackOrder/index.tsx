@@ -26,6 +26,7 @@ import {
   PageTitle,
   PageSubtitle,
   SearchCard,
+  SearchWrapper,
   ResultCard,
   ResultHeader,
   OrderTitle,
@@ -110,10 +111,11 @@ export const TrackOrder: React.FC = () => {
       </PageSubtitle>
       {/* SEARCH BAR */}
       <SearchCard variant="borderless">
-        <Space align="center">
+        <SearchWrapper>
           <Input
-            style={{ width: 600, borderRadius: 20 }}
+            style={{ flex: 1, minWidth: 0, borderRadius: 20 }}
             allowClear
+            size="large"
             placeholder="Enter your Order ID (e.g., EXNS-12345)"
             value={orderId}
             onChange={(e) => setOrderId(e.target.value)}
@@ -121,6 +123,7 @@ export const TrackOrder: React.FC = () => {
           />
           <Button
             type="primary"
+            size="large"
             disabled={!orderId.trim()}
             shape="round"
             icon={<SearchOutlined />}
@@ -128,7 +131,7 @@ export const TrackOrder: React.FC = () => {
           >
             Search
           </Button>
-        </Space>
+        </SearchWrapper>
       </SearchCard>
       {/* TRACKING RESULTS */}
       {searchedOrder ? (
@@ -168,6 +171,7 @@ export const TrackOrder: React.FC = () => {
 
           {/* STEP PROGRESS */}
           <Steps
+            responsive
             current={STEP_INDEX[searchedOrder.status] ?? 0}
             items={TRACKING_STEPS}
           />

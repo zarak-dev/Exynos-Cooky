@@ -28,10 +28,10 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
         <SlideContainer key={cookie.id}>
           <Row
             align="middle"
-            gutter={[48, 0]}
+            gutter={[32, 24]}
             style={{ width: "100%", height: "100%" }}
           >
-            <Col xs={24} lg={12}>
+            <Col xs={24} md={12}>
               <HeroContent vertical justify="center">
                 <HeroTitle level={1}>{cookie.name}</HeroTitle>
                 <HeroDescription>{cookie.description}</HeroDescription>
@@ -47,7 +47,7 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
               </HeroContent>
             </Col>
 
-            <Col xs={24} lg={12}>
+            <Col xs={24} md={12}>
               <ImageWrapper>
                 <HeroImage src={cookie.imageUrl} alt={cookie.name} />
               </ImageWrapper>

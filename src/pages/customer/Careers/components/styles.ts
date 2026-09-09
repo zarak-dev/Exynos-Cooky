@@ -9,6 +9,10 @@ export const CareersContainer = styled.div`
   padding: 60px 20px;
   background-color: #ffffff;
   font-family: "Poppins", sans-serif;
+
+  @media (max-width: 576px) {
+    padding: 32px 16px;
+  }
 `;
 
 export const SectionTitle = styled(Title)`
@@ -19,6 +23,11 @@ export const SectionTitle = styled(Title)`
     text-transform: uppercase;
     margin-bottom: 32px;
     letter-spacing: 0.5px;
+
+    @media (max-width: 576px) {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
   }
 `;
 
@@ -30,6 +39,7 @@ export const ValueGrid = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    margin-bottom: 40px;
   }
 `;
 
@@ -60,10 +70,15 @@ export const JobCollapse = styled(Collapse)`
     margin-bottom: 16px;
     background: #fafafa;
     border: 1px solid #e8e8e8;
+  }
 
   .ant-collapse-header {
     align-items: center !important;
-    padding: 20px !important;
+    padding: 16px 20px !important;
+
+    @media (max-width: 576px) {
+      padding: 14px 12px !important;
+    }
   }
 
   .ant-collapse-content {

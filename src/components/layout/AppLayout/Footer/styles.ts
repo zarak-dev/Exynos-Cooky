@@ -6,6 +6,11 @@ export const StyledFooter = styled.footer`
   padding: 60px 40px 20px 40px;
   margin-top: auto;
   position: relative;
+  overflow: hidden;
+
+  @media (max-width: 576px) {
+    padding: 48px 20px 20px 20px;
+  }
 
   &::before {
     content: "";

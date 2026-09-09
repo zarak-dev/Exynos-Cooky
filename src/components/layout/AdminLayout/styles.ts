@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Layout, Flex, Typography, Button } from "antd";
+import { Layout, Flex, Typography, Button, Drawer } from "antd";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -19,6 +19,10 @@ export const StyledSider = styled(Sider)`
   z-index: 1000;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    display: none !important;
+  }
 
   .ant-layout-sider-children {
     display: flex;
@@ -88,6 +92,10 @@ export const MainContentWrapper = styled(Layout)<{ $collapsed: boolean }>`
   margin-left: ${(props) => (props.$collapsed ? "80px" : "200px")};
   transition: all 0.2s ease-in-out;
   height: 100vh;
+
+  @media (max-width: 768px) {
+    margin-left: 0 !important;
+  }
 `;
 
 export const StyledHeader = styled(Header)`
@@ -97,6 +105,44 @@ export const StyledHeader = styled(Header)`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #e8e8e8;
+
+  @media (max-width: 576px) {
+    padding: 0 16px !important;
+  }
+`;
+
+export const MobileAdminMenuBtn = styled(Button)`
+  display: none;
+  margin-right: 12px;
+  color: #00009c;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+export const AdminMobileDrawer = styled(Drawer)`
+  .ant-drawer-body {
+    padding: 0 !important;
+    background: #00009c;
+    display: flex;
+    flex-direction: column;
+  }
+  .ant-menu {
+    background: transparent !important;
+  }
+  .ant-menu-item {
+    border-radius: 10px;
+    margin: 4px 8px;
+    width: calc(100% - 16px);
+    font-weight: 600;
+  }
+  .ant-menu-item-selected {
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
 `;
 
 export const HeaderLeft = styled(Flex)`

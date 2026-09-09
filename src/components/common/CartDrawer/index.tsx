@@ -44,7 +44,7 @@ export const CartDrawer: React.FC = () => {
     <Drawer
       title={<StyledTitle level={4}>Your Cookie Box</StyledTitle>}
       placement="right"
-      size={400}
+      width={typeof window !== "undefined" && window.innerWidth < 420 ? "100%" : 400}
       onClose={() => dispatch(setCartOpen(false))}
       open={isCartOpen}
     >

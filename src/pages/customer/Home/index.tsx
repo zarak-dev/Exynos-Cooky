@@ -140,7 +140,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchReviewUsers());
-  }, []);
+  }, [dispatch]);
 
   const carouselCookies = cookies.slice(0, 6);
   // Build a lookup table once — each cookie is instantly accessible by its id
@@ -299,15 +299,15 @@ const Home: React.FC = () => {
               },
               {
                 breakpoint: 768,
-                settings: { slidesToShow: 2, slidesToScroll: 1 },
+                settings: { slidesToShow: 2, slidesToScroll: 1, dots: true },
               },
               {
                 breakpoint: 576,
-                settings: { slidesToShow: 1, slidesToScroll: 1 },
+                settings: { slidesToShow: 1, slidesToScroll: 1, dots: true },
               },
               {
                 breakpoint: 480,
-                settings: { slidesToShow: 1, slidesToScroll: 1 },
+                settings: { slidesToShow: 1, slidesToScroll: 1, dots: true },
               },
             ]}
           >

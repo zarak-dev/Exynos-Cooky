@@ -11,6 +11,12 @@ export const SlotGrid = styled.div`
   background: #fafafa;
   padding: 16px;
   border: 1px solid #e8e8e8;
+
+  @media (max-width: 380px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 12px;
+  }
 `;
 
 export const CookieSlot = styled(Flex)<{ $filled: boolean }>`

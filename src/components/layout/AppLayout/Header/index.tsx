@@ -182,7 +182,7 @@ const Header: React.FC = () => {
         placement="left"
         onClose={() => setIsMobileMenuOpen(false)}
         open={isMobileMenuOpen}
-        size={250}
+        width={typeof window !== "undefined" && window.innerWidth < 340 ? "80%" : 260}
       >
         <MobileDrawerMenu
           mode="vertical"

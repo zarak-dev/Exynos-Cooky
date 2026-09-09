@@ -11,6 +11,11 @@ const HeaderWrapper = styled(Flex)`
   box-shadow: 0 2px 8px rgba(0, 0, 56, 0.07);
   flex-direction: column;
   gap: 4px;
+
+  @media (max-width: 576px) {
+    padding: 16px 16px 0px;
+    margin-bottom: 16px;
+  }
 `;
 
 const StyledTitle = styled(Title)`
