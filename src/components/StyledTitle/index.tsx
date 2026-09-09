@@ -12,29 +12,49 @@ export const StyledTitle = styled(Title)`
   }
 
   @media (max-width: 768px) {
-    &.ant-typography.ant-typography-1 {
-      font-size: 1.6rem;
-    }
-    &.ant-typography.ant-typography-2 {
-      font-size: 1.35rem;
-    }
-    &.ant-typography.ant-typography-3 {
-      font-size: 1.2rem;
-    }
-    &.ant-typography.ant-typography-4 {
-      font-size: 1.1rem;
-    }
-    &.ant-typography.ant-typography-5 {
-      font-size: 1rem;
+    &.ant-typography {
+      margin-bottom: 10px;
     }
   }
 
-  @media (max-width: 480px) {
-    &.ant-typography.ant-typography-1 {
-      font-size: 1.35rem;
+  &.ant-typography.ant-typography-1,
+  h1&.ant-typography {
+    @media (max-width: 768px) {
+      font-size: 1.6rem !important;
     }
-    &.ant-typography.ant-typography-2 {
-      font-size: 1.2rem;
+    @media (max-width: 480px) {
+      font-size: 1.35rem !important;
+    }
+  }
+
+  &.ant-typography.ant-typography-2,
+  h2&.ant-typography {
+    @media (max-width: 768px) {
+      font-size: 1.35rem !important;
+    }
+    @media (max-width: 480px) {
+      font-size: 1.2rem !important;
+    }
+  }
+
+  &.ant-typography.ant-typography-3,
+  h3&.ant-typography {
+    @media (max-width: 768px) {
+      font-size: 1.2rem !important;
+    }
+  }
+
+  &.ant-typography.ant-typography-4,
+  h4&.ant-typography {
+    @media (max-width: 768px) {
+      font-size: 1.05rem !important;
+    }
+  }
+
+  &.ant-typography.ant-typography-5,
+  h5&.ant-typography {
+    @media (max-width: 768px) {
+      font-size: 0.95rem !important;
     }
   }
 `;

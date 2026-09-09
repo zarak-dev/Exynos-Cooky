@@ -13,6 +13,7 @@ export const StyledHeader = styled(Header)`
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 40px;
   height: 84px;
   background-color: rgba(255, 255, 255, 0.92);
@@ -24,16 +25,12 @@ export const StyledHeader = styled(Header)`
 
   @media (max-width: 992px) {
     padding: 0 16px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    justify-items: center;
-    align-items: center;
-    height: 70px;
+    height: 64px;
   }
 
   @media (max-width: 576px) {
     padding: 0 12px;
-    height: 60px;
+    height: 58px;
   }
 `;
 
@@ -133,8 +130,11 @@ export const LogoWrapper = styled.div`
   padding: 0 16px;
 
   @media (max-width: 992px) {
-    padding: 0 8px;
-    justify-self: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+    pointer-events: auto;
   }
 `;
 
@@ -148,6 +148,17 @@ export const LogoContainer = styled(NavLink)`
     display: flex !important;
     align-items: center;
     justify-content: center;
+    max-width: 125px;
+
+    @media (max-width: 992px) {
+      max-width: 110px;
+    }
+    @media (max-width: 576px) {
+      max-width: 96px;
+    }
+    @media (max-width: 380px) {
+      max-width: 82px;
+    }
   }
 
   .ant-image-img {
@@ -180,6 +191,7 @@ export const MobileMenuButton = styled(Button)`
   background: transparent;
   color: #00009c;
   flex-shrink: 0;
+  z-index: 2;
 
   .anticon {
     font-size: 1.4rem;
@@ -188,13 +200,9 @@ export const MobileMenuButton = styled(Button)`
   @media (max-width: 992px) {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    justify-self: start;
+    justify-content: center;
     width: 36px;
     height: 36px;
-  }
-
-  @media (max-width: 576px) {
     padding: 0;
   }
 `;
@@ -202,14 +210,14 @@ export const IconActions = styled(Flex)`
   flex-shrink: 0;
   gap: 24px;
   align-items: center;
-  justify-self: end;
+  z-index: 2;
 
   @media (max-width: 992px) {
-    gap: 16px;
+    gap: 14px;
   }
 
   @media (max-width: 576px) {
-    gap: 12px;
+    gap: 10px;
   }
 
   @media (max-width: 380px) {

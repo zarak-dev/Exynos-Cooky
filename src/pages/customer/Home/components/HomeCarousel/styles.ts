@@ -26,25 +26,25 @@ export const StyledCarousel = styled(Carousel)`
 
 export const SlideContainer = styled.div`
   width: 100%;
-  height: 520px;
   background: linear-gradient(135deg, #f8faff 0%, #eef3ff 100%);
   overflow: hidden;
-  display: flex !important;
-  align-items: center;
-  padding: 0 80px;
   box-sizing: border-box;
 
+  @media (min-width: 993px) {
+    height: 520px;
+    display: flex !important;
+    align-items: center;
+    padding: 0 80px;
+  }
+
   @media (max-width: 992px) {
-    height: auto;
-    min-height: 460px;
     padding: 32px 24px 44px;
+    display: block !important;
   }
 
   @media (max-width: 576px) {
-    height: auto;
-    min-height: 420px;
-    padding: 20px 14px 44px;
-    flex-direction: column;
+    padding: 20px 14px 36px;
+    display: block !important;
 
     .ant-row {
       flex-direction: column-reverse;
@@ -63,11 +63,14 @@ export const SlideContainer = styled.div`
 `;
 
 export const HeroContent = styled(Flex)`
-  height: 100%;
-  flex: 1;
+  width: 100%;
+
+  @media (min-width: 993px) {
+    height: 100%;
+    flex: 1;
+  }
 
   @media (max-width: 576px) {
-    width: 100%;
     align-items: center;
     text-align: center;
   }

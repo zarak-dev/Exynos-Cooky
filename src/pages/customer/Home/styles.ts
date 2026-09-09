@@ -106,11 +106,11 @@ export const ReviewCountText = styled(Text)`
 export const BestSection = styled.div`
   max-width: 1200px;
   margin: 48px auto 0;
-  padding: 0 48px 44px;
+  padding: 0 48px 24px;
   overflow: hidden;
 
   @media (max-width: 768px) {
-    padding: 0 14px 48px;
+    padding: 0 14px 20px;
     margin: 32px auto 0;
   }
 `;
@@ -155,7 +155,10 @@ export const BestCarousel = styled(Carousel)`
   }
 
   .slick-dots {
-    bottom: -24px;
+    position: relative;
+    bottom: auto;
+    margin: 16px 0 0 0;
+    padding: 0;
   }
 
   .slick-dots li button {
@@ -204,11 +207,16 @@ export const BestCardBody = styled(Flex)`
   flex: 1;
 `;
 
-export const BestCardSlide = styled(Flex)`
-  padding: 0 10px 16px;
+export const BestCardSlide = styled.div`
+  padding: 0 8px 10px;
+  box-sizing: border-box;
+
+  .ant-card {
+    width: 100%;
+  }
 
   @media (max-width: 576px) {
-    padding: 0 4px 16px;
+    padding: 0 4px 10px;
   }
 `;
 
@@ -323,21 +331,26 @@ export const TrendingCardBody = styled(Flex)`
 export const ReviewsSection = styled.div`
   max-width: 1200px;
   margin: 60px auto;
-  padding: 0 20px 44px;
+  padding: 0 20px 24px;
   overflow: hidden;
 
   @media (max-width: 768px) {
-    margin: 36px auto;
-    padding: 0 14px 48px;
+    margin: 32px auto;
+    padding: 0 14px 20px;
   }
 `;
 
-export const ReviewSlide = styled(Flex)`
-  padding: 0 10px;
+export const ReviewSlide = styled.div`
+  padding: 0 8px 10px;
+  box-sizing: border-box;
   min-width: 0;
 
+  .ant-card {
+    width: 100%;
+  }
+
   @media (max-width: 576px) {
-    padding: 0 4px;
+    padding: 0 4px 10px;
   }
 `;
 export const ReviewsSectionTitle = styled(Title)`

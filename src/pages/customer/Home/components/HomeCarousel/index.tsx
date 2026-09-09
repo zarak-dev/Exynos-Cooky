@@ -29,7 +29,7 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
           <Row
             align="middle"
             gutter={[32, 24]}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%" }}
           >
             <Col xs={24} md={12}>
               <HeroContent vertical justify="center">
