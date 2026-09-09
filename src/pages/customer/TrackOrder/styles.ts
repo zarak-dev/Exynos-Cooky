@@ -62,7 +62,8 @@ export const SearchWrapper = styled(Flex)`
     flex-direction: column;
     align-items: stretch;
 
-    .ant-input {
+    .ant-input,
+    .ant-input-affix-wrapper {
       width: 100% !important;
     }
 
@@ -121,6 +122,15 @@ export const BadgeText = styled(Text)`
 
 export const DetailsCard = styled(Card)`
   margin-top: 24px;
+
+  .ant-descriptions-view {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .ant-descriptions-item-content {
+    word-break: break-word;
+  }
 `;
 
 export const DetailRow = styled(Paragraph)<{ $isLast?: boolean }>`

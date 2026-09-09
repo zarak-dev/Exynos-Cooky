@@ -38,6 +38,8 @@ import {
   ModalCookieName,
   BlinkingTag,
   ModalBodyWrapper,
+  FilterBar,
+  FilterGroup,
 } from "./styles";
 import { addCookieWithFeedback } from "../../../utils/cartActions";
 
@@ -106,8 +108,8 @@ const BuyCooky: React.FC = () => {
         />
       </ExploreSection>
 
-      <Flex justify="space-between" align="center" wrap="wrap" gap={12}>
-        <Flex gap={8} align="center">
+      <FilterBar>
+        <FilterGroup>
           <Select
             value={sortBy}
             placeholder="Sort by Price"
@@ -116,6 +118,7 @@ const BuyCooky: React.FC = () => {
               setVisibleCount(PAGE_SIZE);
             }}
             options={FILTER_OPTIONS}
+            style={{ minWidth: 150 }}
           />
           {sortBy && (
             <Button
@@ -127,7 +130,7 @@ const BuyCooky: React.FC = () => {
               Clear
             </Button>
           )}
-        </Flex>
+        </FilterGroup>
         <Tooltip title="Select Your Box Size">
           <Select
             value={boxSize}
@@ -136,9 +139,10 @@ const BuyCooky: React.FC = () => {
               value: size,
               label: `${size}-Pack`,
             }))}
+            style={{ minWidth: 110 }}
           />
         </Tooltip>
-      </Flex>
+      </FilterBar>
 
       {visibleCookies.length ? (
         <>

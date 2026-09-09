@@ -39,7 +39,7 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
                   <PriceLabel>Starting from</PriceLabel>
                   <Price level={2}>Rs {cookie.price.toLocaleString()}</Price>
                 </PriceWrapper>
-                <Flex gap={16}>
+                <Flex gap={16} justify="center">
                   <OrderButton type="primary" onClick={() => onAdd(cookie)}>
                     Add to Box
                   </OrderButton>

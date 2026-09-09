@@ -23,12 +23,17 @@ export const StyledHeader = styled(Header)`
     0 1px 4px rgba(0, 0, 0, 0.06);
 
   @media (max-width: 992px) {
-    padding: 0 20px;
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    justify-items: center;
+    align-items: center;
+    height: 70px;
   }
 
   @media (max-width: 576px) {
-    padding: 0 14px;
-    height: 64px;
+    padding: 0 12px;
+    height: 60px;
   }
 `;
 
@@ -127,24 +132,40 @@ export const LogoWrapper = styled.div`
   justify-content: center;
   padding: 0 16px;
 
-  @media (max-width: 576px) {
+  @media (max-width: 992px) {
     padding: 0 8px;
-    flex: 1;
-    justify-content: center;
+    justify-self: center;
   }
 `;
 
 export const LogoContainer = styled(NavLink)`
   display: flex;
   align-items: center;
+  justify-content: center;
   transition: transform 0.2s ease;
+
+  .ant-image {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
 
   .ant-image-img {
     object-fit: contain;
     display: block;
+    width: 125px;
+    height: auto;
+
+    @media (max-width: 992px) {
+      width: 110px;
+    }
 
     @media (max-width: 576px) {
-      max-width: 95px !important;
+      width: 96px;
+    }
+
+    @media (max-width: 380px) {
+      width: 82px;
     }
   }
 
@@ -167,7 +188,10 @@ export const MobileMenuButton = styled(Button)`
   @media (max-width: 992px) {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    justify-self: start;
+    width: 36px;
+    height: 36px;
   }
 
   @media (max-width: 576px) {
@@ -178,6 +202,7 @@ export const IconActions = styled(Flex)`
   flex-shrink: 0;
   gap: 24px;
   align-items: center;
+  justify-self: end;
 
   @media (max-width: 992px) {
     gap: 16px;
@@ -187,7 +212,7 @@ export const IconActions = styled(Flex)`
     gap: 12px;
   }
 
-  @media (max-width: 360px) {
+  @media (max-width: 380px) {
     gap: 8px;
   }
 `;
@@ -199,6 +224,10 @@ export const ActionIcon = styled.div`
   display: flex;
   align-items: center;
 
+  @media (max-width: 380px) {
+    font-size: 1.25rem;
+  }
+
   &:hover {
     opacity: 0.7;
   }
@@ -206,10 +235,18 @@ export const ActionIcon = styled.div`
 
 export const CartIcon = styled(ActionIcon)`
   font-size: 1.6rem;
+
+  @media (max-width: 380px) {
+    font-size: 1.4rem;
+  }
 `;
 
 export const TrackIcon = styled(ActionIcon)`
   font-size: 1.4rem;
+
+  @media (max-width: 380px) {
+    font-size: 1.25rem;
+  }
 `;
 
 export const RoleText = styled(Text)<{ $isAdmin?: boolean }>`
@@ -220,6 +257,10 @@ export const RoleText = styled(Text)<{ $isAdmin?: boolean }>`
 export const StyledDrawer = styled(Drawer)`
   .ant-drawer-body {
     padding: 0 !important;
+  }
+
+  .ant-drawer-content-wrapper {
+    max-width: 85vw !important;
   }
 `;
 

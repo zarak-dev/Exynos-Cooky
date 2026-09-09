@@ -21,9 +21,9 @@ export const getCartColumns = ({
     title: "COOKIE",
     dataIndex: "name",
     render: (name: string, record: GroupedCartItem) => (
-      <Flex align="center" gap="middle">
+      <Flex align="center" gap={10}>
         {record.imageUrl && (
-          <Avatar shape="square" size={60} src={record.imageUrl} />
+          <Avatar shape="square" size={48} src={record.imageUrl} style={{ flexShrink: 0 }} />
         )}
         <Text strong>{name}</Text>
       </Flex>
@@ -33,7 +33,7 @@ export const getCartColumns = ({
     title: "QTY",
     dataIndex: "quantity",
     align: "center" as const,
-    width: 160,
+    width: 130,
     render: (quantity: number, record: GroupedCartItem) => (
       <QuantityControl align="center" justify="space-between">
         <Button
@@ -58,11 +58,12 @@ export const getCartColumns = ({
   {
     title: "TOTAL",
     dataIndex: "totalPrice",
+    width: 90,
     render: (price: number) => <Text>Rs. {price}</Text>,
   },
   {
     title: "REMOVE",
-    width: 140,
+    width: 80,
     align: "center" as const,
     render: (_: unknown, record: GroupedCartItem) => (
       <Button

@@ -3,25 +3,16 @@ import { NavLink } from "react-router-dom";
 
 export const StyledFooter = styled.footer`
   background-color: #00009c;
-  padding: 60px 40px 20px 40px;
+  padding: 60px 40px 28px 40px;
   margin-top: auto;
   position: relative;
-  overflow: hidden;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
 
   @media (max-width: 576px) {
-    padding: 48px 20px 20px 20px;
-  }
-
-  &::before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: -30px;
-    left: 0;
-    width: 100%;
-    height: 32px;
-    background-color: #00009c;
-    clip-path: ellipse(55% 100% at 50% 100%);
+    padding: 40px 18px 24px 18px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
   }
 `;
 
@@ -33,6 +24,9 @@ export const LogoImage = styled.img`
   @media (max-width: 768px) {
     margin-left: 0;
   }
+  @media (max-width: 480px) {
+    width: 110px;
+  }
 `;
 export const FooterGrid = styled.div`
   display: grid;
@@ -43,10 +37,12 @@ export const FooterGrid = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
   }
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
 `;
 

@@ -50,6 +50,37 @@ export const CardFooter = styled(Flex)`
   gap: 8px;
 `;
 
+export const FilterBar = styled(Flex)`
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+
+    .ant-select {
+      width: 100% !important;
+    }
+  }
+`;
+
+export const FilterGroup = styled(Flex)`
+  gap: 8px;
+  align-items: center;
+
+  @media (max-width: 576px) {
+    width: 100%;
+
+    .ant-select {
+      flex: 1;
+    }
+  }
+`;
+
 export const ModalBodyWrapper = styled(Flex)`
   gap: 16px;
 
@@ -62,12 +93,24 @@ export const ModalBodyWrapper = styled(Flex)`
 export const ModalImage = styled(Image)`
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;
-  border-radius: 12px 0 0 12px !important;
+  display: block;
+
+  .ant-image,
+  .ant-image-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 12px 0 0 12px !important;
+    display: block;
+  }
 
   @media (max-width: 576px) {
-    border-radius: 12px 12px 0 0 !important;
     max-height: 200px;
+    .ant-image,
+    .ant-image-img {
+      border-radius: 12px 12px 0 0 !important;
+      max-height: 200px;
+    }
   }
 `;
 
@@ -79,7 +122,7 @@ export const ModalLeft = styled(Flex)`
   @media (max-width: 576px) {
     width: 100%;
     min-height: 180px;
-    height: 200px;
+    height: 190px;
   }
 `;
 

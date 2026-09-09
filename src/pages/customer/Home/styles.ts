@@ -26,13 +26,25 @@ export const CoverImage = styled(Image)`
   object-fit: cover !important;
   padding: 12px !important;
   background: #fafafa !important;
+
+  @media (max-width: 576px) {
+    height: 220px !important;
+    padding: 8px !important;
+  }
 `;
 
 export const CardHeader = styled(Flex)`
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+
+  .ant-typography {
+    margin-bottom: 0 !important;
+    flex: 1;
+    min-width: 120px;
+  }
 `;
 
 export const StyledButton = styled(Button)`
@@ -94,11 +106,11 @@ export const ReviewCountText = styled(Text)`
 export const BestSection = styled.div`
   max-width: 1200px;
   margin: 48px auto 0;
-  padding: 0 48px 30px;
+  padding: 0 48px 44px;
   overflow: hidden;
 
   @media (max-width: 768px) {
-    padding: 0 16px 24px;
+    padding: 0 14px 48px;
     margin: 32px auto 0;
   }
 `;
@@ -143,7 +155,18 @@ export const BestCarousel = styled(Carousel)`
   }
 
   .slick-dots {
-    bottom: -20px;
+    bottom: -24px;
+  }
+
+  .slick-dots li button {
+    background: #00009c;
+    opacity: 0.35;
+    border-radius: 4px;
+  }
+
+  .slick-dots li.slick-active button {
+    opacity: 1;
+    background: #00009c;
   }
 `;
 export const BestCoverImage = styled(Image)`
@@ -159,6 +182,12 @@ export const BestCardTitle = styled(StyledTitle)`
     text-overflow: ellipsis;
     max-width: 140px;
     margin: 0;
+
+    @media (max-width: 768px) {
+      max-width: 100%;
+      flex: 1;
+      font-size: 1rem !important;
+    }
   }
 `;
 export const BestCardHeader = styled(Flex)`
@@ -166,6 +195,7 @@ export const BestCardHeader = styled(Flex)`
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
 `;
 export const BestCardBody = styled(Flex)`
   flex-direction: column;
@@ -176,6 +206,10 @@ export const BestCardBody = styled(Flex)`
 
 export const BestCardSlide = styled(Flex)`
   padding: 0 10px 16px;
+
+  @media (max-width: 576px) {
+    padding: 0 4px 16px;
+  }
 `;
 
 export const TrendingSection = styled.div`
@@ -184,8 +218,8 @@ export const TrendingSection = styled.div`
   padding: 0 20px;
 
   @media (max-width: 768px) {
-    margin: 40px auto;
-    padding: 0 16px;
+    margin: 36px auto;
+    padding: 0 14px;
   }
 `;
 
@@ -261,7 +295,12 @@ export const TrendingCardHeader = styled(Flex)`
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+
+  .ant-typography {
+    margin-bottom: 0 !important;
+    font-size: 1.05rem !important;
+  }
 `;
 
 export const TrendingMeta = styled(Meta)`
@@ -284,18 +323,22 @@ export const TrendingCardBody = styled(Flex)`
 export const ReviewsSection = styled.div`
   max-width: 1200px;
   margin: 60px auto;
-  padding: 0 20px;
+  padding: 0 20px 44px;
   overflow: hidden;
 
   @media (max-width: 768px) {
-    margin: 40px auto;
-    padding: 0 16px 20px;
+    margin: 36px auto;
+    padding: 0 14px 48px;
   }
 `;
 
 export const ReviewSlide = styled(Flex)`
   padding: 0 10px;
   min-width: 0;
+
+  @media (max-width: 576px) {
+    padding: 0 4px;
+  }
 `;
 export const ReviewsSectionTitle = styled(Title)`
   &.ant-typography {
@@ -305,6 +348,10 @@ export const ReviewsSectionTitle = styled(Title)`
     text-transform: uppercase;
     margin-bottom: 15px;
     font-size: 1.4rem;
+
+    @media (max-width: 576px) {
+      font-size: 1.25rem;
+    }
   }
 `;
 

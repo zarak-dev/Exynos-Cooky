@@ -46,8 +46,14 @@ export const StyledRadioGroup = styled(Radio.Group)`
     flex: 1;
     text-align: center;
     border-color: #00009c;
-    padding: 0 8px;
+    padding: 0 6px;
     font-size: 0.85rem;
+    white-space: nowrap;
+
+    @media (max-width: 380px) {
+      padding: 0 3px;
+      font-size: 0.78rem;
+    }
   }
 `;
 

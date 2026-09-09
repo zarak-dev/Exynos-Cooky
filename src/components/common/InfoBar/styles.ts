@@ -27,6 +27,11 @@ export const InfoBarCard = styled(Card)<{ $clickable?: boolean }>`
     align-items: flex-start;
     gap: 16px;
     padding: 20px;
+
+    @media (max-width: 576px) {
+      padding: 14px 16px;
+      gap: 12px;
+    }
   }
 
   &:hover {

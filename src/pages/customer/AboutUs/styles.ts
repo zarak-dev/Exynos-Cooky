@@ -67,6 +67,9 @@ export const StoryTitle = styled.h1`
   @media (max-width: 768px) {
     font-size: 1.8rem;
   }
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
 export const NarrativeBlock = styled.div`
   display: flex;

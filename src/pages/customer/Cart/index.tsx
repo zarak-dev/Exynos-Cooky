@@ -108,7 +108,7 @@ export const CartPage = () => {
               columns={columns}
               rowKey="name"
               pagination={false}
-              scroll={{ x: 600 }}
+              scroll={{ x: 450 }}
             />
           </StyledCard>
         </Col>

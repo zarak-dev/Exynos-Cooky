@@ -144,7 +144,7 @@ export const TrackOrder: React.FC = () => {
               <OrderDateText>Placed: {formattedDate}</OrderDateText>
             </Space>
 
-            <Space>
+            <Space wrap>
               <Badge
                 status="processing"
                 text={<BadgeText strong>{searchedOrder.status}</BadgeText>}

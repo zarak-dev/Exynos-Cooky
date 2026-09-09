@@ -36,21 +36,28 @@ export const SlideContainer = styled.div`
 
   @media (max-width: 992px) {
     height: auto;
-    min-height: 480px;
-    padding: 36px 32px 48px;
+    min-height: 460px;
+    padding: 32px 24px 44px;
   }
 
   @media (max-width: 576px) {
     height: auto;
-    min-height: 460px;
-    padding: 24px 16px 44px;
+    min-height: 420px;
+    padding: 20px 14px 44px;
     flex-direction: column;
-  }
 
-  @media (max-width: 576px) {
     .ant-row {
       flex-direction: column-reverse;
-      gap: 16px;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+      row-gap: 12px !important;
+    }
+
+    .ant-col {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      width: 100% !important;
     }
   }
 `;
@@ -78,8 +85,12 @@ export const HeroTitle = styled(Typography.Title)`
       font-size: 2rem;
     }
     @media (max-width: 576px) {
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       text-align: center;
+      margin-bottom: 8px;
+    }
+    @media (max-width: 380px) {
+      font-size: 1.3rem;
     }
   }
 `;
@@ -95,7 +106,14 @@ export const HeroDescription = styled(Typography.Paragraph)`
       margin-bottom: 12px;
     }
     @media (max-width: 576px) {
+      font-size: 13px;
       text-align: center;
+      margin-bottom: 8px;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
 `;
@@ -107,7 +125,7 @@ export const PriceWrapper = styled(Flex)`
 
   @media (max-width: 576px) {
     align-items: center;
-    margin: 4px 0 14px;
+    margin: 2px 0 12px;
   }
 `;
 
@@ -126,6 +144,9 @@ export const Price = styled(Typography.Title)`
     @media (max-width: 992px) {
       font-size: 1.4rem !important;
     }
+    @media (max-width: 576px) {
+      font-size: 1.25rem !important;
+    }
   }
 `;
 
@@ -137,9 +158,16 @@ export const OrderButton = styled(Button)`
   font-size: 15px;
 
   @media (max-width: 992px) {
-    height: 38px;
-    padding-inline: 20px;
-    font-size: 13px;
+    height: 42px;
+    padding-inline: 24px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 576px) {
+    height: 42px;
+    padding-inline: 28px;
+    font-size: 14px;
+    min-width: 140px;
   }
 `;
 
@@ -153,11 +181,14 @@ export const ImageWrapper = styled.div`
 
   @media (max-width: 576px) {
     width: 100%;
-    height: 200px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    height: 170px;
+    margin: 4px 0;
+  }
+  @media (max-width: 380px) {
+    height: 150px;
   }
 `;
+
 export const HeroImage = styled.img`
   width: 100%;
   height: 100%;
@@ -169,7 +200,12 @@ export const HeroImage = styled.img`
     max-height: 280px;
   }
   @media (max-width: 576px) {
-    max-height: 190px;
-    max-width: 280px;
+    max-height: 170px;
+    max-width: 250px;
+    border-radius: 16px;
+  }
+  @media (max-width: 380px) {
+    max-height: 150px;
+    max-width: 220px;
   }
 `;

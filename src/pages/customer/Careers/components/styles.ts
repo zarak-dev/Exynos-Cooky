@@ -89,7 +89,8 @@ export const JobCollapse = styled(Collapse)`
 
 export const JobMeta = styled.div`
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
   margin-top: 4px;
 `;
@@ -116,12 +117,17 @@ export const JobLabelWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
 `;
 
 export const JobTitleText = styled(Text)`
   color: #00009c;
   font-weight: 600;
   font-size: 1.1rem;
+
+  @media (max-width: 576px) {
+    font-size: 1rem;
+  }
 `;
 
 export const JobContentWrapper = styled.div`

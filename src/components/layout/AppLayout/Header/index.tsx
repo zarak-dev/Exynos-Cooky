@@ -125,8 +125,7 @@ const Header: React.FC = () => {
             src={logoSvg}
             alt="logo"
             preview={false}
-            width={140}
-            style={{ maxWidth: "110px" }}
+            style={{ maxWidth: "100%", height: "auto" }}
           />
         </LogoContainer>
       </LogoWrapper>
@@ -182,7 +181,7 @@ const Header: React.FC = () => {
         placement="left"
         onClose={() => setIsMobileMenuOpen(false)}
         open={isMobileMenuOpen}
-        width={typeof window !== "undefined" && window.innerWidth < 340 ? "80%" : 260}
+        width={280}
       >
         <MobileDrawerMenu
           mode="vertical"

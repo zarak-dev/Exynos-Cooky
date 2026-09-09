@@ -9,6 +9,10 @@ export const CheckoutContainer = styled(Content)`
   max-width: 1200px;
   margin: 0 auto;
   background: transparent;
+
+  @media (max-width: 576px) {
+    padding: 20px 14px;
+  }
 `;
 
 export const CenteredContainer = styled(Content)`
