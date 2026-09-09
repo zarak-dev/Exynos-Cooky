@@ -259,6 +259,7 @@ export const ReviewsSection = styled.div`
 
 export const ReviewSlide = styled(Flex)`
   padding: 0 10px;
+  min-width: 0;
 `;
 export const ReviewsSectionTitle = styled(Title)`
   &.ant-typography {
@@ -273,6 +274,9 @@ export const ReviewsSectionTitle = styled(Title)`
 
 export const ReviewCard = styled(Card)`
   border-radius: 14px;
+  min-width: 0;
+  word-break: break-word;
+
   .ant-card-body {
     padding: 16px;
     height: 100%;
