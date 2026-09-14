@@ -115,14 +115,29 @@ const REVIEWS = [
       "Best decision I made this month was trying Exynos Cooky. Highly recommend!",
   },
 ];
+const CAROUSEL_RESPONSIVE_SETTINGS = [
+  {
+    breakpoint: 1024,
+    settings: {
+      slidesToShow: 2,
+      slidesToScroll: 2,
+    },
+  },
+  {
+    breakpoint: 768,
+    settings: {
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false,
+    },
+  },
+];
+
 const Home: React.FC = () => {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
-  const slidesToShow = isMobile ? 1 : isTablet ? 2 : 4;
-  const slidesToScroll = isMobile ? 1 : 2;
 
   const { items: cookies } = useSelector((state: RootState) => state.inventory);
   const { items: cartItems, boxSize } = useSelector(
@@ -199,13 +214,13 @@ const Home: React.FC = () => {
           🍪 Our most loved cookies, picked just for you
         </SectionBadge>
         <BestCarousel
-          key={`best-carousel-${isMobile ? "mobile" : isTablet ? "tablet" : "desktop"}`}
-          slidesToShow={slidesToShow}
-          slidesToScroll={slidesToScroll}
+          slidesToShow={4}
+          slidesToScroll={2}
           dots={true}
           arrows={!isMobile}
-          infinite={bestCookies.length > slidesToShow}
+          infinite={bestCookies.length > 1}
           swipeToSlide={true}
+          responsive={CAROUSEL_RESPONSIVE_SETTINGS}
         >
           {bestCookies.map((cookie) => (
             <BestCardSlide key={cookie.id}>
@@ -217,6 +232,7 @@ const Home: React.FC = () => {
                     src={cookie.imageUrl}
                     alt={cookie.name}
                     preview={false}
+                    loading="lazy"
                   />
                 }
               >
@@ -268,7 +284,12 @@ const Home: React.FC = () => {
                 $pos={pos}
                 onClick={() => setActiveTrending(idx)}
               >
-                <img src={cookie.imageUrl} alt={cookie.name} />
+                <img
+                  src={cookie.imageUrl}
+                  alt={cookie.name}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <TrendingCardBody>
                   <TrendingCardHeader>
                     <StyledTitle level={5}>{cookie.name}</StyledTitle>
@@ -325,13 +346,13 @@ const Home: React.FC = () => {
 
         <Spin spinning={reviewLoading}>
           <BestCarousel
-            key={`reviews-carousel-${isMobile ? "mobile" : isTablet ? "tablet" : "desktop"}`}
-            slidesToShow={slidesToShow}
-            slidesToScroll={slidesToScroll}
+            slidesToShow={4}
+            slidesToScroll={2}
             dots={true}
             arrows={!isMobile}
             infinite={true}
             swipeToSlide={true}
+            responsive={CAROUSEL_RESPONSIVE_SETTINGS}
           >
             {(reviewUsers.length > 0 ? reviewUsers : REVIEWS).map((review, i) => {
               const reviewer = reviewUsers[i];

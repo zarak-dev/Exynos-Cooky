@@ -7,6 +7,9 @@ import {
   createOrderRequest,
   createOrderSuccess,
   createOrderFailure,
+  trackOrderRequest,
+  trackOrderSuccess,
+  trackOrderFailure,
   updateOrderStatusRequest,
   updateOrderStatus,
   deleteOrderRequest,
@@ -44,6 +47,19 @@ function* handleCreateOrder(
   }
 }
 
+function* handleTrackOrder(
+  action: PayloadAction<string>,
+): Generator<unknown, void, Order | null> {
+  try {
+    const foundOrder = yield call(orderService.trackOrder, action.payload);
+    yield put(trackOrderSuccess(foundOrder));
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Failed to track order";
+    yield put(trackOrderFailure(message));
+  }
+}
+
 function* handleUpdateOrderStatus(
   action: PayloadAction<{ id: string; status: OrderStatus }>,
 ): Generator {
@@ -71,6 +87,7 @@ function* handleDeleteOrder(action: PayloadAction<string>): Generator {
 export function* orderSaga() {
   yield takeLatest(fetchOrdersRequest.type, handleFetchOrders);
   yield takeLatest(createOrderRequest.type, handleCreateOrder);
+  yield takeLatest(trackOrderRequest.type, handleTrackOrder);
   yield takeLatest(updateOrderStatusRequest.type, handleUpdateOrderStatus);
   yield takeLatest(deleteOrderRequest.type, handleDeleteOrder);
 }

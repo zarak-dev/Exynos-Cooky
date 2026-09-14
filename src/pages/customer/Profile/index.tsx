@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { type RootState } from "../../../store";
 import { logoutUser } from "../../../store/slices/authSlice";
+import { fetchOrdersRequest } from "../../../store/slices/orderSlice";
 import {
   fetchAddressesRequest,
   addAddressRequest,
@@ -56,7 +57,10 @@ const CustomerProfile: React.FC = () => {
     if (user?.id) {
       dispatch(fetchAddressesRequest(user.id));
     }
-  }, [user?.id, dispatch]);
+    if (user?.email) {
+      dispatch(fetchOrdersRequest({ userEmail: user.email }));
+    }
+  }, [user?.id, user?.email, dispatch]);
 
   const customerOrders = user
     ? orders.filter(

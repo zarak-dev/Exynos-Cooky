@@ -1,8 +1,10 @@
 import { call, put, takeLatest } from "redux-saga/effects";
+import type { PayloadAction } from "@reduxjs/toolkit";
 import {
   fetchUsersStart,
   fetchUsersSuccess,
   fetchUsersFailure,
+  deleteUser,
   type UserHistoryRow,
 } from "../slices/userHistorySlice";
 import {
@@ -35,6 +37,15 @@ function* handleFetchUsers(): Generator<unknown, void, CustomerHistoryItem[]> {
   }
 }
 
+function* handleDeleteUser(action: PayloadAction<string>): Generator {
+  try {
+    yield call(profileService.deleteCustomer, action.payload);
+  } catch (err) {
+    console.warn("Error deleting customer from database:", err);
+  }
+}
+
 export function* watchUserHistory() {
   yield takeLatest(fetchUsersStart.type, handleFetchUsers);
+  yield takeLatest(deleteUser.type, handleDeleteUser);
 }

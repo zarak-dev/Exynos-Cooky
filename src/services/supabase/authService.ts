@@ -1,6 +1,6 @@
 import { supabase, isSupabaseConfigured } from "./client";
 import type { UserProfile, UserRole } from "../../types/auth";
-import { ADMIN_EMAIL, ADMIN_DEFAULT_PASSWORD } from "../../constants/roles";
+import { ADMIN_EMAIL } from "../../constants/roles";
 
 const LOCAL_STORAGE_SESSION_KEY = "exynos_auth_session";
 
@@ -63,84 +63,64 @@ export const authService = {
 
   async signIn(email: string, password?: string): Promise<UserProfile> {
     const cleanEmail = email.trim().toLowerCase();
-    const isAdminCredential =
-      cleanEmail === ADMIN_EMAIL.toLowerCase() &&
-      password === ADMIN_DEFAULT_PASSWORD;
 
     if (isSupabaseConfigured && password) {
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: cleanEmail,
-          password,
-        });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password,
+      });
 
-        if (error) {
-          // If cloud Supabase sign-in fails, fallback to default admin credentials
-          if (isAdminCredential) {
-            const adminProfile: UserProfile = {
-              id: "admin-default-id",
-              email: ADMIN_EMAIL,
-              name: "System Administrator",
-              role: "admin",
-            };
-            localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(adminProfile));
-            return adminProfile;
-          }
-          throw new Error(error.message);
-        }
+      if (error) {
+        throw new Error(error.message);
+      }
 
-        if (!data.user) {
-          if (isAdminCredential) {
-            const adminProfile: UserProfile = {
-              id: "admin-default-id",
-              email: ADMIN_EMAIL,
-              name: "System Administrator",
-              role: "admin",
-            };
-            localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(adminProfile));
-            return adminProfile;
-          }
-          throw new Error("Login failed: No user returned");
-        }
+      if (!data.user) {
+        throw new Error("Login failed: No user returned");
+      }
 
-        // Fetch profile from database
-        const { data: profileData } = await supabase
+      // Fetch profile from database
+      let { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", data.user.id)
+        .maybeSingle();
+
+      const role: UserRole =
+        profileData?.role ||
+        (cleanEmail === ADMIN_EMAIL.toLowerCase() ? "admin" : "customer");
+
+      // Auto-create profile if missing
+      if (!profileData) {
+        const { data: newProfile } = await supabase
           .from("profiles")
+          .upsert({
+            id: data.user.id,
+            email: data.user.email || cleanEmail,
+            full_name: role === "admin" ? "System Administrator" : "Valued Customer",
+            role,
+          })
           .select("*")
-          .eq("id", data.user.id)
           .single();
 
-        const role: UserRole =
-          profileData?.role ||
-          (cleanEmail === ADMIN_EMAIL.toLowerCase() ? "admin" : "customer");
-
-        const profile: UserProfile = {
-          id: data.user.id,
-          email: data.user.email || email,
-          name:
-            profileData?.full_name ||
-            (role === "admin" ? "System Administrator" : "Valued Customer"),
-          role,
-          phone: profileData?.phone,
-          avatarUrl: profileData?.avatar_url,
-          marketingPreferences: profileData?.marketing_preferences,
-        };
-
-        localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(profile));
-        return profile;
-      } catch (err) {
-        if (isAdminCredential) {
-          const adminProfile: UserProfile = {
-            id: "admin-default-id",
-            email: ADMIN_EMAIL,
-            name: "System Administrator",
-            role: "admin",
-          };
-          localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(adminProfile));
-          return adminProfile;
+        if (newProfile) {
+          profileData = newProfile;
         }
-        throw err;
       }
+
+      const profile: UserProfile = {
+        id: data.user.id,
+        email: data.user.email || cleanEmail,
+        name:
+          profileData?.full_name ||
+          (role === "admin" ? "System Administrator" : "Valued Customer"),
+        role,
+        phone: profileData?.phone,
+        avatarUrl: profileData?.avatar_url,
+        marketingPreferences: profileData?.marketing_preferences,
+      };
+
+      localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(profile));
+      return profile;
     }
 
     // Offline / Demo Fallback Mode

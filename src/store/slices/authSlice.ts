@@ -16,6 +16,7 @@ export interface RegisteredUser {
 interface AuthState {
   isAuthModalOpen: boolean;
   isLoggedIn: boolean;
+  isRestoringSession: boolean;
   user: UserProfile | null;
   registeredUsers: RegisteredUser[];
   loading: boolean;
@@ -25,6 +26,7 @@ interface AuthState {
 const initialState: AuthState = {
   isAuthModalOpen: false,
   isLoggedIn: false,
+  isRestoringSession: true,
   user: null,
   registeredUsers: [],
   loading: false,
@@ -61,11 +63,13 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
       state.user = action.payload;
       state.loading = false;
+      state.isRestoringSession = false;
       state.error = null;
       state.isAuthModalOpen = false;
     },
     loginFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
+      state.isRestoringSession = false;
       state.error = action.payload;
     },
 
@@ -79,6 +83,7 @@ const authSlice = createSlice({
     },
     signupSuccess: (state, action: PayloadAction<UserProfile>) => {
       state.loading = false;
+      state.isRestoringSession = false;
       state.error = null;
       state.isAuthModalOpen = false;
       state.user = action.payload;
@@ -86,17 +91,23 @@ const authSlice = createSlice({
     },
     signupFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
+      state.isRestoringSession = false;
       state.error = action.payload;
     },
 
     restoreSessionRequest: (state) => {
       state.loading = true;
+      state.isRestoringSession = true;
     },
     restoreSessionSuccess: (state, action: PayloadAction<UserProfile | null>) => {
       state.loading = false;
+      state.isRestoringSession = false;
       if (action.payload) {
         state.isLoggedIn = true;
         state.user = action.payload;
+      } else {
+        state.isLoggedIn = false;
+        state.user = null;
       }
     },
 
@@ -131,6 +142,7 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
       state.error = null;
+      state.isRestoringSession = false;
     },
 
     updateUserProfile: (state, action: PayloadAction<Partial<UserProfile>>) => {

@@ -24,6 +24,7 @@ interface OrderSummaryProps {
   subtotal: number;
   deliveryFee: number;
   totalAmount: number;
+  isSubmitting?: boolean;
 }
 
 export const OrderSummary: React.FC<OrderSummaryProps> = ({
@@ -32,6 +33,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
   subtotal,
   deliveryFee,
   totalAmount,
+  isSubmitting,
 }) => {
   const dispatch = useDispatch();
   const [couponCode, setCouponCode] = useState("");
@@ -147,8 +149,15 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
         <TotalText level={4}>Rs. {totalAmount}</TotalText>
       </TotalRow>
 
-      <SubmitButton type="primary" htmlType="submit" block size="large">
-        Place Order — Rs. {totalAmount}
+      <SubmitButton
+        type="primary"
+        htmlType="submit"
+        block
+        size="large"
+        loading={isSubmitting}
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Placing Order..." : `Place Order — Rs. ${totalAmount}`}
       </SubmitButton>
     </OrderSummarySticky>
   );

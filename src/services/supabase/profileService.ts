@@ -160,4 +160,17 @@ export const profileService = {
       SEED_CUSTOMERS,
     );
   },
+
+  async deleteCustomer(userId: string): Promise<string> {
+    if (isSupabaseConfigured) {
+      const { error } = await supabase
+        .from("profiles")
+        .delete()
+        .eq("id", userId);
+      if (error) {
+        throw new Error(error.message);
+      }
+    }
+    return userId;
+  },
 };

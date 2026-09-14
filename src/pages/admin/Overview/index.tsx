@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
+import React, { useMemo, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Row, Col, Progress, Tag, Typography, Statistic } from "antd";
 import { Column, Pie } from "@ant-design/charts";
 import {
@@ -9,6 +9,9 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import type { RootState } from "../../../store";
+import { fetchOrdersRequest } from "../../../store/slices/orderSlice";
+import { fetchInventoryRequest } from "../../../store/slices/inventorySlice";
+import { fetchUsersStart } from "../../../store/slices/userHistorySlice";
 import {
   MetricCard,
   MetricIcon,
@@ -27,9 +30,16 @@ import { AdminAIInsightsCard } from "./components/AdminAIInsightsCard";
 const { Text } = Typography;
 
 export const AdminOverview: React.FC = () => {
+  const dispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.orders.orders);
   const inventory = useSelector((state: RootState) => state.inventory.items);
   const users = useSelector((state: RootState) => state.userHistory.users);
+
+  useEffect(() => {
+    dispatch(fetchOrdersRequest());
+    dispatch(fetchInventoryRequest());
+    dispatch(fetchUsersStart());
+  }, [dispatch]);
 
   // Real computed metrics derived from database data
   const metrics = useMemo(() => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -22,8 +22,6 @@ export function useCheckout() {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const [confirmedOrderId, setConfirmedOrderId] = useState<string | null>(null);
-  const [confirmedOrder, setConfirmedOrder] = useState<Order | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const user = useSelector((state: RootState) => state.auth.user);
   const { items: cartItems, boxSize } = useSelector(
@@ -32,6 +30,15 @@ export function useCheckout() {
   const discountAmount = useSelector(
     (state: RootState) => state.coupons.discountAmount,
   );
+
+  const { currentOrder, loading: orderLoading, error: orderError } = useSelector(
+    (state: RootState) => state.orders,
+  );
+
+  // Derive order confirmation directly from Redux store state
+  const isOrdered = Boolean(currentOrder);
+  const confirmedOrderId = currentOrder?.id || null;
+  const confirmedOrder = currentOrder;
 
   const groupedCartItems = groupCartItems(cartItems);
 
@@ -42,6 +49,22 @@ export function useCheckout() {
 
   const deliveryFee = cartItems.length > 0 ? DELIVERY_FEE : 0;
   const totalAmount = Math.max(0, subtotal + deliveryFee - discountAmount);
+
+  // When order completes successfully, clean up cart and notify
+  useEffect(() => {
+    if (currentOrder) {
+      dispatch(clearBox());
+      dispatch(clearCoupon());
+      messageApi.success("Order confirmed and baking scheduled! 🍪");
+    }
+  }, [currentOrder, dispatch, messageApi]);
+
+  // When order placement fails
+  useEffect(() => {
+    if (orderError) {
+      messageApi.error(`Could not place order: ${orderError}`);
+    }
+  }, [orderError, messageApi]);
 
   function handleSubmit(values: FormValues) {
     const orderId = generateOrderId();
@@ -73,18 +96,14 @@ export function useCheckout() {
     };
 
     dispatch(createOrderRequest(order));
-    dispatch(clearBox());
-    dispatch(clearCoupon());
-    setConfirmedOrderId(orderId);
-    setConfirmedOrder(order);
-    messageApi.success("Order confirmed and baking scheduled! 🍪");
   }
 
   return {
     contextHolder,
     confirmedOrderId,
     confirmedOrder,
-    isOrdered: confirmedOrderId !== null,
+    isOrdered,
+    isSubmitting: orderLoading,
     paymentMethod,
     setPaymentMethod,
     cartItems,

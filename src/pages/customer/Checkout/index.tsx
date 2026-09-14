@@ -6,7 +6,7 @@ import { OrderConfirmed } from "./components/OrderConfirmed";
 import { EmptyCart } from "./components/EmptyCart";
 import { useCheckout } from "./components/useCheckout";
 import { type FormValues } from "./types";
-import { deleteOrder } from "../../../store/slices/orderSlice";
+import { deleteOrderRequest, clearCurrentOrder } from "../../../store/slices/orderSlice";
 import {
   CheckoutContainer,
   FullWidthRadioGroup,
@@ -24,6 +24,7 @@ export const CheckoutPage: React.FC = () => {
     contextHolder,
     confirmedOrderId,
     isOrdered,
+    isSubmitting,
     confirmedOrder,
     paymentMethod,
     setPaymentMethod,
@@ -44,9 +45,13 @@ export const CheckoutPage: React.FC = () => {
         <OrderConfirmed
           orderId={confirmedOrderId}
           order={confirmedOrder}
-          onBackToShop={() => navigate("/")}
+          onBackToShop={() => {
+            dispatch(clearCurrentOrder());
+            navigate("/");
+          }}
           onDelete={() => {
-            dispatch(deleteOrder(confirmedOrderId));
+            dispatch(deleteOrderRequest(confirmedOrderId));
+            dispatch(clearCurrentOrder());
             navigate("/");
           }}
         />
@@ -198,6 +203,7 @@ export const CheckoutPage: React.FC = () => {
               subtotal={subtotal}
               deliveryFee={deliveryFee}
               totalAmount={totalAmount}
+              isSubmitting={isSubmitting}
             />
           </Col>
         </Row>

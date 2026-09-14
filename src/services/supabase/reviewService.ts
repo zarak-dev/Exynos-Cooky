@@ -64,6 +64,38 @@ const SEED_REVIEWS: Review[] = [
 export const reviewService = {
   async fetchReviews(): Promise<Review[]> {
     if (isSupabaseConfigured) {
+      // 1. Try secure public reviews RPC
+      const { data: rpcReviews, error: rpcError } = await supabase.rpc(
+        "get_public_reviews",
+      );
+
+      if (!rpcError && rpcReviews && rpcReviews.length > 0) {
+        return rpcReviews.map(
+          (row: {
+            id: string;
+            product_id: number;
+            order_id?: string;
+            rating: number;
+            comment: string;
+            verified_purchase: boolean;
+            created_at: string;
+            user_name: string;
+            user_avatar: string;
+          }) => ({
+            id: row.id,
+            productId: row.product_id,
+            orderId: row.order_id,
+            userName: row.user_name || "Verified Customer",
+            userAvatar: row.user_avatar || "",
+            rating: row.rating,
+            comment: row.comment,
+            verifiedPurchase: row.verified_purchase ?? true,
+            createdAt: row.created_at,
+          }),
+        );
+      }
+
+      // 2. Direct table fallback with privacy-safe profile selection (excluding email/phone)
       const { data, error } = await supabase
         .from("reviews")
         .select(`
@@ -72,7 +104,7 @@ export const reviewService = {
           comment,
           verified_purchase,
           created_at,
-          profiles(full_name, avatar_url, email)
+          profiles(full_name, avatar_url)
         `)
         .order("created_at", { ascending: false });
 
@@ -84,8 +116,8 @@ export const reviewService = {
           verified_purchase?: boolean;
           created_at: string;
           profiles?:
-            | { full_name?: string; avatar_url?: string; email?: string }
-            | Array<{ full_name?: string; avatar_url?: string; email?: string }>
+            | { full_name?: string; avatar_url?: string }
+            | Array<{ full_name?: string; avatar_url?: string }>
             | null;
         };
 
@@ -97,10 +129,9 @@ export const reviewService = {
             id: row.id,
             userName: profile?.full_name || "Verified Customer",
             userAvatar: profile?.avatar_url || "",
-            userEmail: profile?.email || "",
             rating: row.rating,
             comment: row.comment,
-            verifiedPurchase: row.verified_purchase ?? true,
+            verifiedPurchase: row.verified_purchase ?? false,
             createdAt: row.created_at,
           };
         });
@@ -114,6 +145,33 @@ export const reviewService = {
     reviewInput: ReviewInput,
     user: { id: string; name: string; email: string },
   ): Promise<Review> {
+    let isVerified = false;
+
+    if (isSupabaseConfigured) {
+      // Check if user has an order to legitimately verify purchase
+      const { data: userOrders } = await supabase
+        .from("orders")
+        .select("id, status")
+        .eq("customer_email", user.email)
+        .neq("status", "Cancelled")
+        .limit(1);
+
+      isVerified = Boolean(userOrders && userOrders.length > 0);
+
+      const { error: insertError } = await supabase.from("reviews").insert({
+        user_id: user.id,
+        product_id: reviewInput.productId,
+        order_id: reviewInput.orderId,
+        rating: reviewInput.rating,
+        comment: reviewInput.comment,
+        verified_purchase: isVerified,
+      });
+
+      if (insertError) {
+        throw new Error(`Review submission failed: ${insertError.message}`);
+      }
+    }
+
     const newReview: Review = {
       id: `rev-${Date.now()}`,
       userId: user.id,
@@ -123,20 +181,9 @@ export const reviewService = {
       orderId: reviewInput.orderId,
       rating: reviewInput.rating,
       comment: reviewInput.comment,
-      verifiedPurchase: true,
+      verifiedPurchase: isVerified,
       createdAt: new Date().toISOString(),
     };
-
-    if (isSupabaseConfigured) {
-      await supabase.from("reviews").insert({
-        user_id: user.id,
-        product_id: reviewInput.productId,
-        order_id: reviewInput.orderId,
-        rating: reviewInput.rating,
-        comment: reviewInput.comment,
-        verified_purchase: true,
-      });
-    }
 
     const current = loadFromStorage<Review[]>(
       LOCAL_STORAGE_REVIEWS_KEY,
