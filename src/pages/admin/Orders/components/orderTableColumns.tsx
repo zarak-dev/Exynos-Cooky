@@ -3,6 +3,7 @@ import type { ColumnsType } from "antd/es/table";
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
+  CloseCircleOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
 import { type Order } from "../../../../store/slices/orderSlice";
@@ -41,6 +42,11 @@ const statusTags: Partial<Record<Order["status"], React.ReactNode>> = {
   Delivered: (
     <Tag icon={<CheckCircleOutlined />} color="default">
       DELIVERED
+    </Tag>
+  ),
+  Cancelled: (
+    <Tag icon={<CloseCircleOutlined />} color="error">
+      CANCELLED
     </Tag>
   ),
 };

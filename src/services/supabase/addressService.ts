@@ -1,104 +1,113 @@
 import { supabase, isSupabaseConfigured } from "./client";
 import type { Address, AddressInput } from "../../types/address";
-import { loadFromStorage } from "../../utils/storage";
-
-const LOCAL_STORAGE_ADDRESS_KEY = "exynos_user_addresses";
 
 export const addressService = {
   async fetchAddresses(userId: string): Promise<Address[]> {
-    if (isSupabaseConfigured) {
-      const { data, error } = await supabase
-        .from("addresses")
-        .select("*")
-        .eq("user_id", userId)
-        .order("is_default", { ascending: false });
-
-      if (!error && data) {
-        return data.map((item) => ({
-          id: item.id,
-          userId: item.user_id,
-          recipientName: item.recipient_name,
-          phone: item.phone,
-          addressLine1: item.address_line1,
-          addressLine2: item.address_line2,
-          city: item.city,
-          state: item.state,
-          postalCode: item.postal_code,
-          isDefault: item.is_default,
-          createdAt: item.created_at,
-        }));
-      }
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot load addresses.");
     }
 
-    const localList = loadFromStorage<Address[]>(LOCAL_STORAGE_ADDRESS_KEY, []);
-    return localList.filter((a) => a.userId === userId);
+    const { data, error } = await supabase
+      .from("addresses")
+      .select("*")
+      .eq("user_id", userId)
+      .order("is_default", { ascending: false });
+
+    if (error) {
+      throw new Error(`Failed to load addresses: ${error.message}`);
+    }
+
+    return (data || []).map((item) => ({
+      id: item.id,
+      userId: item.user_id,
+      recipientName: item.recipient_name,
+      phone: item.phone,
+      addressLine1: item.address_line1,
+      addressLine2: item.address_line2,
+      city: item.city,
+      state: item.state,
+      postalCode: item.postal_code,
+      isDefault: item.is_default,
+      createdAt: item.created_at,
+    }));
   },
 
   async addAddress(input: AddressInput, userId: string): Promise<Address> {
-    const newAddress: Address = {
-      ...input,
-      id: `addr-${Date.now()}`,
-      userId,
-      createdAt: new Date().toISOString(),
-    };
-
-    if (isSupabaseConfigured) {
-      const { data, error } = await supabase
-        .from("addresses")
-        .insert({
-          user_id: userId,
-          recipient_name: input.recipientName,
-          phone: input.phone,
-          address_line1: input.addressLine1,
-          address_line2: input.addressLine2 || "",
-          city: input.city,
-          state: input.state || "",
-          postal_code: input.postalCode || "",
-          is_default: input.isDefault,
-        })
-        .select()
-        .single();
-
-      if (!error && data) {
-        newAddress.id = data.id;
-      }
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot add address.");
     }
 
-    const current = loadFromStorage<Address[]>(LOCAL_STORAGE_ADDRESS_KEY, []);
-    const updated = [newAddress, ...current];
-    localStorage.setItem(LOCAL_STORAGE_ADDRESS_KEY, JSON.stringify(updated));
-    return newAddress;
+    const { data, error } = await supabase
+      .from("addresses")
+      .insert({
+        user_id: userId,
+        recipient_name: input.recipientName,
+        phone: input.phone,
+        address_line1: input.addressLine1,
+        address_line2: input.addressLine2 || "",
+        city: input.city,
+        state: input.state || "",
+        postal_code: input.postalCode || "",
+        is_default: input.isDefault,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to save address: ${error.message}`);
+    }
+
+    return {
+      id: data.id,
+      userId: data.user_id,
+      recipientName: data.recipient_name,
+      phone: data.phone,
+      addressLine1: data.address_line1,
+      addressLine2: data.address_line2,
+      city: data.city,
+      state: data.state,
+      postalCode: data.postal_code,
+      isDefault: data.is_default,
+      createdAt: data.created_at,
+    };
   },
 
   async deleteAddress(id: string): Promise<string> {
-    if (isSupabaseConfigured) {
-      await supabase.from("addresses").delete().eq("id", id);
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot delete address.");
     }
 
-    const current = loadFromStorage<Address[]>(LOCAL_STORAGE_ADDRESS_KEY, []);
-    const updated = current.filter((a) => a.id !== id);
-    localStorage.setItem(LOCAL_STORAGE_ADDRESS_KEY, JSON.stringify(updated));
+    const { error } = await supabase.from("addresses").delete().eq("id", id);
+    if (error) {
+      throw new Error(`Failed to delete address: ${error.message}`);
+    }
+
     return id;
   },
 
   async setDefaultAddress(id: string, userId: string): Promise<Address[]> {
-    if (isSupabaseConfigured) {
-      await supabase
-        .from("addresses")
-        .update({ is_default: false })
-        .eq("user_id", userId);
-
-      await supabase
-        .from("addresses")
-        .update({ is_default: true })
-        .eq("id", id);
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot update default address.");
     }
 
-    const current = loadFromStorage<Address[]>(LOCAL_STORAGE_ADDRESS_KEY, []);
-    const updated = current.map((a) =>
-      a.userId === userId ? { ...a, isDefault: a.id === id } : a,
-    );
-    localStorage.setItem(LOCAL_STORAGE_ADDRESS_KEY, JSON.stringify(updated));
-    return updated.filter((a) => a.userId === userId);
+    const { error: resetError } = await supabase
+      .from("addresses")
+      .update({ is_default: false })
+      .eq("user_id", userId);
+
+    if (resetError) {
+      throw new Error(`Failed to reset default address: ${resetError.message}`);
+    }
+
+    const { error: setError } = await supabase
+      .from("addresses")
+      .update({ is_default: true })
+      .eq("id", id);
+
+    if (setError) {
+      throw new Error(`Failed to set default address: ${setError.message}`);
+    }
+
+    return this.fetchAddresses(userId);
   },
 };

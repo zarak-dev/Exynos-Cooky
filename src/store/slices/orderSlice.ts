@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Order, OrderStatus } from "../../types/order";
-import { loadFromStorage } from "../../utils/storage";
 
 export type { Order };
 
@@ -13,7 +12,7 @@ interface OrderState {
 }
 
 const initialState: OrderState = {
-  orders: loadFromStorage<Order[]>("exynos_orders", []),
+  orders: [],
   loading: false,
   error: null,
   currentOrder: null,
@@ -24,13 +23,18 @@ const orderSlice = createSlice({
   name: "orders",
   initialState,
   reducers: {
-    fetchOrdersRequest: (
-      state,
-      action: PayloadAction<{ userEmail?: string } | undefined>,
-    ) => {
-      void action;
-      state.loading = true;
-      state.error = null;
+    fetchOrdersRequest: {
+      reducer: (
+        state,
+        action: PayloadAction<{ userEmail?: string } | undefined>,
+      ) => {
+        void action;
+        state.loading = true;
+        state.error = null;
+      },
+      prepare: (payload?: { userEmail?: string }) => ({
+        payload,
+      }),
     },
     fetchOrdersSuccess: (state, action: PayloadAction<Order[]>) => {
       state.orders = action.payload;
@@ -84,13 +88,44 @@ const orderSlice = createSlice({
     ) => {
       void action;
     },
+    updateOrderStatusSuccess: (
+      state,
+      action: PayloadAction<{ id: string; status: OrderStatus }>,
+    ) => {
+      const order = state.orders.find((order) => order.id === action.payload.id);
+      if (order) {
+        order.status = action.payload.status;
+      }
+      if (state.trackedOrder && state.trackedOrder.id === action.payload.id) {
+        state.trackedOrder.status = action.payload.status;
+      }
+      state.error = null;
+    },
+    updateOrderStatusFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    },
 
-    // Synchronous compatibility
+    deleteOrderRequest: (_state, action: PayloadAction<string>) => {
+      void action;
+    },
+    deleteOrderSuccess: (state, action: PayloadAction<string>) => {
+      state.orders = state.orders.filter(
+        (order) => order.id !== action.payload,
+      );
+      if (state.trackedOrder && state.trackedOrder.id === action.payload) {
+        state.trackedOrder = null;
+      }
+      state.error = null;
+    },
+    deleteOrderFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    },
+
+    // Synchronous action compatibility
     placeNewOrder: (state, action: PayloadAction<Order>) => {
       state.orders.unshift(action.payload);
       state.currentOrder = action.payload;
     },
-
     updateOrderStatus: (
       state,
       action: PayloadAction<{ id: string; status: OrderStatus }>,
@@ -102,10 +137,6 @@ const orderSlice = createSlice({
       if (state.trackedOrder && state.trackedOrder.id === action.payload.id) {
         state.trackedOrder.status = action.payload.status;
       }
-    },
-
-    deleteOrderRequest: (_state, action: PayloadAction<string>) => {
-      void action;
     },
     deleteOrder: (state, action: PayloadAction<string>) => {
       state.orders = state.orders.filter(
@@ -130,9 +161,13 @@ export const {
   trackOrderSuccess,
   trackOrderFailure,
   updateOrderStatusRequest,
+  updateOrderStatusSuccess,
+  updateOrderStatusFailure,
+  deleteOrderRequest,
+  deleteOrderSuccess,
+  deleteOrderFailure,
   placeNewOrder,
   updateOrderStatus,
-  deleteOrderRequest,
   deleteOrder,
 } = orderSlice.actions;
 

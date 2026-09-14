@@ -75,7 +75,7 @@ const STEP_INDEX: Record<string, number> = {
 };
 
 export const TrackOrder: React.FC = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const initialParamId = searchParams.get("id") || "";
   const [orderId, setOrderId] = useState(initialParamId);
   const [messageApi, contextHolder] = message.useMessage();
@@ -88,9 +88,10 @@ export const TrackOrder: React.FC = () => {
   // Directly derive searchedOrder from authoritative Redux store state
   const searchedOrder = trackedOrder;
 
-  // Handle URL param lookup on mount
+  // Handle URL param lookup on mount or param change
   useEffect(() => {
     if (initialParamId) {
+      setOrderId(initialParamId);
       dispatch(trackOrderRequest(initialParamId.trim()));
     }
   }, [initialParamId, dispatch]);
@@ -98,7 +99,7 @@ export const TrackOrder: React.FC = () => {
   const handleCancelOrder = () => {
     if (!searchedOrder) return;
     dispatch(updateOrderStatusRequest({ id: searchedOrder.id, status: "Cancelled" }));
-    messageApi.success("Order cancelled and baking updated.");
+    messageApi.success("Order cancellation initiated and baking slots restored.");
   };
 
   // Realtime subscription for searched order updates
@@ -122,6 +123,7 @@ export const TrackOrder: React.FC = () => {
       return;
     }
 
+    setSearchParams({ id: normalizedOrderId });
     dispatch(trackOrderRequest(normalizedOrderId));
   };
 

@@ -1,5 +1,5 @@
 import { Button, Popconfirm, Space, Tag } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { type Order } from "../../../../store/slices/orderSlice";
 
 type Props = {
@@ -16,38 +16,71 @@ const OrderActions = ({
   nextStatus,
   onStatusChange,
   onDelete,
-}: Props) => (
-  <Space>
-    {order.status === "Delivered" ? (
-      <Tag color="green">Order Complete</Tag>
-    ) : (
-      <Button
-        type="primary"
-        size="small"
-        shape="round"
-        onClick={() => onStatusChange(order.id, nextStatus!)}
-      >
-        {buttonLabel}
-      </Button>
-    )}
+}: Props) => {
+  const isCancellable =
+    order.status !== "Cancelled" && order.status !== "Delivered";
 
-    <Popconfirm
-      title="Delete Order"
-      description={`Delete order ${order.id}?`}
-      onConfirm={() => onDelete(order.id)}
-      okText="Delete"
-      cancelText="Cancel"
-      okButtonProps={{ danger: true }}
-    >
-      <Button
-        shape="round"
-        type="link"
-        danger
-        size="small"
-        icon={<DeleteOutlined />}
-      />
-    </Popconfirm>
-  </Space>
-);
+  return (
+    <Space size="small">
+      {order.status === "Delivered" && (
+        <Tag color="green">Complete</Tag>
+      )}
+
+      {order.status === "Cancelled" && (
+        <Tag color="red">Cancelled</Tag>
+      )}
+
+      {order.status !== "Delivered" && order.status !== "Cancelled" && buttonLabel && nextStatus && (
+        <Button
+          type="primary"
+          size="small"
+          shape="round"
+          onClick={() => onStatusChange(order.id, nextStatus)}
+        >
+          {buttonLabel}
+        </Button>
+      )}
+
+      {isCancellable && (
+        <Popconfirm
+          title="Cancel Order"
+          description={`Cancel order ${order.id} and return cookies to stock?`}
+          onConfirm={() => onStatusChange(order.id, "Cancelled")}
+          okText="Cancel Order"
+          cancelText="Keep"
+          okButtonProps={{ danger: true }}
+        >
+          <Button
+            shape="round"
+            type="default"
+            danger
+            size="small"
+            icon={<CloseCircleOutlined />}
+          >
+            Cancel
+          </Button>
+        </Popconfirm>
+      )}
+
+      <Popconfirm
+        title="Delete Order Record"
+        description={`Permanently purge order ${order.id} from database?`}
+        onConfirm={() => onDelete(order.id)}
+        okText="Purge"
+        cancelText="Cancel"
+        okButtonProps={{ danger: true }}
+      >
+        <Button
+          shape="circle"
+          type="text"
+          danger
+          size="small"
+          icon={<DeleteOutlined />}
+          title="Delete record"
+        />
+      </Popconfirm>
+    </Space>
+  );
+};
 
 export default OrderActions;

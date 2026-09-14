@@ -11,9 +11,11 @@ import {
   trackOrderSuccess,
   trackOrderFailure,
   updateOrderStatusRequest,
-  updateOrderStatus,
+  updateOrderStatusSuccess,
+  updateOrderStatusFailure,
   deleteOrderRequest,
-  deleteOrder,
+  deleteOrderSuccess,
+  deleteOrderFailure,
 } from "../slices/orderSlice";
 import { orderService } from "../../services/supabase/orderService";
 import type { Order, OrderStatus } from "../../types/order";
@@ -62,25 +64,31 @@ function* handleTrackOrder(
 
 function* handleUpdateOrderStatus(
   action: PayloadAction<{ id: string; status: OrderStatus }>,
-): Generator {
+): Generator<unknown, void, { id: string; status: OrderStatus }> {
   try {
-    yield put(updateOrderStatus(action.payload));
-    yield call(
+    const result = yield call(
       orderService.updateOrderStatus,
       action.payload.id,
       action.payload.status,
     );
-  } catch (err) {
-    console.warn("Error updating order status:", err);
+    yield put(updateOrderStatusSuccess(result));
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Failed to update order status";
+    yield put(updateOrderStatusFailure(message));
   }
 }
 
-function* handleDeleteOrder(action: PayloadAction<string>): Generator {
+function* handleDeleteOrder(
+  action: PayloadAction<string>,
+): Generator<unknown, void, string> {
   try {
-    yield put(deleteOrder(action.payload));
-    yield call(orderService.deleteOrder, action.payload);
-  } catch (err) {
-    console.warn("Error deleting order:", err);
+    const deletedId = yield call(orderService.deleteOrder, action.payload);
+    yield put(deleteOrderSuccess(deletedId));
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Failed to delete order";
+    yield put(deleteOrderFailure(message));
   }
 }
 

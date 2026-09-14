@@ -5,13 +5,17 @@ import {
   fetchInventorySuccess,
   fetchInventoryFailure,
   toggleAvailabilityRequest,
-  toggleItemAvailability,
+  toggleAvailabilitySuccess,
+  toggleAvailabilityFailure,
   addProductRequest,
   addProductSuccess,
+  addProductFailure,
   updateProductRequest,
   updateProductSuccess,
+  updateProductFailure,
   deleteProductRequest,
-  deleteItem,
+  deleteProductSuccess,
+  deleteProductFailure,
 } from "../slices/inventorySlice";
 import { productService } from "../../services/supabase/productService";
 import type { Product } from "../../types/product";
@@ -29,16 +33,18 @@ function* handleFetchInventory(): Generator<unknown, void, Product[]> {
 
 function* handleToggleAvailability(
   action: PayloadAction<{ id: number; isAvailable: boolean }>,
-): Generator {
+): Generator<unknown, void, { id: number; isAvailable: boolean }> {
   try {
-    yield put(toggleItemAvailability(action.payload));
-    yield call(
+    const result = yield call(
       productService.toggleAvailability,
       action.payload.id,
       action.payload.isAvailable,
     );
-  } catch (err) {
-    console.warn("Error updating availability:", err);
+    yield put(toggleAvailabilitySuccess(result));
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Failed to update availability";
+    yield put(toggleAvailabilityFailure(message));
   }
 }
 
@@ -48,8 +54,10 @@ function* handleAddProduct(
   try {
     const newProduct = yield call(productService.addProduct, action.payload);
     yield put(addProductSuccess(newProduct));
-  } catch (err) {
-    console.warn("Error adding product:", err);
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Failed to add product";
+    yield put(addProductFailure(message));
   }
 }
 
@@ -63,17 +71,23 @@ function* handleUpdateProduct(
       action.payload.updates,
     );
     yield put(updateProductSuccess(updated));
-  } catch (err) {
-    console.warn("Error updating product:", err);
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Failed to update product";
+    yield put(updateProductFailure(message));
   }
 }
 
-function* handleDeleteProduct(action: PayloadAction<number>): Generator {
+function* handleDeleteProduct(
+  action: PayloadAction<number>,
+): Generator<unknown, void, number> {
   try {
-    yield put(deleteItem(action.payload));
-    yield call(productService.deleteProduct, action.payload);
-  } catch (err) {
-    console.warn("Error deleting product:", err);
+    const deletedId = yield call(productService.deleteProduct, action.payload);
+    yield put(deleteProductSuccess(deletedId));
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Failed to delete product";
+    yield put(deleteProductFailure(message));
   }
 }
 

@@ -1,91 +1,105 @@
 import { supabase, isSupabaseConfigured } from "./client";
 import type { Coupon, CouponValidationResult } from "../../types/coupon";
 
-const ACTIVE_COUPONS: Coupon[] = [
-  {
-    id: "cpn-1",
-    code: "WELCOME10",
-    discountType: "percentage",
-    discountValue: 10,
-    minimumOrder: 1000,
-    maximumDiscount: 500,
-    usedCount: 42,
-    isActive: true,
-  },
-  {
-    id: "cpn-2",
-    code: "SWEET20",
-    discountType: "percentage",
-    discountValue: 20,
-    minimumOrder: 2500,
-    maximumDiscount: 1000,
-    usedCount: 19,
-    isActive: true,
-  },
-  {
-    id: "cpn-3",
-    code: "FREESHIP",
-    discountType: "fixed",
-    discountValue: 150,
-    minimumOrder: 1200,
-    usedCount: 88,
-    isActive: true,
-  },
-];
-
 export const couponService = {
   async validateCoupon(
     code: string,
     subtotal: number,
   ): Promise<CouponValidationResult> {
     const normalizedCode = code.trim().toUpperCase();
-
-    let coupon: Coupon | undefined;
-
-    if (isSupabaseConfigured) {
-      const { data, error } = await supabase
-        .from("coupons")
-        .select("*")
-        .eq("code", normalizedCode)
-        .eq("is_active", true)
-        .maybeSingle();
-
-      if (!error && data) {
-        coupon = {
-          id: data.id,
-          code: data.code,
-          discountType: data.discount_type,
-          discountValue: Number(data.discount_value),
-          minimumOrder: Number(data.minimum_order) || 0,
-          maximumDiscount: data.maximum_discount ? Number(data.maximum_discount) : undefined,
-          usageLimit: data.usage_limit,
-          usedCount: data.used_count || 0,
-          isActive: data.is_active,
-        };
-      }
-    }
-
-    if (!coupon) {
-      coupon = ACTIVE_COUPONS.find(
-        (c) => c.code.toUpperCase() === normalizedCode && c.isActive,
-      );
-    }
-
-    if (!coupon) {
+    if (!normalizedCode) {
       return {
         isValid: false,
         discountAmount: 0,
-        errorMessage: "Invalid or expired coupon code",
+        errorMessage: "Please enter a coupon code",
       };
     }
 
-    if (subtotal < coupon.minimumOrder) {
+    if (!isSupabaseConfigured) {
       return {
         isValid: false,
         discountAmount: 0,
-        errorMessage: `Minimum order of Rs. ${coupon.minimumOrder} required for ${coupon.code}`,
+        errorMessage: "Coupon validation service is currently unavailable",
       };
     }
+
+    // Query authoritative database coupon record
+    const { data, error } = await supabase
+      .from("coupons")
+      .select("*")
+      .ilike("code", normalizedCode)
+      .maybeSingle();
+
+    if (error) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        errorMessage: `Coupon verification failed: ${error.message}`,
+      };
+    }
+
+    if (!data) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        errorMessage: `Coupon "${normalizedCode}" does not exist`,
+      };
+    }
+
+    const now = new Date();
+
+    if (!data.is_active) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        errorMessage: `Coupon "${data.code}" is currently disabled`,
+      };
+    }
+
+    if (data.start_date && new Date(data.start_date) > now) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        errorMessage: `Coupon "${data.code}" is not valid yet`,
+      };
+    }
+
+    if (data.expiry_date && new Date(data.expiry_date) < now) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        errorMessage: `Coupon "${data.code}" expired on ${new Date(data.expiry_date).toLocaleDateString()}`,
+      };
+    }
+
+    if (data.usage_limit && (data.used_count || 0) >= data.usage_limit) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        errorMessage: `Coupon "${data.code}" has reached its maximum redemptions`,
+      };
+    }
+
+    const minimumOrder = Number(data.minimum_order) || 0;
+    if (subtotal < minimumOrder) {
+      return {
+        isValid: false,
+        discountAmount: 0,
+        errorMessage: `Minimum order of Rs. ${minimumOrder} required for coupon ${data.code}`,
+      };
+    }
+
+    const coupon: Coupon = {
+      id: data.id,
+      code: data.code,
+      discountType: data.discount_type,
+      discountValue: Number(data.discount_value),
+      minimumOrder,
+      maximumDiscount: data.maximum_discount ? Number(data.maximum_discount) : undefined,
+      usageLimit: data.usage_limit,
+      usedCount: data.used_count || 0,
+      isActive: data.is_active,
+    };
 
     let discountAmount: number;
     if (coupon.discountType === "percentage") {
@@ -96,6 +110,8 @@ export const couponService = {
     } else {
       discountAmount = Math.min(coupon.discountValue, subtotal);
     }
+
+    discountAmount = Math.min(discountAmount, subtotal);
 
     return {
       isValid: true,

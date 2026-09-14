@@ -23,6 +23,7 @@ import {
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../store";
+import { whatsappService } from "../../../services/whatsapp/whatsappService";
 import {
   askAIRequest,
   clearAIConversation,
@@ -106,10 +107,10 @@ export const CookyAIAssistant: React.FC = () => {
         {/* WhatsApp Button */}
         <Tooltip title="Chat with us on WhatsApp" placement="left">
           <a
-            href="https://wa.me/923404646122?text=Hello%20Exynos%20Cooky!%20%F0%9F%8D%AA"
+            href={whatsappService.getSupportChatUrl("Hello Exynos Cooky! 🍪✨ I'd love to chat about your fresh cookies.")}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Chat with us on WhatsApp (+923404646122)"
+            aria-label="Chat with us on WhatsApp"
             style={{ display: "inline-block", textDecoration: "none" }}
           >
             <Button

@@ -1,7 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Product } from "../../types/product";
-import { COOKIE_MOCK_DATA } from "../../utils/mockData";
-import { loadFromStorage } from "../../utils/storage";
 
 interface InventoryState {
   items: Product[];
@@ -10,7 +8,7 @@ interface InventoryState {
 }
 
 const initialState: InventoryState = {
-  items: loadFromStorage<Product[]>("exynos_inventory", COOKIE_MOCK_DATA),
+  items: [],
   loading: false,
   error: null,
 };
@@ -27,14 +25,6 @@ const inventorySlice = createSlice({
       state.items = action.payload;
       state.loading = false;
       state.error = null;
-      try {
-        localStorage.setItem(
-          "exynos_inventory",
-          JSON.stringify(action.payload),
-        );
-      } catch {
-        // Ignore quota
-      }
     },
     fetchInventoryFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -47,9 +37,7 @@ const inventorySlice = createSlice({
     ) => {
       void action;
     },
-
-    // Synchronous action compatibility + optimistic update
-    toggleItemAvailability: (
+    toggleAvailabilitySuccess: (
       state,
       action: PayloadAction<{ id: number; isAvailable: boolean }>,
     ) => {
@@ -57,6 +45,10 @@ const inventorySlice = createSlice({
       if (item) {
         item.isAvailable = action.payload.isAvailable;
       }
+      state.error = null;
+    },
+    toggleAvailabilityFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
 
     addProductRequest: (
@@ -67,6 +59,10 @@ const inventorySlice = createSlice({
     },
     addProductSuccess: (state, action: PayloadAction<Product>) => {
       state.items.unshift(action.payload);
+      state.error = null;
+    },
+    addProductFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
 
     updateProductRequest: (
@@ -80,10 +76,32 @@ const inventorySlice = createSlice({
       if (index !== -1) {
         state.items[index] = action.payload;
       }
+      state.error = null;
+    },
+    updateProductFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
 
     deleteProductRequest: (_state, action: PayloadAction<number>) => {
       void action;
+    },
+    deleteProductSuccess: (state, action: PayloadAction<number>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload);
+      state.error = null;
+    },
+    deleteProductFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    },
+
+    // Synchronous action compatibility
+    toggleItemAvailability: (
+      state,
+      action: PayloadAction<{ id: number; isAvailable: boolean }>,
+    ) => {
+      const item = state.items.find((item) => item.id === action.payload.id);
+      if (item) {
+        item.isAvailable = action.payload.isAvailable;
+      }
     },
     deleteItem: (state, action: PayloadAction<number>) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
@@ -96,12 +114,18 @@ export const {
   fetchInventorySuccess,
   fetchInventoryFailure,
   toggleAvailabilityRequest,
-  toggleItemAvailability,
+  toggleAvailabilitySuccess,
+  toggleAvailabilityFailure,
   addProductRequest,
   addProductSuccess,
+  addProductFailure,
   updateProductRequest,
   updateProductSuccess,
+  updateProductFailure,
   deleteProductRequest,
+  deleteProductSuccess,
+  deleteProductFailure,
+  toggleItemAvailability,
   deleteItem,
 } = inventorySlice.actions;
 

@@ -6,11 +6,15 @@ import {
   fetchAddressesFailure,
   addAddressRequest,
   addAddressSuccess,
+  addAddressFailure,
   deleteAddressRequest,
   deleteAddressSuccess,
+  deleteAddressFailure,
   setDefaultAddressRequest,
   setDefaultAddressSuccess,
+  setDefaultAddressFailure,
   updateProfileRequest,
+  updateProfileFailure,
 } from "../slices/profileSlice";
 import { updateUserProfile } from "../slices/authSlice";
 import { addressService } from "../../services/supabase/addressService";
@@ -41,17 +45,23 @@ function* handleAddAddress(
       action.payload.userId,
     );
     yield put(addAddressSuccess(created));
-  } catch (err) {
-    console.warn("Error adding address:", err);
+  } catch (err: unknown) {
+    const msg =
+      err instanceof Error ? err.message : "Failed to add address";
+    yield put(addAddressFailure(msg));
   }
 }
 
-function* handleDeleteAddress(action: PayloadAction<string>): Generator {
+function* handleDeleteAddress(
+  action: PayloadAction<string>,
+): Generator<unknown, void, string> {
   try {
     yield call(addressService.deleteAddress, action.payload);
     yield put(deleteAddressSuccess(action.payload));
-  } catch (err) {
-    console.warn("Error deleting address:", err);
+  } catch (err: unknown) {
+    const msg =
+      err instanceof Error ? err.message : "Failed to delete address";
+    yield put(deleteAddressFailure(msg));
   }
 }
 
@@ -65,8 +75,10 @@ function* handleSetDefaultAddress(
       action.payload.userId,
     );
     yield put(setDefaultAddressSuccess(updated));
-  } catch (err) {
-    console.warn("Error setting default address:", err);
+  } catch (err: unknown) {
+    const msg =
+      err instanceof Error ? err.message : "Failed to set default address";
+    yield put(setDefaultAddressFailure(msg));
   }
 }
 
@@ -80,8 +92,10 @@ function* handleUpdateProfile(
       action.payload.updates,
     );
     yield put(updateUserProfile(updated));
-  } catch (err) {
-    console.warn("Error updating profile:", err);
+  } catch (err: unknown) {
+    const msg =
+      err instanceof Error ? err.message : "Failed to update profile";
+    yield put(updateProfileFailure(msg));
   }
 }
 

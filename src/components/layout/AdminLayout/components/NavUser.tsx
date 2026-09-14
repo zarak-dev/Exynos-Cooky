@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../../../store";
 import { logoutUser } from "../../../../store/slices/authSlice";
-import { ADMIN_EMAIL } from "../../../../constants/roles";
 import styled from "styled-components";
 
 interface NavUserProps {
@@ -85,7 +84,7 @@ export const NavUser: React.FC<NavUserProps> = ({ collapsed }) => {
   const { user } = useSelector((state: RootState) => state.auth);
 
   const name = user?.name || "Admin Staff";
-  const email = user?.email || ADMIN_EMAIL;
+  const email = user?.email || "staff@exynoscooky.com";
   const initials = name
     .split(" ")
     .map((n: string) => n[0])

@@ -27,6 +27,9 @@ export function useCheckout() {
   const { items: cartItems, boxSize } = useSelector(
     (state: RootState) => state.cart,
   );
+  const appliedCoupon = useSelector(
+    (state: RootState) => state.coupons.appliedCoupon,
+  );
   const discountAmount = useSelector(
     (state: RootState) => state.coupons.discountAmount,
   );
@@ -86,6 +89,7 @@ export function useCheckout() {
       paymentStatus: "pending",
       status: "Pending",
       timestamp: new Date().toISOString(),
+      couponCode: appliedCoupon?.code,
       items: groupedCartItems.map((item) => ({
         productId: item.id,
         productNameSnapshot: item.name,

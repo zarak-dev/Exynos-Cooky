@@ -1,163 +1,137 @@
 import { supabase, isSupabaseConfigured } from "./client";
 import type { Product } from "../../types/product";
-import { COOKIE_MOCK_DATA } from "../../utils/mockData";
-import { loadFromStorage } from "../../utils/storage";
-
-const LOCAL_STORAGE_INVENTORY_KEY = "exynos_inventory";
 
 export const productService = {
   async fetchProducts(): Promise<Product[]> {
-    if (isSupabaseConfigured) {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .order("id", { ascending: true });
-
-      if (!error && data && data.length > 0) {
-        const products = data.map((item) => ({
-          id: item.id,
-          name: item.name,
-          price: Number(item.price),
-          stock: item.stock_quantity ?? item.stock ?? 0,
-          description: item.description,
-          imageUrl: item.image_url ?? item.imageUrl,
-          isAvailable: item.is_available ?? item.isAvailable ?? true,
-          category: item.category || "classic",
-        }));
-        try {
-          localStorage.setItem(
-            LOCAL_STORAGE_INVENTORY_KEY,
-            JSON.stringify(products),
-          );
-        } catch {
-          // Ignore storage quota errors
-        }
-        return products;
-      }
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot load products.");
     }
 
-    // Fallback to local storage or mock data
-    return loadFromStorage<Product[]>(
-      LOCAL_STORAGE_INVENTORY_KEY,
-      COOKIE_MOCK_DATA,
-    );
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("id", { ascending: true });
+
+    if (error) {
+      throw new Error(`Failed to load products: ${error.message}`);
+    }
+
+    return (data || []).map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: Number(item.price),
+      stock: item.stock_quantity ?? item.stock ?? 0,
+      description: item.description,
+      imageUrl: item.image_url ?? item.imageUrl,
+      isAvailable: item.is_available ?? item.isAvailable ?? true,
+      category: item.category || "classic",
+    }));
   },
 
   async toggleAvailability(
     id: number,
     isAvailable: boolean,
   ): Promise<{ id: number; isAvailable: boolean }> {
-    if (isSupabaseConfigured) {
-      const { error } = await supabase
-        .from("products")
-        .update({ is_available: isAvailable })
-        .eq("id", id);
-
-      if (error) {
-        console.warn("Supabase toggle availability error:", error.message);
-      }
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot update availability.");
     }
 
-    // Update local cache
-    const current = loadFromStorage<Product[]>(
-      LOCAL_STORAGE_INVENTORY_KEY,
-      COOKIE_MOCK_DATA,
-    );
-    const updated = current.map((p) =>
-      p.id === id ? { ...p, isAvailable } : p,
-    );
-    localStorage.setItem(LOCAL_STORAGE_INVENTORY_KEY, JSON.stringify(updated));
+    const { error } = await supabase
+      .from("products")
+      .update({ is_available: isAvailable, updated_at: new Date().toISOString() })
+      .eq("id", id);
+
+    if (error) {
+      throw new Error(`Failed to toggle availability: ${error.message}`);
+    }
 
     return { id, isAvailable };
   },
 
   async addProduct(newProduct: Omit<Product, "id">): Promise<Product> {
-    const current = loadFromStorage<Product[]>(
-      LOCAL_STORAGE_INVENTORY_KEY,
-      COOKIE_MOCK_DATA,
-    );
-    const newId =
-      current.length > 0 ? Math.max(...current.map((p) => p.id)) + 1 : 1;
-
-    const product: Product = {
-      ...newProduct,
-      id: newId,
-    };
-
-    if (isSupabaseConfigured) {
-      const { data, error } = await supabase
-        .from("products")
-        .insert({
-          name: product.name,
-          price: product.price,
-          description: product.description,
-          image_url: product.imageUrl,
-          stock_quantity: product.stock,
-          is_available: product.isAvailable,
-          category: product.category || "classic",
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Supabase addProduct error:", error.message);
-      } else if (data) {
-        product.id = data.id;
-      }
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot add product.");
     }
 
-    const updated = [product, ...current];
-    localStorage.setItem(LOCAL_STORAGE_INVENTORY_KEY, JSON.stringify(updated));
-    return product;
+    const { data, error } = await supabase
+      .from("products")
+      .insert({
+        name: newProduct.name,
+        price: newProduct.price,
+        description: newProduct.description,
+        image_url: newProduct.imageUrl,
+        stock_quantity: newProduct.stock,
+        is_available: newProduct.isAvailable,
+        category: newProduct.category || "classic",
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to add product: ${error.message}`);
+    }
+
+    return {
+      id: data.id,
+      name: data.name,
+      price: Number(data.price),
+      stock: data.stock_quantity,
+      description: data.description,
+      imageUrl: data.image_url,
+      isAvailable: data.is_available,
+      category: data.category,
+    };
   },
 
   async updateProduct(id: number, updates: Partial<Product>): Promise<Product> {
-    if (isSupabaseConfigured) {
-      const { error } = await supabase
-        .from("products")
-        .update({
-          ...(updates.name && { name: updates.name }),
-          ...(updates.price !== undefined && { price: updates.price }),
-          ...(updates.stock !== undefined && { stock_quantity: updates.stock }),
-          ...(updates.description && { description: updates.description }),
-          ...(updates.imageUrl && { image_url: updates.imageUrl }),
-          ...(updates.isAvailable !== undefined && {
-            is_available: updates.isAvailable,
-          }),
-        })
-        .eq("id", id);
-
-      if (error) {
-        console.error("Supabase updateProduct error:", error.message);
-      }
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot update product.");
     }
 
-    const current = loadFromStorage<Product[]>(
-      LOCAL_STORAGE_INVENTORY_KEY,
-      COOKIE_MOCK_DATA,
-    );
-    const updated = current.map((p) => (p.id === id ? { ...p, ...updates } : p));
-    localStorage.setItem(LOCAL_STORAGE_INVENTORY_KEY, JSON.stringify(updated));
+    const { data, error } = await supabase
+      .from("products")
+      .update({
+        ...(updates.name && { name: updates.name }),
+        ...(updates.price !== undefined && { price: updates.price }),
+        ...(updates.stock !== undefined && { stock_quantity: updates.stock }),
+        ...(updates.description && { description: updates.description }),
+        ...(updates.imageUrl && { image_url: updates.imageUrl }),
+        ...(updates.isAvailable !== undefined && {
+          is_available: updates.isAvailable,
+        }),
+        ...(updates.category && { category: updates.category }),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id)
+      .select()
+      .single();
 
-    const target = updated.find((p) => p.id === id);
-    if (!target) throw new Error("Product not found");
-    return target;
+    if (error) {
+      throw new Error(`Failed to update product: ${error.message}`);
+    }
+
+    return {
+      id: data.id,
+      name: data.name,
+      price: Number(data.price),
+      stock: data.stock_quantity,
+      description: data.description,
+      imageUrl: data.image_url,
+      isAvailable: data.is_available,
+      category: data.category,
+    };
   },
 
   async deleteProduct(id: number): Promise<number> {
-    if (isSupabaseConfigured) {
-      const { error } = await supabase.from("products").delete().eq("id", id);
-      if (error) {
-        console.error("Supabase deleteProduct error:", error.message);
-      }
+    if (!isSupabaseConfigured) {
+      throw new Error("Supabase is not configured. Cannot delete product.");
     }
 
-    const current = loadFromStorage<Product[]>(
-      LOCAL_STORAGE_INVENTORY_KEY,
-      COOKIE_MOCK_DATA,
-    );
-    const updated = current.filter((p) => p.id !== id);
-    localStorage.setItem(LOCAL_STORAGE_INVENTORY_KEY, JSON.stringify(updated));
+    const { error } = await supabase.from("products").delete().eq("id", id);
+    if (error) {
+      throw new Error(`Failed to delete product: ${error.message}`);
+    }
+
     return id;
   },
 };

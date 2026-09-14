@@ -1,8 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { UserProfile, UserRole } from "../../types/auth";
-import { ADMIN_EMAIL } from "../../constants/roles";
 
-export { ADMIN_EMAIL };
 export type { UserProfile, UserRole };
 
 export interface RegisteredUser {
@@ -10,7 +8,6 @@ export interface RegisteredUser {
   name: string;
   email: string;
   role: UserRole;
-  password?: string;
 }
 
 interface AuthState {
@@ -116,18 +113,12 @@ const authSlice = createSlice({
       state,
       action: PayloadAction<{ name?: string; email: string; role?: UserRole }>,
     ) => {
-      const assignedRole: UserRole =
-        action.payload.role ||
-        (action.payload.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()
-          ? "admin"
-          : "customer");
+      const assignedRole: UserRole = action.payload.role || "customer";
 
       state.isLoggedIn = true;
       state.user = {
         id: `user-${Date.now()}`,
-        name:
-          action.payload.name ||
-          (assignedRole === "admin" ? "System Administrator" : "Valued Customer"),
+        name: action.payload.name || "Valued Customer",
         email: action.payload.email,
         role: assignedRole,
       };
@@ -147,7 +138,14 @@ const authSlice = createSlice({
 
     updateUserProfile: (state, action: PayloadAction<Partial<UserProfile>>) => {
       if (state.user) {
-        state.user = { ...state.user, ...action.payload };
+        state.user = {
+          ...state.user,
+          ...action.payload,
+          // Preserve foundational identity if payload omitted them
+          id: action.payload.id || state.user.id,
+          email: action.payload.email || state.user.email,
+          role: action.payload.role || state.user.role,
+        };
       }
     },
   },

@@ -37,6 +37,7 @@ export interface Order {
   paymentStatus?: PaymentStatus;
   status: OrderStatus;
   timestamp: string;
+  couponCode?: string;
   items?: OrderItem[];
   createdAt?: string;
   updatedAt?: string;

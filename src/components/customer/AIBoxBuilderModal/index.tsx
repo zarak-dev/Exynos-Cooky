@@ -82,17 +82,64 @@ export const AIBoxBuilderModal: React.FC<AIBoxBuilderModalProps> = ({
   const handleApplyToCart = () => {
     if (!recommendation) return;
 
+    // 1. Validate Schema & Box Size
+    const allowedSizes = [4, 6, 12];
+    if (!allowedSizes.includes(recommendation.boxSize)) {
+      message.error("Invalid AI recommendation: Box size must be 4, 6, or 12.");
+      return;
+    }
+
+    if (!Array.isArray(recommendation.items) || recommendation.items.length === 0) {
+      message.error("Invalid AI recommendation: Box contains no items.");
+      return;
+    }
+
+    // 2. Validate product IDs, quantities, and availability against authoritative inventory
+    let totalQuantity = 0;
+    const itemsToAdd: Array<{ cookie: typeof inventory[0]; quantity: number }> = [];
+
+    for (const item of recommendation.items) {
+      if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
+        message.error(`Invalid quantity (${item.quantity}) suggested for cookie.`);
+        return;
+      }
+
+      totalQuantity += item.quantity;
+
+      const targetCookie = inventory.find((c) => c.id === item.productId);
+      if (!targetCookie) {
+        message.error(`AI suggested a cookie ID (${item.productId}) that does not exist in our kitchen catalog.`);
+        return;
+      }
+
+      if (!targetCookie.isAvailable) {
+        message.error(`"${targetCookie.name}" is currently marked unavailable.`);
+        return;
+      }
+
+      if (targetCookie.stock < item.quantity) {
+        message.error(`Insufficient stock for "${targetCookie.name}". Only ${targetCookie.stock} available, AI requested ${item.quantity}.`);
+        return;
+      }
+
+      itemsToAdd.push({ cookie: targetCookie, quantity: item.quantity });
+    }
+
+    // 3. Validate total count matches box size
+    if (totalQuantity !== recommendation.boxSize) {
+      message.error(`AI box composition total (${totalQuantity}) does not match required box size (${recommendation.boxSize}).`);
+      return;
+    }
+
+    // 4. Authoritative cart update using kitchen catalog prices only
     dispatch(setBoxSize(recommendation.boxSize));
     dispatch(clearBox());
 
     let addedCount = 0;
-    for (const item of recommendation.items) {
-      const targetCookie = inventory.find((c) => c.id === item.productId);
-      if (targetCookie) {
-        for (let i = 0; i < item.quantity; i++) {
-          dispatch(addCookieToBox(targetCookie));
-          addedCount++;
-        }
+    for (const { cookie, quantity } of itemsToAdd) {
+      for (let i = 0; i < quantity; i++) {
+        dispatch(addCookieToBox(cookie));
+        addedCount++;
       }
     }
 

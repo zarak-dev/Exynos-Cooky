@@ -26,6 +26,7 @@ const profileSlice = createSlice({
     fetchAddressesSuccess: (state, action: PayloadAction<Address[]>) => {
       state.addresses = action.payload;
       state.loading = false;
+      state.error = null;
     },
     fetchAddressesFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -43,6 +44,10 @@ const profileSlice = createSlice({
         state.addresses.forEach((a) => (a.isDefault = false));
       }
       state.addresses.unshift(action.payload);
+      state.error = null;
+    },
+    addAddressFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
 
     deleteAddressRequest: (_state, action: PayloadAction<string>) => {
@@ -50,6 +55,10 @@ const profileSlice = createSlice({
     },
     deleteAddressSuccess: (state, action: PayloadAction<string>) => {
       state.addresses = state.addresses.filter((a) => a.id !== action.payload);
+      state.error = null;
+    },
+    deleteAddressFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
 
     setDefaultAddressRequest: (
@@ -60,6 +69,10 @@ const profileSlice = createSlice({
     },
     setDefaultAddressSuccess: (state, action: PayloadAction<Address[]>) => {
       state.addresses = action.payload;
+      state.error = null;
+    },
+    setDefaultAddressFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
 
     updateProfileRequest: (
@@ -67,6 +80,9 @@ const profileSlice = createSlice({
       action: PayloadAction<{ userId: string; updates: Partial<UserProfile> }>,
     ) => {
       void action;
+    },
+    updateProfileFailure: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
   },
 });
@@ -77,11 +93,15 @@ export const {
   fetchAddressesFailure,
   addAddressRequest,
   addAddressSuccess,
+  addAddressFailure,
   deleteAddressRequest,
   deleteAddressSuccess,
+  deleteAddressFailure,
   setDefaultAddressRequest,
   setDefaultAddressSuccess,
+  setDefaultAddressFailure,
   updateProfileRequest,
+  updateProfileFailure,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

@@ -3,7 +3,6 @@ import { Alert, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { loginRequest, loginOAuthRequest } from "../../../../../store/slices/authSlice";
 import { type RootState } from "../../../../../store";
-import { ADMIN_EMAIL, ADMIN_DEFAULT_PASSWORD } from "../../../../../constants/roles";
 import styled from "styled-components";
 
 interface LoginFormProps {
@@ -39,27 +38,6 @@ const Subtitle = styled.p`
   margin: 0;
 `;
 
-const AdminHintRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 11.5px;
-  color: #71717a;
-  background: #f4f4f5;
-  padding: 6px 10px;
-  border-radius: 6px;
-  margin-top: 4px;
-
-  code {
-    background: #e4e4e7;
-    color: #18181b;
-    padding: 1px 5px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-family: monospace;
-  }
-`;
 
 const SocialButtonGroup = styled.div`
   display: flex;
@@ -221,8 +199,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state: RootState) => state.auth);
 
-  const [email, setEmail] = useState(ADMIN_EMAIL);
-  const [password, setPassword] = useState(ADMIN_DEFAULT_PASSWORD);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -246,10 +224,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
       <HeaderSection>
         <Title>Welcome back</Title>
         <Subtitle>Login with your Apple or Google account</Subtitle>
-        <AdminHintRow>
-          <span>Default Admin:</span>
-          <code>{ADMIN_EMAIL}</code> / <code>{ADMIN_DEFAULT_PASSWORD}</code>
-        </AdminHintRow>
       </HeaderSection>
 
       {error && (
@@ -302,7 +276,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
           <Input
             id="login-email"
             type="email"
-            placeholder={ADMIN_EMAIL}
+            placeholder="your.email@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -325,7 +299,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
           <Input
             id="login-password"
             type="password"
-            placeholder={ADMIN_DEFAULT_PASSWORD}
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
