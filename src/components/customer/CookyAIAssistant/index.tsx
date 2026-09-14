@@ -12,12 +12,14 @@ import {
   Space,
   Badge,
   message,
+  Tooltip,
 } from "antd";
 import {
   ThunderboltOutlined,
   SendOutlined,
   PlusOutlined,
   ClearOutlined,
+  WhatsAppOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../store";
@@ -88,35 +90,89 @@ export const CookyAIAssistant: React.FC = () => {
     <>
       {contextHolder}
 
-      {/* Floating Action Button */}
+      {/* Floating Action Buttons (WhatsApp + Cooky AI) */}
       <div
         style={{
           position: "fixed",
           bottom: 24,
           right: 24,
           zIndex: 999,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 14,
         }}
       >
-        <Badge count="AI" color="#fa8c16">
-          <Button
-            type="primary"
-            shape="circle"
-            size="large"
-            icon={<ThunderboltOutlined style={{ fontSize: 22 }} />}
-            style={{
-              width: 58,
-              height: 58,
-              boxShadow: "0 6px 20px rgba(0, 0, 156, 0.35)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "linear-gradient(135deg, #00009c 0%, #391085 100%)",
-              border: "none",
-            }}
-            onClick={() => dispatch(setAIAssistantOpen(true))}
-            title="Ask Cooky AI"
-          />
-        </Badge>
+        {/* WhatsApp Button */}
+        <Tooltip title="Chat with us on WhatsApp" placement="left">
+          <a
+            href="https://wa.me/93404646122?text=Hello%20Exynos%20Cooky!%20%F0%9F%8D%AA"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat with us on WhatsApp (+923404646122)"
+            style={{ display: "inline-block", textDecoration: "none" }}
+          >
+            <Button
+              type="primary"
+              shape="circle"
+              size="large"
+              icon={<WhatsAppOutlined style={{ fontSize: 28, color: "#ffffff" }} />}
+              style={{
+                width: 56,
+                height: 56,
+                boxShadow: "0 6px 20px rgba(37, 211, 102, 0.45)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+                border: "none",
+                cursor: "pointer",
+                transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.1)";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(37, 211, 102, 0.6)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 6px 20px rgba(37, 211, 102, 0.45)";
+              }}
+            />
+          </a>
+        </Tooltip>
+
+        {/* Cooky AI Button */}
+        <Tooltip title="Ask Cooky AI" placement="left">
+          <Badge count="AI" color="#fa8c16">
+            <Button
+              type="primary"
+              shape="circle"
+              size="large"
+              icon={<ThunderboltOutlined style={{ fontSize: 22 }} />}
+              style={{
+                width: 56,
+                height: 56,
+                boxShadow: "0 6px 20px rgba(0, 0, 156, 0.35)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "linear-gradient(135deg, #00009c 0%, #391085 100%)",
+                border: "none",
+                cursor: "pointer",
+                transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.1)";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 156, 0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 6px 20px rgba(0, 0, 156, 0.35)";
+              }}
+              onClick={() => dispatch(setAIAssistantOpen(true))}
+            />
+          </Badge>
+        </Tooltip>
       </div>
 
       {/* AI Assistant Drawer */}

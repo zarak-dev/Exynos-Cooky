@@ -1,19 +1,27 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import MainLayout from "../components/layout/AppLayout/Main";
-import { AdminLayout } from "../components/layout/AdminLayout";
-import Home from "../pages/customer/Home";
-import AboutUs from "../pages/customer/AboutUs";
-import Careers from "../pages/customer/Careers";
-import CartPage from "../pages/customer/Cart";
-import { CheckoutPage } from "../pages/customer/Checkout";
-import TrackOrder from "../pages/customer/TrackOrder";
-import ScrollToTop from "../utils/scrollToTop";
-import CustomerProfile from "../pages/customer/Profile";
-import { PageTransitionLoader } from "../components/common/PageTransitionLoader";
-import ProtectedRoute from "./ProtectedRoute";
 import { lazy, Suspense } from "react";
-import { Spin } from "antd";
-import BuyCooky from "../pages/customer/BuyCooky";
+import MainLayout from "../components/layout/AppLayout/Main";
+import ScrollToTop from "../utils/scrollToTop";
+import ProtectedRoute from "./ProtectedRoute";
+import { PageLoader } from "../components/common/PageTransitionLoader";
+
+// Lazy-loaded pages for optimal chunking and authentic network loading on Vercel
+const Home = lazy(() => import("../pages/customer/Home"));
+const AboutUs = lazy(() => import("../pages/customer/AboutUs"));
+const Careers = lazy(() => import("../pages/customer/Careers"));
+const CartPage = lazy(() => import("../pages/customer/Cart"));
+const CheckoutPage = lazy(() =>
+  import("../pages/customer/Checkout").then((m) => ({ default: m.CheckoutPage })),
+);
+const TrackOrder = lazy(() => import("../pages/customer/TrackOrder"));
+const CustomerProfile = lazy(() => import("../pages/customer/Profile"));
+const BuyCooky = lazy(() => import("../pages/customer/BuyCooky"));
+
+const AdminLayout = lazy(() =>
+  import("../components/layout/AdminLayout").then((m) => ({
+    default: m.AdminLayout,
+  })),
+);
 const AdminOverview = lazy(() => import("../pages/admin/Overview/index"));
 const AdminInventory = lazy(() => import("../pages/admin/Inventory/index"));
 const AdminOrders = lazy(() => import("../pages/admin/Orders"));
@@ -25,25 +33,11 @@ const AppRoute = () => {
   return (
     <>
       <ScrollToTop />
-      <PageTransitionLoader>
+      <Suspense fallback={<PageLoader text="Loading Exynos Cooky..." />}>
         <Routes>
-          {/* AUTH ROUTES (SHADCN LOGIN-03) */}
-          <Route
-            path="/login"
-            element={
-              <Suspense fallback={<Spin size="large" style={{ display: "flex", justifyContent: "center", padding: 48 }} />}>
-                <LoginPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <Suspense fallback={<Spin size="large" style={{ display: "flex", justifyContent: "center", padding: 48 }} />}>
-                <SignupPage />
-              </Suspense>
-            }
-          />
+          {/* AUTH ROUTES */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
 
           {/* STOREFRONT LAYOUT GROUP */}
           <Route path="/" element={<MainLayout />}>
@@ -60,26 +54,19 @@ const AppRoute = () => {
           </Route>
 
           {/* ADMIN WORKSPACE LAYOUT GROUP */}
-       <Route element={<ProtectedRoute role="admin" />}>
-  <Route
-    path="/admin"
-    element={
-      <Suspense fallback={<Spin size="large" style={{ display: "flex", justifyContent: "center", padding: 48 }} />}>
-        <AdminLayout />
-      </Suspense>
-    }
-  >
-    <Route index element={<AdminOverview />} />
-    <Route path="inventory" element={<AdminInventory />} />
-    <Route path="orders" element={<AdminOrders />} />
-    <Route path="history" element={<UserHistory />} />
-  </Route>
-</Route>
+          <Route element={<ProtectedRoute role="admin" />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminOverview />} />
+              <Route path="inventory" element={<AdminInventory />} />
+              <Route path="orders" element={<AdminOrders />} />
+              <Route path="history" element={<UserHistory />} />
+            </Route>
+          </Route>
 
           {/* Catch-all fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </PageTransitionLoader>
+      </Suspense>
     </>
   );
 };

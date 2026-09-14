@@ -49,6 +49,14 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    loginOAuthRequest: (
+      state,
+      action: PayloadAction<{ provider: "google" | "github" }>,
+    ) => {
+      void action;
+      state.loading = true;
+      state.error = null;
+    },
     loginSuccess: (state, action: PayloadAction<UserProfile>) => {
       state.isLoggedIn = true;
       state.user = action.payload;
@@ -136,6 +144,7 @@ const authSlice = createSlice({
 export const {
   setOpenAuthModal,
   loginRequest,
+  loginOAuthRequest,
   loginSuccess,
   loginFailure,
   signupRequest,

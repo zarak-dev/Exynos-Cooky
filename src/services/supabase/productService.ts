@@ -90,7 +90,9 @@ export const productService = {
         .select()
         .single();
 
-      if (!error && data) {
+      if (error) {
+        console.error("Supabase addProduct error:", error.message);
+      } else if (data) {
         product.id = data.id;
       }
     }
@@ -102,7 +104,7 @@ export const productService = {
 
   async updateProduct(id: number, updates: Partial<Product>): Promise<Product> {
     if (isSupabaseConfigured) {
-      await supabase
+      const { error } = await supabase
         .from("products")
         .update({
           ...(updates.name && { name: updates.name }),
@@ -115,6 +117,10 @@ export const productService = {
           }),
         })
         .eq("id", id);
+
+      if (error) {
+        console.error("Supabase updateProduct error:", error.message);
+      }
     }
 
     const current = loadFromStorage<Product[]>(
@@ -131,7 +137,10 @@ export const productService = {
 
   async deleteProduct(id: number): Promise<number> {
     if (isSupabaseConfigured) {
-      await supabase.from("products").delete().eq("id", id);
+      const { error } = await supabase.from("products").delete().eq("id", id);
+      if (error) {
+        console.error("Supabase deleteProduct error:", error.message);
+      }
     }
 
     const current = loadFromStorage<Product[]>(

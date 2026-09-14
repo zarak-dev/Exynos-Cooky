@@ -1,44 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 import { Spin } from "antd";
 import { FullScreenOverlay, LoadingText } from "./styles";
 
-interface PageTransitionLoaderProps {
-  children: React.ReactNode;
+interface PageLoaderProps {
+  text?: string;
 }
 
-export const PageTransitionLoader: React.FC<PageTransitionLoaderProps> = ({
+export const PageLoader: React.FC<PageLoaderProps> = ({
+  text = "Loading...",
+}) => (
+  <FullScreenOverlay>
+    <Spin size="large" />
+    <LoadingText>{text}</LoadingText>
+  </FullScreenOverlay>
+);
+
+// Transparent wrapper for backward compatibility without simulated timers
+export const PageTransitionLoader: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isSimulatingLoad, setIsSimulatingLoad] = useState<boolean>(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    // Trigger the loading overlay when the route changes
-    let transitionTimer: ReturnType<typeof setTimeout>;
-    const startTimer = setTimeout(() => {
-      setIsSimulatingLoad(true);
-      transitionTimer = setTimeout(() => {
-        setIsSimulatingLoad(false);
-      }, 300);
-    }, 0);
-
-    // Cleanup function to prevent memory leaks if the user navigates too fast
-    return () => {
-      clearTimeout(startTimer);
-      clearTimeout(transitionTimer);
-    };
-  }, [location.pathname]); // dependency array ensures the effect runs only on path changes taught by jameel bhai
-
-  return (
-    <>
-      {isSimulatingLoad && (
-        <FullScreenOverlay>
-          <Spin size="large" />
-          <LoadingText>Loading...</LoadingText>
-        </FullScreenOverlay>
-      )}
-      {children} {/* The actual page content renders behind the overlay */}
-    </>
-  );
+  return <>{children}</>;
 };
+
+export default PageLoader;

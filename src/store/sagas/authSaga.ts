@@ -2,6 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import {
   loginRequest,
+  loginOAuthRequest,
   loginSuccess,
   loginFailure,
   signupRequest,
@@ -56,6 +57,18 @@ function* handleRestoreSession(): Generator<unknown, void, UserProfile | null> {
   }
 }
 
+function* handleLoginOAuth(
+  action: PayloadAction<{ provider: "google" | "github" }>,
+): Generator {
+  try {
+    yield call(authService.signInWithOAuth, action.payload.provider);
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Failed to initiate OAuth login";
+    yield put(loginFailure(message));
+  }
+}
+
 function* handleLogout(): Generator {
   try {
     yield call(authService.signOut);
@@ -66,6 +79,7 @@ function* handleLogout(): Generator {
 
 export function* authSaga() {
   yield takeLatest(loginRequest.type, handleLogin);
+  yield takeLatest(loginOAuthRequest.type, handleLoginOAuth);
   yield takeLatest(signupRequest.type, handleSignup);
   yield takeLatest(restoreSessionRequest.type, handleRestoreSession);
   yield takeLatest(logoutUser.type, handleLogout);
