@@ -1,24 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import { all, fork } from "redux-saga/effects";
 
 // Import Reducers
-import authReducer from "../store/slices/authSlice";
-import cartReducer from "../store/slices/cartSlice";
-import inventoryReducer from "../store/slices/inventorySlice";
-import orderReducer from "../store/slices/orderSlice";
+import authReducer from "./slices/authSlice";
+import cartReducer from "./slices/cartSlice";
+import inventoryReducer from "./slices/inventorySlice";
+import orderReducer from "./slices/orderSlice";
 import userHistoryReducer from "./slices/userHistorySlice";
-import reviewReducer from "./slices/reviewSlice"; //
+import reviewReducer from "./slices/reviewSlice";
+import profileReducer from "./slices/profileSlice";
+import couponReducer from "./slices/couponSlice";
+import notificationReducer from "./slices/notificationSlice";
+import aiReducer from "./slices/aiSlice";
 
-// Import Sagas
-import { watchUserHistory } from "./sagas/userHistorySaga"; //
-import { reviewSaga } from "./sagas/reviewSaga";
-
-//  Centralized Root Saga
-// As we add more features, just add their watchers here
-function* rootSaga() {
-  yield all([fork(watchUserHistory), fork(reviewSaga)]);
-}
+// Import Centralized Root Saga
+import { rootSaga } from "./rootSaga";
 
 // Initialize Middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -32,13 +28,16 @@ export const store = configureStore({
     orders: orderReducer,
     userHistory: userHistoryReducer,
     reviews: reviewReducer,
+    profile: profileReducer,
+    coupons: couponReducer,
+    notifications: notificationReducer,
+    ai: aiReducer,
   },
-  //concatenate saga middleware
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 });
 
-//  Run the Root Saga
+// Run Root Saga
 sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;

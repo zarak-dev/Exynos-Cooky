@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "../../../store";
 import { type Order, deleteOrder } from "../../../store/slices/orderSlice";
+import { notificationService } from "../../../services/supabase/notificationService";
 import {
   Input,
   Steps,
@@ -55,12 +56,15 @@ const TRACKING_STEPS = [
   },
 ];
 
-const STEP_INDEX = {
+const STEP_INDEX: Record<string, number> = {
   Pending: 0,
+  Confirmed: 0,
+  Preparing: 1,
   Baking: 1,
   Dispatched: 2,
   Delivered: 3,
-} as const;
+  Cancelled: 0,
+};
 
 export const TrackOrder: React.FC = () => {
   const [orderId, setOrderId] = useState("");
@@ -77,6 +81,22 @@ export const TrackOrder: React.FC = () => {
 
   // Grab live orders from our global Redux store
   const orders = useSelector((state: RootState) => state.orders.orders);
+
+  // Realtime subscription for searched order updates
+  useEffect(() => {
+    if (searchedOrder?.id) {
+      const unsubscribe = notificationService.subscribeToOrderUpdates(
+        searchedOrder.id,
+        (newStatus) => {
+          setSearchedOrder((prev) =>
+            prev ? { ...prev, status: newStatus as Order["status"] } : null,
+          );
+          messageApi.info(`Order status updated to "${newStatus}"! 🍪`);
+        },
+      );
+      return () => unsubscribe();
+    }
+  }, [searchedOrder?.id, messageApi]);
 
   const handleSearch = () => {
     const normalizedOrderId = orderId.trim().toUpperCase();

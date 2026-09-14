@@ -19,6 +19,10 @@ export const HomeContainer = styled.div`
   padding: 60px 20px;
   max-width: 1200px;
   margin: 0 auto;
+
+  @media (max-width: 576px) {
+    padding: 32px 12px;
+  }
 `;
 
 export const CoverImage = styled(Image)`
@@ -106,11 +110,11 @@ export const ReviewCountText = styled(Text)`
 export const BestSection = styled.div`
   max-width: 1200px;
   margin: 48px auto 0;
-  padding: 0 48px 24px;
+  padding: 0 40px 24px;
   overflow: hidden;
 
   @media (max-width: 768px) {
-    padding: 0 14px 20px;
+    padding: 0 12px 20px;
     margin: 32px auto 0;
   }
 `;
@@ -134,6 +138,20 @@ export const BestCarousel = styled(Carousel)`
   width: 100%;
   max-width: 100%;
 
+  .slick-track {
+    display: flex !important;
+    align-items: stretch;
+  }
+
+  .slick-slide {
+    height: auto !important;
+    background: transparent;
+
+    > div {
+      height: 100%;
+    }
+  }
+
   .slick-prev,
   .slick-next {
     color: #00009c;
@@ -145,13 +163,10 @@ export const BestCarousel = styled(Carousel)`
     }
   }
   .slick-prev {
-    left: -32px;
+    left: -28px;
   }
   .slick-next {
-    right: -32px;
-  }
-  .slick-slide {
-    background: transparent;
+    right: -28px;
   }
 
   .slick-dots {
@@ -205,18 +220,32 @@ export const BestCardBody = styled(Flex)`
   gap: 10px;
   padding-top: 4px;
   flex: 1;
+  justify-content: space-between;
 `;
 
 export const BestCardSlide = styled.div`
   padding: 0 8px 10px;
   box-sizing: border-box;
+  height: 100%;
 
   .ant-card {
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ant-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
   }
 
   @media (max-width: 576px) {
     padding: 0 4px 10px;
+    max-width: 320px;
+    margin: 0 auto;
   }
 `;
 
@@ -224,10 +253,11 @@ export const TrendingSection = styled.div`
   max-width: 1200px;
   margin: 60px auto;
   padding: 0 20px;
+  overflow: hidden;
 
   @media (max-width: 768px) {
     margin: 36px auto;
-    padding: 0 14px;
+    padding: 0 12px;
   }
 `;
 
@@ -253,7 +283,7 @@ export const TrendingStack = styled.div`
   align-items: center;
   justify-content: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     height: auto;
     flex-direction: column;
     gap: 20px;
@@ -290,7 +320,7 @@ export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
     width: 100%;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     position: static;
     width: 100%;
     max-width: 340px;
@@ -331,12 +361,12 @@ export const TrendingCardBody = styled(Flex)`
 export const ReviewsSection = styled.div`
   max-width: 1200px;
   margin: 60px auto;
-  padding: 0 20px 24px;
+  padding: 0 40px 24px;
   overflow: hidden;
 
   @media (max-width: 768px) {
     margin: 32px auto;
-    padding: 0 14px 20px;
+    padding: 0 12px 20px;
   }
 `;
 
@@ -344,13 +374,17 @@ export const ReviewSlide = styled.div`
   padding: 0 8px 10px;
   box-sizing: border-box;
   min-width: 0;
+  height: 100%;
 
   .ant-card {
     width: 100%;
+    height: 100%;
   }
 
   @media (max-width: 576px) {
     padding: 0 4px 10px;
+    max-width: 360px;
+    margin: 0 auto;
   }
 `;
 export const ReviewsSectionTitle = styled(Title)`
@@ -372,6 +406,8 @@ export const ReviewCard = styled(Card)`
   border-radius: 14px;
   min-width: 0;
   word-break: break-word;
+  height: 100%;
+  box-shadow: 0 4px 16px rgba(0, 0, 56, 0.06);
 
   .ant-card-body {
     padding: 16px;
@@ -380,6 +416,7 @@ export const ReviewCard = styled(Card)`
     flex-direction: column;
     gap: 8px;
     overflow: hidden;
+    flex: 1;
   }
 `;
 
@@ -393,6 +430,7 @@ export const ReviewText = styled(Paragraph)`
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    line-height: 1.5;
   }
 `;
 
@@ -401,12 +439,21 @@ export const ReviewerName = styled(Text)`
     font-weight: 700;
     font-size: 0.9rem;
     color: #00009c;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
   }
 `;
 export const ReviewEmail = styled(Text)`
   &.ant-typography {
     font-size: 0.75rem;
     color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
     display: block;
   }
 `;
@@ -417,10 +464,20 @@ export const SectionBadge = styled(Tag)`
     font-size: 0.85rem;
     display: block;
     width: fit-content;
+    max-width: calc(100% - 24px);
+    white-space: normal;
+    text-align: center;
+    word-break: break-word;
     margin: 0 auto 12px;
     border: none;
     background: #00009c;
     color: #fff;
+    line-height: 1.4;
+
+    @media (max-width: 480px) {
+      font-size: 0.78rem;
+      padding: 4px 12px;
+    }
   }
 `;
 

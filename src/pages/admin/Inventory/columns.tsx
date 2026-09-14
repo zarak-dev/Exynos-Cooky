@@ -1,20 +1,22 @@
-import { Button, Popconfirm, Space, Switch } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { Button, Popconfirm, Space, Switch, Tag } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Text from "antd/es/typography/Text";
 import { CookieImage, StatusTag } from "./styles";
-import type { InventoryColumnsProps, InventoryColumns, CookieItem } from "./types";
+import type { InventoryColumnsProps, InventoryColumns } from "./types";
+import type { Product } from "../../../types/product";
 
 export const getInventoryColumns = ({
   onToggle,
+  onEdit,
   onDelete,
 }: InventoryColumnsProps): InventoryColumns => [
   {
     title: "IMAGE",
     dataIndex: "imageUrl",
     key: "imageUrl",
-    width: 100,
-    render: (url: string, record: CookieItem) => (
-      <CookieImage src={url} alt={record.name} width={60} />
+    width: 90,
+    render: (url: string, record: Product) => (
+      <CookieImage src={url} alt={record.name} width={55} />
     ),
   },
   {
@@ -30,6 +32,21 @@ export const getInventoryColumns = ({
     key: "price",
     sorter: (a, b) => a.price - b.price,
     render: (price: number) => <Text>Rs. {price}</Text>,
+  },
+  {
+    title: "STOCK",
+    dataIndex: "stock",
+    key: "stock",
+    sorter: (a, b) => a.stock - b.stock,
+    render: (stock: number) => {
+      if (stock === 0) {
+        return <Tag color="error">Out of Stock</Tag>;
+      }
+      if (stock <= 5) {
+        return <Tag color="warning">Low Stock ({stock})</Tag>;
+      }
+      return <Text>{stock} units</Text>;
+    },
   },
   {
     title: "STATUS",
@@ -51,13 +68,19 @@ export const getInventoryColumns = ({
     title: "ACTION",
     key: "action",
     width: 180,
-    render: (_: unknown, record: CookieItem) => (
+    render: (_: unknown, record: Product) => (
       <Space>
         <Switch
           checkedChildren="ON"
           unCheckedChildren="OFF"
           checked={record.isAvailable}
           onChange={(checked) => onToggle(record.id, checked)}
+        />
+        <Button
+          type="text"
+          icon={<EditOutlined />}
+          onClick={() => onEdit(record)}
+          title="Edit Cookie"
         />
         <Popconfirm
           title="Delete this cookie?"

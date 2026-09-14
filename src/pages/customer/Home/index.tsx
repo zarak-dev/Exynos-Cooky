@@ -119,9 +119,9 @@ const carouselSettings = {
   dots: true,
   responsive: [
     { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 1 } },
-    { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 1 } },
-    { breakpoint: 576, settings: { slidesToShow: 1, slidesToScroll: 1 } },
-    { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
+    { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 1, arrows: false } },
+    { breakpoint: 576, settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false } },
+    { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false } },
   ],
 };
 
@@ -150,7 +150,6 @@ const Home: React.FC = () => {
   const bestCookies = BEST_COOKIE_IDS.map((id) => cookieMap.get(id)).filter(
     (cookie): cookie is Cookie => !!cookie,
   );
-  console.log(bestCookies);
 
   const trendingCookies = TRENDING_COOKIE_IDS.map((id) =>
     cookieMap.get(id),
@@ -290,7 +289,7 @@ const Home: React.FC = () => {
           <BestCarousel
             slidesToShow={4}
             slidesToScroll={2}
-            dots={false}
+            dots={true}
             arrows={true}
             responsive={[
               {
@@ -299,41 +298,46 @@ const Home: React.FC = () => {
               },
               {
                 breakpoint: 768,
-                settings: { slidesToShow: 2, slidesToScroll: 1, dots: true },
-              },
-              {
-                breakpoint: 576,
-                settings: { slidesToShow: 1, slidesToScroll: 1, dots: true },
+                settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false, dots: true },
               },
               {
                 breakpoint: 480,
-                settings: { slidesToShow: 1, slidesToScroll: 1, dots: true },
+                settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false, dots: true },
               },
             ]}
           >
-            {REVIEWS.map((review, i) => (
-              <ReviewSlide key={i}>
-                <ReviewCard>
-                  <Flex align="center" gap={10}>
-                    <Avatar
-                      size={40}
-                      src={reviewUsers[i]?.avatar}
-                      style={{ background: "#e8eaff", flexShrink: 0 }}
-                    />
-                    <Flex vertical>
-                      <ReviewerName>{reviewUsers[i]?.name ?? "—"}</ReviewerName>
-                      <ReviewEmail>{reviewUsers[i]?.email ?? ""}</ReviewEmail>
+            {(reviewUsers.length > 0 ? reviewUsers : REVIEWS).map((review, i) => {
+              const reviewer = reviewUsers[i];
+              const comment = 'comment' in review && review.comment ? review.comment : REVIEWS[i]?.comment || "Delicious cookies!";
+              const name = reviewer?.name ?? "Verified Customer";
+              const avatar = reviewer?.avatar;
+              const email = reviewer?.email ?? "";
+              const rating = reviewer?.rating ?? 5;
+
+              return (
+                <ReviewSlide key={i}>
+                  <ReviewCard>
+                    <Flex align="center" gap={10} style={{ minWidth: 0, width: "100%" }}>
+                      <Avatar
+                        size={40}
+                        src={avatar}
+                        style={{ background: "#e8eaff", flexShrink: 0 }}
+                      />
+                      <Flex vertical style={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
+                        <ReviewerName>{name}</ReviewerName>
+                        <ReviewEmail>{email}</ReviewEmail>
+                      </Flex>
                     </Flex>
-                  </Flex>
-                  <Rate
-                    disabled
-                    defaultValue={5}
-                    style={{ fontSize: 12, color: "#faad14" }}
-                  />
-                  <ReviewText>"{review.comment}"</ReviewText>
-                </ReviewCard>
-              </ReviewSlide>
-            ))}
+                    <Rate
+                      disabled
+                      value={rating}
+                      style={{ fontSize: 12, color: "#faad14" }}
+                    />
+                    <ReviewText>"{comment}"</ReviewText>
+                  </ReviewCard>
+                </ReviewSlide>
+              );
+            })}
           </BestCarousel>
         </Spin>
       </ReviewsSection>

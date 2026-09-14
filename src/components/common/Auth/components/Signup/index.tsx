@@ -1,70 +1,78 @@
-import { Form, Input, Button, message } from "antd";
+import React from "react";
+import { Form, Input, Button, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ADMIN_EMAIL,
-  registerUser,
-} from "../../../../../store/slices/authSlice";
+import { signupRequest } from "../../../../../store/slices/authSlice";
 import { type RootState } from "../../../../../store";
 import type { SignUpFormValues } from "../../Types";
-import { setOpenAuthModal } from "../../../../../store/slices/authSlice";
 
-export const SignUpForm = () => {
+export const SignUpForm: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-
-  const users = useSelector((state: RootState) => state.auth.registeredUsers);
+  const { loading, error } = useSelector((state: RootState) => state.auth);
 
   const onFinish = ({ name, email, password }: SignUpFormValues) => {
-    email = email.trim();
-
-    const exists = users.some(
-      (value) => value.email.toLowerCase() === email.toLowerCase(),
-    );
-    if (exists) {
-      return message.error("Email already registered");
-    }
-
     dispatch(
-      registerUser({
-        name,
-        email,
+      signupRequest({
+        name: name.trim(),
+        email: email.trim(),
         password,
-        role:
-          email.toLowerCase() === ADMIN_EMAIL.toLowerCase()
-            ? "admin"
-            : "customer",
       }),
     );
-
-    message.success("Account created");
-    form.resetFields();
-    dispatch(setOpenAuthModal(false));
   };
 
   return (
-    <Form layout="vertical" onFinish={onFinish}>
-      <Form.Item name="name" label="Full Name" rules={[{ required: true }]}>
-        <Input />
+    <Form form={form} layout="vertical" onFinish={onFinish}>
+      {error && (
+        <Alert
+          message={error}
+          type="error"
+          showIcon
+          style={{ marginBottom: 16 }}
+        />
+      )}
+
+      <Form.Item
+        name="name"
+        label="Full Name"
+        rules={[
+          { required: true, message: "Please enter your full name" },
+          { min: 2, message: "Name must be at least 2 characters" },
+        ]}
+      >
+        <Input placeholder="John Doe" size="large" />
       </Form.Item>
 
       <Form.Item
         name="email"
-        label="Email"
-        rules={[{ required: true, type: "email" }]}
+        label="Email Address"
+        rules={[
+          { required: true, message: "Please enter your email" },
+          { type: "email", message: "Please enter a valid email address" },
+        ]}
       >
-        <Input />
+        <Input placeholder="you@example.com" size="large" />
       </Form.Item>
 
       <Form.Item
         name="password"
         label="Password"
-        rules={[{ required: true, min: 6 }]}
+        rules={[
+          { required: true, message: "Please enter your password" },
+          { min: 6, message: "Password must be at least 6 characters" },
+        ]}
       >
-        <Input.Password />
+        <Input.Password placeholder="••••••••" size="large" />
       </Form.Item>
-      {/* Use onClick instead of htmlType */}
-      <Button type="primary" shape="round" htmlType="submit" block>
-        Sign Up
+
+      <Button
+        type="primary"
+        shape="round"
+        htmlType="submit"
+        block
+        size="large"
+        loading={loading}
+      >
+        Create Account
       </Button>
     </Form>
   );

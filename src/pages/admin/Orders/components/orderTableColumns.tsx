@@ -10,19 +10,19 @@ import OrderActions from "./orderActions";
 
 const { Text, Link } = Typography;
 
-const nextStatus: any = {
+const nextStatus: Partial<Record<Order["status"], Order["status"]>> = {
   Pending: "Baking",
   Baking: "Dispatched",
   Dispatched: "Delivered",
 };
 
-const actionLabel: any = {
+const actionLabel: Partial<Record<Order["status"], string>> = {
   Pending: "Start Baking",
   Baking: "Mark Dispatched",
   Dispatched: "Mark Delivered",
 };
 
-const statusTags: any = {
+const statusTags: Partial<Record<Order["status"], React.ReactNode>> = {
   Pending: (
     <Tag icon={<ClockCircleOutlined />} color="warning">
       PENDING QUEUE
@@ -47,9 +47,12 @@ const statusTags: any = {
 
 const STATUS_ORDER: Record<Order["status"], number> = {
   Pending: 0,
+  Confirmed: 0,
+  Preparing: 1,
   Baking: 1,
   Dispatched: 2,
   Delivered: 3,
+  Cancelled: -1,
 };
 
 type Props = {

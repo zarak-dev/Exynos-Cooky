@@ -7,6 +7,8 @@ import { CartDrawer } from "../../../common/CartDrawer";
 import { LayoutWrapper, ContentArea } from "./styles";
 import InfoBar from "../../../common/InfoBar";
 
+import { CookyAIAssistant } from "../../../customer/CookyAIAssistant";
+
 const MainLayout: React.FC = () => {
   return (
     <LayoutWrapper>
@@ -18,6 +20,7 @@ const MainLayout: React.FC = () => {
       <AuthModal />
       <CartDrawer />
       <InfoBar />
+      <CookyAIAssistant />
       <Footer />
     </LayoutWrapper>
   );

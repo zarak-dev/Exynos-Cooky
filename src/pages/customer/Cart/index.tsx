@@ -57,13 +57,19 @@ export const CartPage = () => {
     dispatch(removeCookieFromBox(lastIndex));
 
     if (showMessage) {
-      message.success(`One "${record.name}" removed from cart.`);
+      message.success({
+        content: `One "${record.name}" removed from cart.`,
+        key: "cart_remove_feedback",
+      });
     }
   };
 
   const addCookie = (record: GroupedCartItem) => {
     if (cartItems.length >= boxSize) {
-      message.warning(`Your ${boxSize}-Pack is already full!`);
+      message.warning({
+        content: `Your ${boxSize}-Pack is already full!`,
+        key: "cart_full_warning",
+      });
       return;
     }
 

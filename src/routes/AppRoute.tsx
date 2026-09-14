@@ -18,6 +18,8 @@ const AdminOverview = lazy(() => import("../pages/admin/Overview/index"));
 const AdminInventory = lazy(() => import("../pages/admin/Inventory/index"));
 const AdminOrders = lazy(() => import("../pages/admin/Orders"));
 const UserHistory = lazy(() => import("../pages/admin/UserHistory"));
+const LoginPage = lazy(() => import("../pages/auth/LoginPage"));
+const SignupPage = lazy(() => import("../pages/auth/SignupPage"));
 
 const AppRoute = () => {
   return (
@@ -25,6 +27,24 @@ const AppRoute = () => {
       <ScrollToTop />
       <PageTransitionLoader>
         <Routes>
+          {/* AUTH ROUTES (SHADCN LOGIN-03) */}
+          <Route
+            path="/login"
+            element={
+              <Suspense fallback={<Spin size="large" style={{ display: "flex", justifyContent: "center", padding: 48 }} />}>
+                <LoginPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <Suspense fallback={<Spin size="large" style={{ display: "flex", justifyContent: "center", padding: 48 }} />}>
+                <SignupPage />
+              </Suspense>
+            }
+          />
+
           {/* STOREFRONT LAYOUT GROUP */}
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
@@ -34,7 +54,9 @@ const AppRoute = () => {
             <Route path="careers" element={<Careers />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
-            <Route path="profile" element={<CustomerProfile />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="profile" element={<CustomerProfile />} />
+            </Route>
           </Route>
 
           {/* ADMIN WORKSPACE LAYOUT GROUP */}

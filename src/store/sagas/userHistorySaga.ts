@@ -5,49 +5,33 @@ import {
   fetchUsersFailure,
   type UserHistoryRow,
 } from "../slices/userHistorySlice";
+import {
+  profileService,
+  type CustomerHistoryItem,
+} from "../../services/supabase/profileService";
 
-interface RandomUser {
-  login: { uuid: string };
-  name: { first: string; last: string };
-  email: string;
-  phone: string;
-  gender: string;
-  location: { country: string };
-  picture: { thumbnail: string };
-}
-
-const fetchUsersApi = async () => {
-  const response = await fetch(
-    "https://randomuser.me/api/?results=100&seed=exynos",
-  );
-  if (!response.ok) throw new Error("Failed to fetch user history");
-  return response.json();
-};
-
-function* handleFetchUsers(): Generator<
-  unknown,
-  void,
-  { results: RandomUser[] }
-> {
+function* handleFetchUsers(): Generator<unknown, void, CustomerHistoryItem[]> {
   try {
-    const data = yield call(fetchUsersApi);
+    const customers = yield call(profileService.fetchCustomerList);
 
-    const formattedUsers: UserHistoryRow[] = data.results.map(
-      (user: RandomUser, index: number) => ({
+    const formattedUsers: UserHistoryRow[] = customers.map(
+      (cust: CustomerHistoryItem, index: number) => ({
         index: index + 1,
-        uuid: user.login.uuid,
-        name: `${user.name.first} ${user.name.last}`,
-        email: user.email,
-        phone: user.phone,
-        gender: user.gender,
-        country: user.location.country,
-        thumbnail: user.picture.thumbnail,
+        uuid: cust.uuid,
+        name: cust.name,
+        email: cust.email,
+        phone: cust.phone,
+        gender: "Customer",
+        country: "Pakistan",
+        thumbnail: `https://images.unsplash.com/photo-${1534528741775 + (index % 5) * 1000}?w=150&q=80&auto=format&fit=crop`,
       }),
     );
 
     yield put(fetchUsersSuccess(formattedUsers));
-  } catch (error) {
-    yield put(fetchUsersFailure((error as Error).message));
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to load customer list";
+    yield put(fetchUsersFailure(message));
   }
 }
 

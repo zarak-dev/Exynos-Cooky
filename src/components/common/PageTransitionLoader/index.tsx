@@ -14,15 +14,20 @@ export const PageTransitionLoader: React.FC<PageTransitionLoaderProps> = ({
   const location = useLocation();
 
   useEffect(() => {
-    //Trigger the loading overlay when the route changes
-    setIsSimulatingLoad(true);
+    // Trigger the loading overlay when the route changes
+    let transitionTimer: ReturnType<typeof setTimeout>;
+    const startTimer = setTimeout(() => {
+      setIsSimulatingLoad(true);
+      transitionTimer = setTimeout(() => {
+        setIsSimulatingLoad(false);
+      }, 300);
+    }, 0);
 
-    const transitionTimer = setTimeout(() => {
-      setIsSimulatingLoad(false);
-    }, 300);
-
-    //Cleanup function to prevent memory leaks if the user navigates too fast
-    return () => clearTimeout(transitionTimer);
+    // Cleanup function to prevent memory leaks if the user navigates too fast
+    return () => {
+      clearTimeout(startTimer);
+      clearTimeout(transitionTimer);
+    };
   }, [location.pathname]); // dependency array ensures the effect runs only on path changes taught by jameel bhai
 
   return (
