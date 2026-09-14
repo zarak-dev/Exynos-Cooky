@@ -191,6 +191,11 @@ export const BestCoverImage = styled(Image)`
   height: 160px !important;
   object-fit: cover !important;
   padding: 8px !important;
+
+  @media (max-width: 768px) {
+    height: 220px !important;
+    padding: 10px !important;
+  }
 `;
 
 export const BestCardTitle = styled(StyledTitle)`
@@ -242,9 +247,9 @@ export const BestCardSlide = styled.div`
     padding: 14px;
   }
 
-  @media (max-width: 576px) {
-    padding: 0 4px 10px;
-    max-width: 320px;
+  @media (max-width: 768px) {
+    padding: 0 8px 12px;
+    max-width: 340px;
     margin: 0 auto;
   }
 `;
@@ -381,8 +386,8 @@ export const ReviewSlide = styled.div`
     height: 100%;
   }
 
-  @media (max-width: 576px) {
-    padding: 0 4px 10px;
+  @media (max-width: 768px) {
+    padding: 0 8px 12px;
     max-width: 360px;
     margin: 0 auto;
   }

@@ -87,12 +87,12 @@ export const aiService = {
     return {
       id: `ai-${Date.now()}`,
       sender: "assistant",
-      content: `Based on what you're craving, I found some freshly baked cookies from our kitchen that match your taste perfectly! Here are my top recommendations:`,
+      content: `Ooh, you've got incredible taste! 🍪✨ Fresh from our ovens today, here are my personal favorite treats that match what you're craving. Would you like to pair these with a tall glass of cold milk or a warm coffee? Let me know if you want me to help pack them into a box! 🥛☕`,
       recommendations: selected.map((p) => ({
         productId: p.id,
         productName: p.name,
         price: p.price,
-        reason: p.description.slice(0, 80) + "...",
+        reason: `Freshly baked, soft & flavorful: ${p.description.slice(0, 90)}...`,
       })),
       timestamp: new Date().toISOString(),
     };
@@ -154,8 +154,8 @@ export const aiService = {
 
     return {
       boxSize: params.boxSize,
-      theme: "Curated Confectionery Box",
-      explanation: `We assembled this balanced ${params.boxSize}-cookie box to match your flavor request with our freshest batches.`,
+      theme: "Baker's Sweet Dream Box 🍪✨",
+      explanation: `I've lovingly hand-picked this ${params.boxSize}-cookie box for you! It's packed with mouth-watering variety, gooey centers, and irresistible aromas. Ready to indulge?`,
       items: boxItems,
     };
   },

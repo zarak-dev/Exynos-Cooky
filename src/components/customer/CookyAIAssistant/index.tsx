@@ -33,10 +33,10 @@ import { addCookieWithFeedback } from "../../../utils/cartActions";
 const { Text, Paragraph } = Typography;
 
 const SUGGESTED_QUESTIONS = [
-  "What is your best chocolate cookie?",
-  "Recommend something not too sweet",
-  "Which cookies are best for kids?",
-  "What's in the Lotus Biscoff Lava?",
+  "What's warm & gooey right now? 🍫",
+  "Recommend something not too sweet ☕",
+  "What are your top kid-friendly favorites? 🎈",
+  "Tell me about the Lotus Biscoff Lava! 🤤",
 ];
 
 export const CookyAIAssistant: React.FC = () => {
@@ -106,7 +106,7 @@ export const CookyAIAssistant: React.FC = () => {
         {/* WhatsApp Button */}
         <Tooltip title="Chat with us on WhatsApp" placement="left">
           <a
-            href="https://wa.me/93404646122?text=Hello%20Exynos%20Cooky!%20%F0%9F%8D%AA"
+            href="https://wa.me/923404646122?text=Hello%20Exynos%20Cooky!%20%F0%9F%8D%AA"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat with us on WhatsApp (+923404646122)"

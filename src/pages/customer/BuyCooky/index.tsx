@@ -7,7 +7,6 @@ import {
   Tooltip,
   Button,
   Flex,
-  Modal,
   Tag,
   Typography,
   Segmented,
@@ -40,11 +39,15 @@ import {
   LoadMoreWrapper,
   EqualCard,
   CardFooter,
-  ModalImage,
+  StyledDetailModal,
+  ModalImageContainer,
   ModalLeft,
   ModalRight,
   ModalCookieName,
-  BlinkingTag,
+  StatusBadge,
+  StockBadge,
+  FreshnessNotice,
+  ModalActions,
   ModalBodyWrapper,
   FilterBar,
   FilterGroup,
@@ -52,7 +55,7 @@ import {
 import { addCookieWithFeedback } from "../../../utils/cartActions";
 
 const { Text, Paragraph } = Typography;
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 12;
 
 const FILTER_OPTIONS = [
   { value: "price-low", label: "Price: Low to High" },
@@ -61,10 +64,14 @@ const FILTER_OPTIONS = [
 
 const CATEGORY_OPTIONS = [
   { label: "All Cookies", value: "all" },
-  { label: "Classic", value: "classic" },
-  { label: "Velvet & Fruit", value: "velvet_fruit" },
-  { label: "Specialty", value: "specialty" },
   { label: "Chocolate", value: "chocolate" },
+  { label: "Caramel", value: "caramel" },
+  { label: "Nutty", value: "nutty" },
+  { label: "Lava Core", value: "lava" },
+  { label: "Fruit & Berry", value: "fruit" },
+  { label: "Velvet", value: "velvet" },
+  { label: "Specialty", value: "specialty" },
+  { label: "Classic", value: "classic" },
 ];
 
 const BuyCooky: React.FC = () => {
@@ -96,7 +103,10 @@ const BuyCooky: React.FC = () => {
 
         const matchesCategory =
           selectedCategory === "all" ||
-          (cookie.category && cookie.category === selectedCategory);
+          (cookie.category &&
+            (cookie.category.toLowerCase() === selectedCategory.toLowerCase() ||
+              (selectedCategory === "velvet" && cookie.category.includes("velvet")) ||
+              (selectedCategory === "fruit" && cookie.category.includes("fruit"))));
 
         return matchesSearch && matchesCategory;
       })
@@ -295,47 +305,69 @@ const BuyCooky: React.FC = () => {
       )}
 
       {/* Cookie Detail Modal */}
-      <Modal
+      <StyledDetailModal
         centered
         open={!!selectedCookie}
         onCancel={() => setSelectedCookie(null)}
         footer={null}
-        width={700}
+        width={680}
         destroyOnHidden
       >
         {selectedCookie && (
           <ModalBodyWrapper>
             <ModalLeft>
-              <ModalImage
-                src={selectedCookie.imageUrl}
-                alt={selectedCookie.name}
-              />
+              <ModalImageContainer>
+                <img
+                  src={selectedCookie.imageUrl}
+                  alt={selectedCookie.name}
+                  loading="lazy"
+                />
+              </ModalImageContainer>
             </ModalLeft>
-            <ModalRight vertical justify="space-between">
-              <Flex vertical gap={10}>
+            <ModalRight>
+              <Flex vertical gap={12}>
                 <ModalCookieName level={2}>
                   {selectedCookie.name}
                 </ModalCookieName>
-                <Flex align="center" gap={8}>
-                  <Text strong style={{ fontSize: "1.2rem", color: "#00009c" }}>
-                    Rs. {selectedCookie.price}
+                
+                <Flex align="center" gap={10} wrap="wrap">
+                  <Text strong style={{ fontSize: "1.35rem", color: "#00009c" }}>
+                    Rs. {selectedCookie.price.toLocaleString()}
                   </Text>
-                  <BlinkingTag
-                    color={selectedCookie.isAvailable ? "blue" : "red"}
-                  >
-                    {selectedCookie.isAvailable ? "AVAILABLE" : "SOLD OUT"}
-                  </BlinkingTag>
+                  <StatusBadge $isAvailable={selectedCookie.isAvailable}>
+                    <span className="dot" />
+                    {selectedCookie.isAvailable ? "Available" : "Sold Out"}
+                  </StatusBadge>
+                  {selectedCookie.stock > 0 && (
+                    <StockBadge>
+                      {selectedCookie.stock} in stock
+                    </StockBadge>
+                  )}
                 </Flex>
-                <Paragraph type="secondary" style={{ marginTop: 8 }}>
+
+                <Paragraph
+                  type="secondary"
+                  style={{
+                    marginTop: 4,
+                    fontSize: "0.95rem",
+                    lineHeight: 1.6,
+                    color: "#475569",
+                  }}
+                >
                   {selectedCookie.description}
                 </Paragraph>
+
+                <FreshnessNotice>
+                  🍪 Freshly baked to order with 100% premium Belgian butter & chocolate
+                </FreshnessNotice>
               </Flex>
 
-              <Flex vertical gap={10} style={{ marginTop: 24 }}>
+              <ModalActions vertical gap={10}>
                 <StyledButton
                   type="primary"
                   shape="round"
                   block
+                  size="large"
                   disabled={!selectedCookie.isAvailable}
                   onClick={() => {
                     handleAddToCart(selectedCookie);
@@ -349,15 +381,16 @@ const BuyCooky: React.FC = () => {
                 <Button
                   shape="round"
                   block
+                  size="large"
                   onClick={() => setSelectedCookie(null)}
                 >
                   Back to Menu
                 </Button>
-              </Flex>
+              </ModalActions>
             </ModalRight>
           </ModalBodyWrapper>
         )}
-      </Modal>
+      </StyledDetailModal>
 
       {/* AI Box Builder Modal */}
       <AIBoxBuilderModal

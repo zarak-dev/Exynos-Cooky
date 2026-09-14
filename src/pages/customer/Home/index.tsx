@@ -7,6 +7,7 @@ import { type RootState } from "../../../store";
 import HomeCarousel from "./components/HomeCarousel";
 import { StyledCard } from "../../../components/StyledCard";
 import { StyledTitle } from "../../../components/StyledTitle";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 import {
   BestSection,
@@ -112,22 +113,14 @@ const REVIEWS = [
       "Best decision I made this month was trying Exynos Cooky. Highly recommend!",
   },
 ];
-const carouselSettings = {
-  slidesToShow: 4,
-  slidesToScroll: 2,
-  arrows: true,
-  dots: true,
-  responsive: [
-    { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 1 } },
-    { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 1, arrows: false } },
-    { breakpoint: 576, settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false } },
-    { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false } },
-  ],
-};
-
 const Home: React.FC = () => {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
+  const slidesToShow = isMobile ? 1 : isTablet ? 2 : 4;
+  const slidesToScroll = isMobile ? 1 : 2;
 
   const { items: cookies } = useSelector((state: RootState) => state.inventory);
   const { items: cartItems, boxSize } = useSelector(
@@ -175,7 +168,15 @@ const Home: React.FC = () => {
         <SectionBadge>
           🍪 Our most loved cookies, picked just for you
         </SectionBadge>
-        <BestCarousel {...carouselSettings}>
+        <BestCarousel
+          key={`best-carousel-${isMobile ? "mobile" : isTablet ? "tablet" : "desktop"}`}
+          slidesToShow={slidesToShow}
+          slidesToScroll={slidesToScroll}
+          dots={true}
+          arrows={!isMobile}
+          infinite={bestCookies.length > slidesToShow}
+          swipeToSlide={true}
+        >
           {bestCookies.map((cookie) => (
             <BestCardSlide key={cookie.id}>
               <StyledCard
@@ -287,24 +288,13 @@ const Home: React.FC = () => {
 
         <Spin spinning={reviewLoading}>
           <BestCarousel
-            slidesToShow={4}
-            slidesToScroll={2}
+            key={`reviews-carousel-${isMobile ? "mobile" : isTablet ? "tablet" : "desktop"}`}
+            slidesToShow={slidesToShow}
+            slidesToScroll={slidesToScroll}
             dots={true}
-            arrows={true}
-            responsive={[
-              {
-                breakpoint: 1024,
-                settings: { slidesToShow: 3, slidesToScroll: 1 },
-              },
-              {
-                breakpoint: 768,
-                settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false, dots: true },
-              },
-              {
-                breakpoint: 480,
-                settings: { slidesToShow: 1, slidesToScroll: 1, arrows: false, dots: true },
-              },
-            ]}
+            arrows={!isMobile}
+            infinite={true}
+            swipeToSlide={true}
           >
             {(reviewUsers.length > 0 ? reviewUsers : REVIEWS).map((review, i) => {
               const reviewer = reviewUsers[i];

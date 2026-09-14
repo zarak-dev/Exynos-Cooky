@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Flex, Image, Tag, Typography } from "antd";
+import { Flex, Modal, Typography } from "antd";
 import { StyledCard } from "../../../components/StyledCard";
 
 export const PageLayout = styled(Flex)`
@@ -81,60 +81,104 @@ export const FilterGroup = styled(Flex)`
   }
 `;
 
-export const ModalBodyWrapper = styled(Flex)`
-  gap: 16px;
+export const StyledDetailModal = styled(Modal)`
+  max-width: calc(100vw - 24px);
 
-  @media (max-width: 576px) {
-    flex-direction: column;
-    gap: 12px;
-  }
-`;
+  .ant-modal-content {
+    border-radius: 20px;
+    padding: 24px !important;
+    overflow: hidden;
+    box-shadow: 0 20px 48px rgba(0, 0, 80, 0.12);
 
-export const ModalImage = styled(Image)`
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-
-  .ant-image,
-  .ant-image-img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    border-radius: 12px 0 0 12px !important;
-    display: block;
+    @media (max-width: 768px) {
+      padding: 20px 16px 16px !important;
+      border-radius: 18px;
+    }
   }
 
-  @media (max-width: 576px) {
-    max-height: 200px;
-    .ant-image,
-    .ant-image-img {
-      border-radius: 12px 12px 0 0 !important;
-      max-height: 200px;
+  .ant-modal-close {
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    transition: all 0.2s ease;
+    z-index: 20;
+
+    &:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    @media (max-width: 768px) {
+      top: 12px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
     }
   }
 `;
 
-export const ModalLeft = styled(Flex)`
-  width: 200px;
-  flex-shrink: 0;
-  min-height: 280px;
+export const ModalBodyWrapper = styled(Flex)`
+  gap: 24px;
+  align-items: stretch;
 
-  @media (max-width: 576px) {
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+`;
+
+export const ModalLeft = styled.div`
+  width: 270px;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
     width: 100%;
-    min-height: 180px;
-    height: 190px;
+  }
+`;
+
+export const ModalImageContainer = styled.div`
+  width: 100%;
+  height: 310px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8fafc;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.03);
+  }
+
+  @media (max-width: 768px) {
+    height: 210px;
+    border-radius: 14px;
   }
 `;
 
 export const ModalRight = styled(Flex)`
   flex: 1;
   flex-direction: column;
-  gap: 12px;
-  padding: 8px 0;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 4px 0;
 
-  @media (max-width: 576px) {
-    padding: 0 4px;
-    gap: 8px;
+  @media (max-width: 768px) {
+    padding: 0;
+    gap: 16px;
   }
 `;
 
@@ -143,41 +187,68 @@ export const ModalCookieName = styled(Typography.Title)`
     color: #00009c;
     font-weight: 800;
     margin: 0;
+    font-size: 1.55rem;
+    line-height: 1.25;
 
-    @media (max-width: 576px) {
-      font-size: 1.25rem !important;
+    @media (max-width: 768px) {
+      font-size: 1.3rem !important;
+      padding-right: 28px;
     }
   }
 `;
 
-export const BlinkingTag = styled(Tag)`
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 10;
-  background: #00009c;
-  color: #fff;
-  border: none;
+export const StatusBadge = styled.div<{ $isAvailable?: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
   border-radius: 20px;
-  padding: 4px 14px;
+  font-size: 0.78rem;
   font-weight: 700;
-  font-size: 0.85rem;
-  animation: blink 1.2s step-start infinite;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  background: ${({ $isAvailable }) => ($isAvailable ? "#ecfdf5" : "#fef2f2")};
+  color: ${({ $isAvailable }) => ($isAvailable ? "#059669" : "#dc2626")};
+  border: 1px solid ${({ $isAvailable }) => ($isAvailable ? "#a7f3d0" : "#fecaca")};
 
-  @media (max-width: 576px) {
-    top: 12px;
-    right: 12px;
-    font-size: 0.75rem;
-    padding: 2px 10px;
-  }
-
-  @keyframes blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: ${({ $isAvailable }) => ($isAvailable ? "#10b981" : "#ef4444")};
+    box-shadow: 0 0 6px ${({ $isAvailable }) => ($isAvailable ? "#10b981" : "#ef4444")};
   }
 `;
+
+export const StockBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+`;
+
+export const FreshnessNotice = styled.div`
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.4;
+`;
+
+export const ModalActions = styled(Flex)`
+  margin-top: 20px;
+
+  @media (max-width: 768px) {
+    margin-top: 12px;
+  }
+`;
+
+// Backwards-compatible aliases
+export const ModalImage = ModalImageContainer;
+export const BlinkingTag = StatusBadge;

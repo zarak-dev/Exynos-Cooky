@@ -23,7 +23,7 @@ const initialState: AIState = {
       id: "ai-init",
       sender: "assistant",
       content:
-        "Hello! 🍪 I'm your Cooky AI Assistant. Tell me what flavors or textures you love, and I'll find your perfect cookies or build a custom box for you!",
+        "Hey there, sweet friend! 🍪✨ Welcome to Exynos Cooky! I'm Cooky, your personal baker buddy. What are you craving today — gooey chocolate pools, decadent caramel Biscoff, or something soft and velvety? Tell me what you love and let's find your dream cookie!",
       timestamp: new Date().toISOString(),
     },
   ],
