@@ -38,7 +38,7 @@ export const EditContactModal: React.FC<EditContactModalProps> = ({
       onOk={() => form.submit()}
       okText="Save"
       centered
-      destroyOnClose
+      destroyOnHidden
     >
       <Form form={form} layout="vertical" onFinish={handleFinish}>
         <Form.Item

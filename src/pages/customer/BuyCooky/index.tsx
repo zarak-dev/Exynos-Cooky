@@ -301,7 +301,7 @@ const BuyCooky: React.FC = () => {
         onCancel={() => setSelectedCookie(null)}
         footer={null}
         width={700}
-        destroyOnClose
+        destroyOnHidden
       >
         {selectedCookie && (
           <ModalBodyWrapper>

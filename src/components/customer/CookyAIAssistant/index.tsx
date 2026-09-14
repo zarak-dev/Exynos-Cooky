@@ -219,7 +219,7 @@ export const CookyAIAssistant: React.FC = () => {
                   {/* Grounded Recommendations */}
                   {msg.recommendations && msg.recommendations.length > 0 && (
                     <div style={{ marginTop: 8 }}>
-                      <Space direction="vertical" style={{ width: "100%" }} size={8}>
+                      <Flex vertical gap={8} style={{ width: "100%" }}>
                         {msg.recommendations.map((rec) => (
                           <Card
                             key={rec.productId}
@@ -263,7 +263,7 @@ export const CookyAIAssistant: React.FC = () => {
                             </Paragraph>
                           </Card>
                         ))}
-                      </Space>
+                      </Flex>
                     </div>
                   )}
                 </div>

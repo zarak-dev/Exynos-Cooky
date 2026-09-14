@@ -28,7 +28,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({
       onOk={() => form.submit()}
       okText="Add Address"
       centered
-      destroyOnClose
+      destroyOnHidden
     >
       <Form
         form={form}

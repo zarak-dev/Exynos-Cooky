@@ -131,7 +131,7 @@ export const AIBoxBuilderModal: React.FC<AIBoxBuilderModalProps> = ({
       footer={null}
       width={600}
       centered
-      destroyOnClose
+      destroyOnHidden
     >
       <Paragraph type="secondary" style={{ marginBottom: 16 }}>
         Tell our AI sommelier who this box is for or what flavors you desire. We'll

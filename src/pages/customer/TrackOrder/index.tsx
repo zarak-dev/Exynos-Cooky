@@ -10,6 +10,7 @@ import {
   message,
   Badge,
   Space,
+  Flex,
   Descriptions,
   Button,
   Popconfirm,
@@ -157,12 +158,12 @@ export const TrackOrder: React.FC = () => {
       {searchedOrder ? (
         <ResultCard variant="borderless">
           <ResultHeader>
-            <Space direction="vertical" size={2}>
+            <Flex vertical gap={2}>
               <OrderTitle level={5}>
                 Order: <OrderIdText>{searchedOrder.id}</OrderIdText>
               </OrderTitle>
               <OrderDateText>Placed: {formattedDate}</OrderDateText>
-            </Space>
+            </Flex>
 
             <Space wrap>
               <Badge

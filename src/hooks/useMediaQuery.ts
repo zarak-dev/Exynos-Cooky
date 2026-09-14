@@ -1,27 +1,26 @@
-import { useState, useEffect } from "react";
+import { useSyncExternalStore, useCallback } from "react";
 
 /**
- * Clean, lightweight hook for responsive media queries without Ant Design observer loops.
+ * Clean, modern hook for responsive media queries using React's useSyncExternalStore.
+ * Avoids cascading renders and Ant Design observer recursion loops.
  */
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return window.matchMedia(query).matches;
-    }
-    return false;
-  });
+  const subscribe = useCallback(
+    (callback: () => void) => {
+      if (typeof window === "undefined") return () => {};
+      const mediaQueryList = window.matchMedia(query);
+      mediaQueryList.addEventListener("change", callback);
+      return () => mediaQueryList.removeEventListener("change", callback);
+    },
+    [query],
+  );
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mediaQueryList = window.matchMedia(query);
-    const listener = (event: MediaQueryListEvent) => {
-      setMatches(event.matches);
-    };
-
-    setMatches(mediaQueryList.matches);
-    mediaQueryList.addEventListener("change", listener);
-    return () => mediaQueryList.removeEventListener("change", listener);
+  const getSnapshot = useCallback(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia(query).matches;
   }, [query]);
 
-  return matches;
+  const getServerSnapshot = useCallback(() => false, []);
+
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

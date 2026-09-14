@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Flex, Typography, Tag, Spin, Space, Alert } from "antd";
+import { Button, Card, Flex, Typography, Tag, Spin, Alert } from "antd";
 import {
   BulbOutlined,
   ThunderboltOutlined,
@@ -128,7 +128,7 @@ export const AdminAIInsightsCard: React.FC<AdminAIInsightsCardProps> = ({
 
       {adminInsights.length > 0 && !insightsLoading && (
         <div style={{ marginTop: 20 }}>
-          <Space direction="vertical" size={12} style={{ width: "100%" }}>
+          <Flex vertical gap={12} style={{ width: "100%" }}>
             {adminInsights.map((insight, idx) => (
               <Card
                 key={idx}
@@ -164,7 +164,7 @@ export const AdminAIInsightsCard: React.FC<AdminAIInsightsCardProps> = ({
                 )}
               </Card>
             ))}
-          </Space>
+          </Flex>
         </div>
       )}
     </Card>

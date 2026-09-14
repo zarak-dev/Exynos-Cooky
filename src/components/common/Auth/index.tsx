@@ -67,7 +67,7 @@ export const AuthModal: React.FC = () => {
       open={isOpen}
       footer={null}
       centered
-      destroyOnClose
+      destroyOnHidden
       width={420}
       styles={{
         body: {

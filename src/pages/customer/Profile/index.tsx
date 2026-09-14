@@ -260,7 +260,7 @@ const CustomerProfile: React.FC = () => {
                       </Flex>
                     </StyledCard>
                   ) : (
-                    <Space direction="vertical" style={{ width: "100%" }} size={12}>
+                    <Flex vertical gap={12} style={{ width: "100%" }}>
                       {addresses.map((addr) => (
                         <StyledCard key={addr.id} size="small">
                           <Flex justify="space-between" align="start">
@@ -273,10 +273,12 @@ const CustomerProfile: React.FC = () => {
                                   </Tag>
                                 )}
                               </Flex>
-                              <Text type="secondary" style={{ display: "block" }}>
-                                {addr.addressLine1}
-                                {addr.addressLine2 ? `, ${addr.addressLine2}` : ""}
-                              </Text>
+                              <Text style={{ display: "block" }}>{addr.addressLine1}</Text>
+                              {addr.addressLine2 && (
+                                <Text type="secondary" style={{ display: "block" }}>
+                                  {addr.addressLine2}
+                                </Text>
+                              )}
                               <Text type="secondary" style={{ display: "block" }}>
                                 {addr.city} {addr.postalCode || ""} • {addr.phone}
                               </Text>
@@ -309,7 +311,7 @@ const CustomerProfile: React.FC = () => {
                           </Flex>
                         </StyledCard>
                       ))}
-                    </Space>
+                    </Flex>
                   )}
                 </SectionContainer>
 

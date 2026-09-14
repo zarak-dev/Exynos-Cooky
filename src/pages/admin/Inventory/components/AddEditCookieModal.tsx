@@ -67,7 +67,7 @@ export const AddEditCookieModal: React.FC<AddEditCookieModalProps> = ({
       confirmLoading={loading}
       okText={isEditing ? "Save Changes" : "Add to Inventory"}
       centered
-      destroyOnClose
+      destroyOnHidden
     >
       <Form form={form} layout="vertical" onFinish={handleFinish}>
         <Form.Item
