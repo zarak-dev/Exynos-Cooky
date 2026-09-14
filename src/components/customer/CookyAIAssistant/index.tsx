@@ -30,6 +30,7 @@ import {
   setAIAssistantOpen,
 } from "../../../store/slices/aiSlice";
 import { addCookieWithFeedback } from "../../../utils/cartActions";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 const { Text, Paragraph } = Typography;
 
@@ -53,6 +54,7 @@ export const CookyAIAssistant: React.FC = () => {
   const { items: cartItems, boxSize } = useSelector(
     (state: RootState) => state.cart,
   );
+  const isMobile = useMediaQuery("(max-width: 480px)");
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -217,7 +219,7 @@ export const CookyAIAssistant: React.FC = () => {
           </Flex>
         }
         placement="right"
-        width={typeof window !== "undefined" && window.innerWidth < 480 ? "100%" : 420}
+        width={isMobile ? "100%" : 420}
         onClose={() => dispatch(setAIAssistantOpen(false))}
         open={isAIAssistantOpen}
         styles={{

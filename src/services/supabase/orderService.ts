@@ -240,4 +240,41 @@ export const orderService = {
 
     return id;
   },
+
+  subscribeToOrderStatus(
+    orderId: string,
+    onStatusChange: (status: string) => void,
+    onError?: (err: Error) => void,
+  ): () => void {
+    if (!isSupabaseConfigured) {
+      return () => {};
+    }
+
+    const channel = supabase
+      .channel(`order-status-${orderId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "orders",
+          filter: `id=eq.${orderId}`,
+        },
+        (payload) => {
+          const record = payload.new as { status?: string } | null;
+          if (record?.status) {
+            onStatusChange(record.status);
+          }
+        },
+      )
+      .subscribe((status, err) => {
+        if (status === "CHANNEL_ERROR" && onError) {
+          onError(err || new Error(`Realtime channel error on order ${orderId}`));
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  },
 };

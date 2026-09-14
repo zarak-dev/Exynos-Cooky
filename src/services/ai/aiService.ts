@@ -3,6 +3,7 @@ import type {
   AIMessage,
   AIBoxRecommendation,
   AdminAIInsight,
+  AIRecommendation,
 } from "../../types/ai";
 import { productService } from "../supabase/productService";
 
@@ -26,7 +27,7 @@ interface AdminInsightsParams {
 export const aiService = {
   /**
    * Use Case #1: Cooky AI Assistant
-   * Recommends actual cookies grounded in catalog data
+   * Recommends actual cookies grounded in catalog data with multi-turn conversation support
    */
   async askAssistant(params: AskAssistantParams): Promise<AIMessage> {
     const products = await productService.fetchProducts();
@@ -35,38 +36,54 @@ export const aiService = {
       .slice(0, 15);
 
     if (isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase.functions.invoke("cooky-ai", {
-          body: {
-            mode: "assistant",
-            prompt: params.prompt,
-            conversationHistory: params.conversationHistory,
-            productContext: availableProducts.map((p) => ({
-              id: p.id,
-              name: p.name,
-              price: p.price,
-              description: p.description,
-              category: p.category,
-              stock: p.stock,
-            })),
-          },
-        });
+      const { data, error } = await supabase.functions.invoke("cooky-ai", {
+        body: {
+          mode: "assistant",
+          prompt: params.prompt,
+          conversationHistory: params.conversationHistory,
+          productContext: availableProducts.map((p) => ({
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            description: p.description,
+            category: p.category,
+            stock: p.stock,
+          })),
+        },
+      });
 
-        if (!error && data?.message) {
-          return {
-            id: `ai-${Date.now()}`,
-            sender: "assistant",
-            content: data.message,
-            recommendations: data.recommendations,
-            timestamp: new Date().toISOString(),
-          };
-        }
-      } catch (err) {
-        console.warn("Edge Function notice, using fallback AI engine:", err);
+      if (error) {
+        throw new Error(error.message || "AI assistant service encountered an error.");
       }
+
+      if (data && typeof data.message === "string") {
+        const validatedRecs: AIRecommendation[] = [];
+        if (Array.isArray(data.recommendations)) {
+          for (const item of data.recommendations) {
+            if (item && typeof item.productId === "number" && typeof item.productName === "string") {
+              validatedRecs.push({
+                productId: item.productId,
+                productName: item.productName,
+                reason: item.reason || "Recommended by Baker Cooky",
+                price: item.price ? Number(item.price) : undefined,
+              });
+            }
+          }
+        }
+
+        return {
+          id: `ai-${Date.now()}`,
+          sender: "assistant",
+          content: data.message,
+          recommendations: validatedRecs.length > 0 ? validatedRecs : undefined,
+          timestamp: new Date().toISOString(),
+        };
+      }
+
+      throw new Error("Invalid response schema received from AI assistant.");
     }
 
-    // Intelligent local fallback assistant grounded in real catalog
+    // Offline / unconfigured environment fallback grounded in catalog
     const query = params.prompt.toLowerCase();
     const matches = availableProducts.filter((p) => {
       const text = `${p.name} ${p.description} ${p.category}`.toLowerCase();
@@ -106,31 +123,61 @@ export const aiService = {
     const products = await productService.fetchProducts();
     const available = products.filter((p) => p.isAvailable && p.stock > 0);
 
-    if (isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase.functions.invoke("cooky-ai", {
-          body: {
-            mode: "box_builder",
-            boxSize: params.boxSize,
-            preferences: params.preferences,
-            availableProducts: available.map((p) => ({
-              id: p.id,
-              name: p.name,
-              stock: p.stock,
-              category: p.category,
-            })),
-          },
-        });
-
-        if (!error && data?.boxComposition) {
-          return data.boxComposition;
-        }
-      } catch (err) {
-        console.warn("Edge function fallback for box builder:", err);
-      }
+    if (available.length === 0) {
+      throw new Error("Cannot generate box: No cookies are currently in stock.");
     }
 
-    // Local structured recommendation builder
+    if (isSupabaseConfigured) {
+      const { data, error } = await supabase.functions.invoke("cooky-ai", {
+        body: {
+          mode: "box_builder",
+          boxSize: params.boxSize,
+          preferences: params.preferences,
+          availableProducts: available.map((p) => ({
+            id: p.id,
+            name: p.name,
+            stock: p.stock,
+            category: p.category,
+          })),
+        },
+      });
+
+      if (error) {
+        throw new Error(error.message || "Failed to generate AI box recommendation.");
+      }
+
+      const comp = data?.boxComposition;
+      if (
+        comp &&
+        (comp.boxSize === 4 || comp.boxSize === 6 || comp.boxSize === 12) &&
+        Array.isArray(comp.items) &&
+        comp.items.length > 0
+      ) {
+        // Validate total count
+        const total = comp.items.reduce(
+          (sum: number, item: { quantity?: number }) => sum + (Number(item.quantity) || 0),
+          0,
+        );
+
+        if (total === params.boxSize) {
+          return {
+            boxSize: comp.boxSize,
+            theme: comp.theme || "Artisan Baker's Box 🍪",
+            explanation: comp.explanation || "A curated assortment handpicked for you.",
+            items: comp.items.map((item: { productId: number; productName: string; quantity: number; reason?: string }) => ({
+              productId: Number(item.productId),
+              productName: String(item.productName),
+              quantity: Number(item.quantity),
+              reason: item.reason,
+            })),
+          };
+        }
+      }
+
+      throw new Error("AI generated an invalid box composition schema.");
+    }
+
+    // Offline / unconfigured environment fallback
     const itemsPerCookie = Math.max(1, Math.floor(params.boxSize / Math.min(available.length, 3)));
     let remaining = params.boxSize;
     const boxItems = [];
@@ -142,12 +189,11 @@ export const aiService = {
         productId: p.id,
         productName: p.name,
         quantity: qty,
-        reason: `Pairs deliciously with your taste for ${p.name}`,
+        reason: `Pairs deliciously with your craving for ${p.name}`,
       });
       remaining -= qty;
     }
 
-    // If remaining slots exist, add to the first
     if (remaining > 0 && boxItems.length > 0) {
       boxItems[0].quantity += remaining;
     }
@@ -155,7 +201,7 @@ export const aiService = {
     return {
       boxSize: params.boxSize,
       theme: "Baker's Sweet Dream Box 🍪✨",
-      explanation: `I've lovingly hand-picked this ${params.boxSize}-cookie box for you! It's packed with mouth-watering variety, gooey centers, and irresistible aromas. Ready to indulge?`,
+      explanation: `I've lovingly hand-picked this ${params.boxSize}-cookie box for you! It's packed with mouth-watering variety, gooey centers, and irresistible aromas.`,
       items: boxItems,
     };
   },
@@ -166,23 +212,37 @@ export const aiService = {
    */
   async getAdminInsights(params: AdminInsightsParams): Promise<AdminAIInsight[]> {
     if (isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase.functions.invoke("cooky-ai", {
-          body: {
-            mode: "admin_insights",
-            analytics: params,
-          },
-        });
+      const { data, error } = await supabase.functions.invoke("cooky-ai", {
+        body: {
+          mode: "admin_insights",
+          analytics: params,
+        },
+      });
 
-        if (!error && data?.insights) {
-          return data.insights;
-        }
-      } catch (err) {
-        console.warn("Edge function fallback for admin insights:", err);
+      if (error) {
+        throw new Error(error.message || "Failed to generate admin operational insights.");
       }
+
+      if (data && Array.isArray(data.insights) && data.insights.length > 0) {
+        return data.insights.map((ins: {
+          title: string;
+          type: "positive" | "warning" | "opportunity";
+          description: string;
+          metric?: string;
+          actionableStep?: string;
+        }) => ({
+          title: String(ins.title || "Operations Insight"),
+          type: (ins.type === "positive" || ins.type === "warning" || ins.type === "opportunity") ? ins.type : "positive",
+          description: String(ins.description || ""),
+          metric: ins.metric ? String(ins.metric) : undefined,
+          actionableStep: ins.actionableStep ? String(ins.actionableStep) : undefined,
+        }));
+      }
+
+      throw new Error("Invalid insights schema returned by AI service.");
     }
 
-    // Generated insights derived from real operational metrics
+    // Deterministic operational insights based on real aggregated metrics
     const insights: AdminAIInsight[] = [];
 
     if (params.topSellers.length > 0) {

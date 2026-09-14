@@ -1,3 +1,5 @@
+import type { PaymentMethod } from "../../../types/order";
+
 export interface FormValues {
   firstName: string;
   lastName: string;
@@ -8,4 +10,4 @@ export interface FormValues {
   zipCode?: string;
 }
 
-export type PaymentMethod = "cod" | "card";
+export type { PaymentMethod };

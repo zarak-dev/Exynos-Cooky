@@ -1,13 +1,6 @@
-import type { Cookie } from "./mockData";
-
-export interface GroupedCartItem {
-  imageUrl: string;
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  totalPrice: number;
-}
+import type { Cookie } from "../types/product";
+import type { GroupedCartItem } from "../types/cart";
+export type { GroupedCartItem };
 
 export function groupCartItems(items: Cookie[]): GroupedCartItem[] {
   const map = new Map<string, GroupedCartItem>();

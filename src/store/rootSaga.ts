@@ -6,7 +6,6 @@ import { reviewSaga } from "./sagas/reviewSaga";
 import { watchUserHistory } from "./sagas/userHistorySaga";
 import { profileSaga } from "./sagas/profileSaga";
 import { couponSaga } from "./sagas/couponSaga";
-import { notificationSaga } from "./sagas/notificationSaga";
 import { aiSaga } from "./sagas/aiSaga";
 
 export function* rootSaga() {
@@ -18,7 +17,6 @@ export function* rootSaga() {
     fork(watchUserHistory),
     fork(profileSaga),
     fork(couponSaga),
-    fork(notificationSaga),
     fork(aiSaga),
   ]);
 }

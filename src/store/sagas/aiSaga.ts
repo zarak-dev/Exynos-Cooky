@@ -1,5 +1,6 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, select, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../index";
 import {
   askAIRequest,
   askAISuccess,
@@ -20,11 +21,26 @@ import type {
 
 function* handleAskAI(
   action: PayloadAction<{ prompt: string }>,
-): Generator<unknown, void, AIMessage> {
+): Generator<unknown, void, unknown> {
   try {
-    const response = yield call(aiService.askAssistant, {
+    const allMessages = (yield select(
+      (state: RootState) => state.ai.messages,
+    )) as AIMessage[];
+
+    // Forward past conversation context (last 6 turns, excluding the current pending prompt)
+    const history = (allMessages || [])
+      .slice(0, -1)
+      .filter((m) => m.sender === "user" || m.sender === "assistant")
+      .slice(-6)
+      .map((m) => ({
+        role: m.sender as "user" | "assistant",
+        content: m.content,
+      }));
+
+    const response = (yield call(aiService.askAssistant, {
       prompt: action.payload.prompt,
-    });
+      conversationHistory: history,
+    })) as AIMessage;
     yield put(askAISuccess(response));
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "AI service unavailable";
@@ -34,12 +50,12 @@ function* handleAskAI(
 
 function* handleBuildBox(
   action: PayloadAction<{ boxSize: 4 | 6 | 12; preferences: string }>,
-): Generator<unknown, void, AIBoxRecommendation> {
+): Generator<unknown, void, unknown> {
   try {
-    const recommendation = yield call(aiService.buildBox, {
+    const recommendation = (yield call(aiService.buildBox, {
       boxSize: action.payload.boxSize,
       preferences: action.payload.preferences,
-    });
+    })) as AIBoxRecommendation;
     yield put(buildBoxSuccess(recommendation));
   } catch (err: unknown) {
     const msg =
@@ -55,9 +71,12 @@ function* handleFetchAdminInsights(
     topSellers: Array<{ name: string; count: number }>;
     lowStockItems: Array<{ name: string; stock: number }>;
   }>,
-): Generator<unknown, void, AdminAIInsight[]> {
+): Generator<unknown, void, unknown> {
   try {
-    const insights = yield call(aiService.getAdminInsights, action.payload);
+    const insights = (yield call(
+      aiService.getAdminInsights,
+      action.payload,
+    )) as AdminAIInsight[];
     yield put(fetchAdminInsightsSuccess(insights));
   } catch (err: unknown) {
     const msg =

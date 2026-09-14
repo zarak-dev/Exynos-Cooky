@@ -6,7 +6,6 @@ import {
   Select,
   Tooltip,
   Button,
-  Flex,
   Tag,
   Typography,
   Segmented,
@@ -18,7 +17,7 @@ import {
   ThunderboltOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { type Cookie } from "../../../utils/mockData";
+import type { Cookie } from "../../../types/product";
 import { type RootState } from "../../../store";
 import { setBoxSize } from "../../../store/slices/cartSlice";
 import { StyledInput } from "../../../components/StyledInput";
@@ -26,6 +25,7 @@ import { StyledTitle } from "../../../components/StyledTitle";
 import { BOX_SIZES } from "../../../constants/pricing";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { AIBoxBuilderModal } from "../../../components/customer/AIBoxBuilderModal";
+import { CookieDetailModal } from "./components/CookieDetailModal";
 import {
   CoverImage,
   CardHeader,
@@ -39,22 +39,12 @@ import {
   LoadMoreWrapper,
   EqualCard,
   CardFooter,
-  StyledDetailModal,
-  ModalImageContainer,
-  ModalLeft,
-  ModalRight,
-  ModalCookieName,
-  StatusBadge,
-  StockBadge,
-  FreshnessNotice,
-  ModalActions,
-  ModalBodyWrapper,
   FilterBar,
   FilterGroup,
 } from "./styles";
 import { addCookieWithFeedback } from "../../../utils/cartActions";
 
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 const PAGE_SIZE = 12;
 
 const FILTER_OPTIONS = [
@@ -305,92 +295,11 @@ const BuyCooky: React.FC = () => {
       )}
 
       {/* Cookie Detail Modal */}
-      <StyledDetailModal
-        centered
-        open={!!selectedCookie}
-        onCancel={() => setSelectedCookie(null)}
-        footer={null}
-        width={680}
-        destroyOnHidden
-      >
-        {selectedCookie && (
-          <ModalBodyWrapper>
-            <ModalLeft>
-              <ModalImageContainer>
-                <img
-                  src={selectedCookie.imageUrl}
-                  alt={selectedCookie.name}
-                  loading="lazy"
-                />
-              </ModalImageContainer>
-            </ModalLeft>
-            <ModalRight>
-              <Flex vertical gap={12}>
-                <ModalCookieName level={2}>
-                  {selectedCookie.name}
-                </ModalCookieName>
-                
-                <Flex align="center" gap={10} wrap="wrap">
-                  <Text strong style={{ fontSize: "1.35rem", color: "#00009c" }}>
-                    Rs. {selectedCookie.price.toLocaleString()}
-                  </Text>
-                  <StatusBadge $isAvailable={selectedCookie.isAvailable}>
-                    <span className="dot" />
-                    {selectedCookie.isAvailable ? "Available" : "Sold Out"}
-                  </StatusBadge>
-                  {selectedCookie.stock > 0 && (
-                    <StockBadge>
-                      {selectedCookie.stock} in stock
-                    </StockBadge>
-                  )}
-                </Flex>
-
-                <Paragraph
-                  type="secondary"
-                  style={{
-                    marginTop: 4,
-                    fontSize: "0.95rem",
-                    lineHeight: 1.6,
-                    color: "#475569",
-                  }}
-                >
-                  {selectedCookie.description}
-                </Paragraph>
-
-                <FreshnessNotice>
-                  🍪 Freshly baked to order with 100% premium Belgian butter & chocolate
-                </FreshnessNotice>
-              </Flex>
-
-              <ModalActions vertical gap={10}>
-                <StyledButton
-                  type="primary"
-                  shape="round"
-                  block
-                  size="large"
-                  disabled={!selectedCookie.isAvailable}
-                  onClick={() => {
-                    handleAddToCart(selectedCookie);
-                    setSelectedCookie(null);
-                  }}
-                >
-                  {selectedCookie.isAvailable
-                    ? "Add to Your Box 🍪"
-                    : "Currently Sold Out"}
-                </StyledButton>
-                <Button
-                  shape="round"
-                  block
-                  size="large"
-                  onClick={() => setSelectedCookie(null)}
-                >
-                  Back to Menu
-                </Button>
-              </ModalActions>
-            </ModalRight>
-          </ModalBodyWrapper>
-        )}
-      </StyledDetailModal>
+      <CookieDetailModal
+        cookie={selectedCookie}
+        onClose={() => setSelectedCookie(null)}
+        onAddToCart={handleAddToCart}
+      />
 
       {/* AI Box Builder Modal */}
       <AIBoxBuilderModal

@@ -1,12 +1,5 @@
-export interface Cookie {
-  id: number;
-  name: string;
-  price: number;
-  stock: number;
-  description: string;
-  imageUrl: string;
-  isAvailable: boolean;
-}
+import type { Cookie } from "../types/product";
+export type { Cookie };
 
 export const COOKIE_MOCK_DATA: Cookie[] = [
   {

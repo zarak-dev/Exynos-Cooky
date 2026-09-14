@@ -1,4 +1,4 @@
-import type { Cookie } from "./mockData";
+import type { Cookie } from "../types/product";
 import type { MessageInstance } from "antd/es/message/interface";
 import type { AppDispatch } from "../store";
 import { addCookieToBox } from "../store/slices/cartSlice";

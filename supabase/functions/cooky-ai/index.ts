@@ -25,6 +25,7 @@ interface RequestBody {
     price: number;
     description: string;
     category?: string;
+    stock?: number;
   }>;
   availableProducts?: Array<{
     id: number;
@@ -77,7 +78,7 @@ Deno.serve(async (req: Request) => {
     const supabaseServiceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || supabaseAnonKey;
 
     const body: RequestBody = await req.json();
-    const { mode, prompt, preferences, boxSize, productContext, availableProducts, analytics } = body;
+    const { mode, prompt, preferences, boxSize, productContext, availableProducts, analytics, conversationHistory } = body;
 
     // 2. Validate allowed modes
     const ALLOWED_MODES = ["assistant", "box_builder", "admin_insights"];
@@ -157,7 +158,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // ------------------------------------------------------------
-    // Mode 1: Customer Assistant
+    // Mode 1: Customer Assistant (Multi-turn conversational context)
     // ------------------------------------------------------------
     if (mode === "assistant") {
       const catalogSummary = (productContext || [])
@@ -181,11 +182,20 @@ ${catalogSummary}
 
 Output strictly valid JSON with this schema:
 {
-  "message": "Your warm, friendly, and mouth-watering message here, chatting naturally with the customer and asking an interactive question!",
+  "message": "Your warm, friendly message here, chatting naturally with the customer and asking an interactive question!",
   "recommendations": [
     { "productId": 12, "productName": "Lotus Biscoff Lava", "reason": "Delicious explanation" }
   ]
 }`;
+
+      // Sanitize and cap conversation history to last 6 turns
+      const sanitizedHistory = (conversationHistory || [])
+        .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+        .slice(-6)
+        .map((m) => ({
+          role: m.role,
+          content: m.content.slice(0, 300),
+        }));
 
       let aiResponseText = "";
 
@@ -201,6 +211,7 @@ Output strictly valid JSON with this schema:
               model: "grok-beta",
               messages: [
                 { role: "system", content: systemPrompt },
+                ...sanitizedHistory,
                 { role: "user", content: prompt || "What do you recommend today?" },
               ],
               response_format: { type: "json_object" },
@@ -210,7 +221,13 @@ Output strictly valid JSON with this schema:
 
           if (grokRes.ok) {
             const data = await grokRes.json();
-            aiResponseText = data.choices[0]?.message?.content;
+            const content = data.choices[0]?.message?.content;
+            if (content) {
+              const parsed = JSON.parse(content);
+              if (typeof parsed.message === "string") {
+                aiResponseText = content;
+              }
+            }
           }
         } catch {
           // Fall back gracefully below
@@ -238,7 +255,7 @@ Output strictly valid JSON with this schema:
     }
 
     // ------------------------------------------------------------
-    // Mode 2: Box Builder
+    // Mode 2: Box Builder (Strict quantity verification)
     // ------------------------------------------------------------
     if (mode === "box_builder") {
       const targetSize = boxSize === 4 || boxSize === 12 ? boxSize : 6;
@@ -279,7 +296,7 @@ Sum of quantities MUST EQUAL ${targetSize}.`;
               model: "grok-beta",
               messages: [
                 { role: "system", content: systemPrompt },
-                { role: "user", content: `Build a ${targetSize}-pack box.` },
+                { role: "user", content: `Build a ${targetSize}-pack box based on: ${preferences || "Gourmet mix"}` },
               ],
               response_format: { type: "json_object" },
               temperature: 0.5,
@@ -288,7 +305,17 @@ Sum of quantities MUST EQUAL ${targetSize}.`;
 
           if (grokRes.ok) {
             const data = await grokRes.json();
-            boxResponseText = data.choices[0]?.message?.content;
+            const content = data.choices[0]?.message?.content;
+            if (content) {
+              const parsed = JSON.parse(content);
+              const items = parsed.boxComposition?.items;
+              if (Array.isArray(items)) {
+                const total = items.reduce((s: number, i: { quantity?: number }) => s + (Number(i.quantity) || 0), 0);
+                if (total === targetSize) {
+                  boxResponseText = content;
+                }
+              }
+            }
           }
         } catch {
           // Fall back gracefully below
@@ -301,12 +328,12 @@ Sum of quantities MUST EQUAL ${targetSize}.`;
             boxComposition: {
               boxSize: targetSize,
               theme: "Artisan Baker's Assortment 🍪",
-              explanation: "A balanced selection of our bestselling handcrafted cookies.",
+              explanation: "A balanced selection of our bestselling handcrafted cookies, freshly baked to order.",
               items: (availableProducts || []).slice(0, 3).map((p, idx) => ({
                 productId: p.id,
                 productName: p.name,
                 quantity: Math.floor(targetSize / 3) + (idx === 0 ? targetSize % 3 : 0),
-                reason: "Customer favorite flavor profile",
+                reason: "Customer favorite flavor profile with premium Belgian butter",
               })),
             },
           }),
@@ -320,34 +347,114 @@ Sum of quantities MUST EQUAL ${targetSize}.`;
     }
 
     // ------------------------------------------------------------
-    // Mode 3: Admin Insights (Authorized Admins Only)
+    // Mode 3: Admin Insights (Grok analysis of non-PII operational metrics)
     // ------------------------------------------------------------
     if (mode === "admin_insights") {
-      const topSeller = analytics?.topSellers?.[0]?.name || "Bestselling assortment";
+      const topSellersStr = (analytics?.topSellers || [])
+        .slice(0, 5)
+        .map((s) => `${s.name} (${s.count} orders)`)
+        .join(", ") || "None recorded yet";
+      const lowStockStr = (analytics?.lowStockItems || [])
+        .slice(0, 5)
+        .map((i) => `${i.name} (${i.stock} remaining)`)
+        .join(", ") || "None currently";
       const revenue = analytics?.netRevenue || 0;
-      const lowStockCount = analytics?.lowStockItems?.length || 0;
+      const totalOrders = analytics?.totalOrders || 0;
 
-      return new Response(
-        JSON.stringify({
-          insights: [
-            {
-              title: "Product Momentum",
-              type: "positive",
-              description: `"${topSeller}" continues to drive strong sales. Consider keeping baking batches full throughout afternoon peaks.`,
-              metric: `Rs. ${revenue.toLocaleString()} Gross Volume`,
-              actionableStep: "Schedule dedicated oven cycles for top demand items.",
+      const systemPrompt = `You are the Executive AI Bakery Operations Consultant for Exynos Cooky.
+Analyze the following aggregated operational metrics (NO personal customer information is included):
+- Total Orders: ${totalOrders}
+- Net Revenue: Rs. ${revenue.toLocaleString()}
+- Top Selling Items: ${topSellersStr}
+- Low Stock Alerts: ${lowStockStr}
+
+Provide 2 to 3 concise, highly practical operational insights for the bakery manager.
+Output strictly valid JSON with this schema:
+{
+  "insights": [
+    {
+      "title": "Concise insight title",
+      "type": "positive" | "warning" | "opportunity",
+      "description": "Clear 1-2 sentence explanation based on the numbers",
+      "metric": "Key supporting metric",
+      "actionableStep": "Specific practical operational action for the kitchen team"
+    }
+  ]
+}`;
+
+      let insightsResponseText = "";
+
+      if (grokApiKey) {
+        try {
+          const grokRes = await fetch("https://api.x.ai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${grokApiKey}`,
             },
-            {
-              title: "Inventory Alert",
-              type: lowStockCount > 0 ? "warning" : "positive",
-              description: `${lowStockCount} items currently at or below safety stock threshold (<= 5 units).`,
-              metric: `${lowStockCount} Low Stock`,
-              actionableStep: "Trigger early morning dough preparation in Inventory management.",
-            },
-          ],
-        }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
+            body: JSON.stringify({
+              model: "grok-beta",
+              messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: "Analyze current kitchen operations and generate actionable insights." },
+              ],
+              response_format: { type: "json_object" },
+              temperature: 0.4,
+            }),
+          });
+
+          if (grokRes.ok) {
+            const data = await grokRes.json();
+            const content = data.choices[0]?.message?.content;
+            if (content) {
+              const parsed = JSON.parse(content);
+              if (Array.isArray(parsed.insights) && parsed.insights.length > 0) {
+                insightsResponseText = content;
+              }
+            }
+          }
+        } catch {
+          // Fall back gracefully below
+        }
+      }
+
+      if (!insightsResponseText) {
+        const topSeller = analytics?.topSellers?.[0]?.name || "Chocolate Chip";
+        const lowStockCount = analytics?.lowStockItems?.length || 0;
+
+        return new Response(
+          JSON.stringify({
+            insights: [
+              {
+                title: "Product Momentum",
+                type: "positive",
+                description: `"${topSeller}" continues to dominate customer preference. Consider keeping baking trays prepped for peak afternoon delivery windows.`,
+                metric: `Rs. ${revenue.toLocaleString()} Gross Volume`,
+                actionableStep: "Schedule dedicated oven cycles for top demand items.",
+              },
+              {
+                title: "Inventory Alert",
+                type: lowStockCount > 0 ? "warning" : "positive",
+                description: `${lowStockCount} items currently at or below safety stock threshold (<= 5 units remaining).`,
+                metric: `${lowStockCount} Low Stock Varieties`,
+                actionableStep: "Trigger early morning dough preparation in Inventory management.",
+              },
+              {
+                title: "Average Order Value Optimization",
+                type: "opportunity",
+                description: `Current order count stands at ${totalOrders} orders. Custom 6-Pack boxes show the highest retention rate.`,
+                metric: `${totalOrders} Orders Placed`,
+                actionableStep: "Promote 6-Pack and 12-Pack box upgrades during customer checkout.",
+              },
+            ],
+          }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+
+      return new Response(insightsResponseText, {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     return new Response(JSON.stringify({ error: "Invalid mode" }), {

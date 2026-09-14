@@ -120,32 +120,6 @@ const orderSlice = createSlice({
     deleteOrderFailure: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
-
-    // Synchronous action compatibility
-    placeNewOrder: (state, action: PayloadAction<Order>) => {
-      state.orders.unshift(action.payload);
-      state.currentOrder = action.payload;
-    },
-    updateOrderStatus: (
-      state,
-      action: PayloadAction<{ id: string; status: OrderStatus }>,
-    ) => {
-      const order = state.orders.find((order) => order.id === action.payload.id);
-      if (order) {
-        order.status = action.payload.status;
-      }
-      if (state.trackedOrder && state.trackedOrder.id === action.payload.id) {
-        state.trackedOrder.status = action.payload.status;
-      }
-    },
-    deleteOrder: (state, action: PayloadAction<string>) => {
-      state.orders = state.orders.filter(
-        (order) => order.id !== action.payload,
-      );
-      if (state.trackedOrder && state.trackedOrder.id === action.payload) {
-        state.trackedOrder = null;
-      }
-    },
   },
 });
 
@@ -166,9 +140,9 @@ export const {
   deleteOrderRequest,
   deleteOrderSuccess,
   deleteOrderFailure,
-  placeNewOrder,
-  updateOrderStatus,
-  deleteOrder,
 } = orderSlice.actions;
+
+// Clean alias for realtime event dispatch
+export const updateOrderStatus = updateOrderStatusSuccess;
 
 export default orderSlice.reducer;

@@ -6,9 +6,9 @@ import {
   type Order,
   trackOrderRequest,
   updateOrderStatusRequest,
-  updateOrderStatus,
+  updateOrderStatusSuccess,
 } from "../../../store/slices/orderSlice";
-import { notificationService } from "../../../services/supabase/notificationService";
+import { orderService } from "../../../services/supabase/orderService";
 import {
   Input,
   Steps,
@@ -77,7 +77,7 @@ const STEP_INDEX: Record<string, number> = {
 export const TrackOrder: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialParamId = searchParams.get("id") || "";
-  const [orderId, setOrderId] = useState(initialParamId);
+  const [orderId, setOrderId] = useState(() => initialParamId);
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
 
@@ -91,7 +91,6 @@ export const TrackOrder: React.FC = () => {
   // Handle URL param lookup on mount or param change
   useEffect(() => {
     if (initialParamId) {
-      setOrderId(initialParamId);
       dispatch(trackOrderRequest(initialParamId.trim()));
     }
   }, [initialParamId, dispatch]);
@@ -105,16 +104,26 @@ export const TrackOrder: React.FC = () => {
   // Realtime subscription for searched order updates
   useEffect(() => {
     if (searchedOrder?.id) {
-      const unsubscribe = notificationService.subscribeToOrderUpdates(
+      const unsubscribe = orderService.subscribeToOrderStatus(
         searchedOrder.id,
         (newStatus) => {
-          dispatch(updateOrderStatus({ id: searchedOrder.id, status: newStatus as Order["status"] }));
-          messageApi.info(`Order status updated to "${newStatus}"! 🍪`);
+          if (newStatus !== searchedOrder.status) {
+            dispatch(
+              updateOrderStatusSuccess({
+                id: searchedOrder.id,
+                status: newStatus as Order["status"],
+              }),
+            );
+            messageApi.info(`Order status updated to "${newStatus}"! 🍪`);
+          }
+        },
+        (err) => {
+          console.warn("Realtime order subscription notice:", err);
         },
       );
       return () => unsubscribe();
     }
-  }, [searchedOrder?.id, dispatch, messageApi]);
+  }, [searchedOrder?.id, searchedOrder?.status, dispatch, messageApi]);
 
   const handleSearch = () => {
     const normalizedOrderId = orderId.trim().toUpperCase();

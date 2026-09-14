@@ -21,7 +21,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../store";
 import {
-  buildBoxSuccess,
+  buildBoxRequest,
 } from "../../../store/slices/aiSlice";
 import {
   setBoxSize,
@@ -30,7 +30,6 @@ import {
   setCartOpen,
 } from "../../../store/slices/cartSlice";
 import type { BoxSize } from "../../../types/cart";
-import { aiService } from "../../../services/ai/aiService";
 
 const { Text, Paragraph } = Typography;
 
@@ -52,31 +51,17 @@ export const AIBoxBuilderModal: React.FC<AIBoxBuilderModalProps> = ({
   const dispatch = useDispatch();
   const [selectedSize, setSelectedSize] = useState<BoxSize>(6);
   const [customPrompt, setCustomPrompt] = useState("");
-  const [localLoading, setLocalLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
   const inventory = useSelector((state: RootState) => state.inventory.items);
-  const recommendation = useSelector(
-    (state: RootState) => state.ai.activeBoxRecommendation,
-  );
+  const {
+    activeBoxRecommendation: recommendation,
+    boxLoading,
+    error: aiError,
+  } = useSelector((state: RootState) => state.ai);
 
-  const handleGenerateBox = async () => {
-    const preferences = customPrompt.trim() || "A gourmet assortment of our bestselling flavors";
-    setLocalLoading(true);
-    setErrorMsg(null);
-
-    try {
-      const result = await aiService.buildBox({
-        boxSize: selectedSize,
-        preferences,
-      });
-      dispatch(buildBoxSuccess(result));
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "Could not generate box";
-      setErrorMsg(msg);
-    } finally {
-      setLocalLoading(false);
-    }
+  const handleGenerateBox = () => {
+    const preferences =
+      customPrompt.trim() || "A gourmet assortment of our bestselling flavors";
+    dispatch(buildBoxRequest({ boxSize: selectedSize, preferences }));
   };
 
   const handleApplyToCart = () => {
@@ -234,25 +219,25 @@ export const AIBoxBuilderModal: React.FC<AIBoxBuilderModalProps> = ({
         icon={<ThunderboltOutlined />}
         block
         size="large"
-        loading={localLoading}
+        loading={boxLoading}
         onClick={handleGenerateBox}
         style={{ marginBottom: 16 }}
       >
         Compose Custom Box with AI
       </Button>
 
-      {errorMsg && (
-        <Alert type="error" message={errorMsg} showIcon style={{ marginBottom: 16 }} />
+      {aiError && (
+        <Alert type="error" message={aiError} showIcon style={{ marginBottom: 16 }} />
       )}
 
-      {localLoading && (
+      {boxLoading && (
         <Flex justify="center" align="center" style={{ padding: 24 }}>
           <Spin size="large" />
           <Text style={{ marginLeft: 12 }}>Consulting bakery catalog...</Text>
         </Flex>
       )}
 
-      {recommendation && !localLoading && (
+      {recommendation && !boxLoading && (
         <Card
           size="small"
           style={{

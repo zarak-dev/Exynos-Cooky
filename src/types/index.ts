@@ -5,5 +5,4 @@ export * from "./order";
 export * from "./review";
 export * from "./address";
 export * from "./coupon";
-export * from "./notification";
 export * from "./ai";

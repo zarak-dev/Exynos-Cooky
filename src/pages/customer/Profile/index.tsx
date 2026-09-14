@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Table, Empty, Flex, Button, message, Tag, Space, Popconfirm } from "antd";
-import {
-  EditOutlined,
-  EnvironmentOutlined,
-  MailOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  CheckCircleOutlined,
-} from "@ant-design/icons";
+import { Switch, Flex, Button, message, Typography } from "antd";
+import { EditOutlined, MailOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { type RootState } from "../../../store";
@@ -30,12 +23,15 @@ import {
   SignOutLink,
   HeaderRow,
 } from "./styles";
-import Text from "antd/es/typography/Text";
 import { StyledCard } from "../../../components/StyledCard";
 import { StyledTitle } from "../../../components/StyledTitle";
 import { EditContactModal } from "./components/EditContactModal";
 import { AddAddressModal } from "./components/AddAddressModal";
+import { ProfileOrdersCard } from "./components/ProfileOrdersCard";
+import { ProfileAddressesCard } from "./components/ProfileAddressesCard";
 import { useMediaQuery } from "../../../hooks/useMediaQuery";
+
+const { Text } = Typography;
 
 const CustomerProfile: React.FC = () => {
   const dispatch = useDispatch();
@@ -124,57 +120,6 @@ const CustomerProfile: React.FC = () => {
     }
   };
 
-  const orderColumns = [
-    {
-      title: "Order ID",
-      dataIndex: "id",
-      key: "id",
-      render: (id: string) => (
-        <Button
-          type="link"
-          style={{ padding: 0 }}
-          onClick={() => navigate(`/track-order`)}
-        >
-          {id}
-        </Button>
-      ),
-    },
-    {
-      title: "Date",
-      dataIndex: "timestamp",
-      key: "timestamp",
-      render: (value: string) =>
-        value ? new Date(value).toLocaleDateString() : "N/A",
-    },
-    {
-      title: "Box",
-      dataIndex: "boxSize",
-      key: "boxSize",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status: string) => {
-        const color =
-          status === "Delivered"
-            ? "success"
-            : status === "Baking"
-              ? "processing"
-              : status === "Dispatched"
-                ? "blue"
-                : "warning";
-        return <Tag color={color}>{status.toUpperCase()}</Tag>;
-      },
-    },
-    {
-      title: "Total",
-      dataIndex: "totalPrice",
-      key: "totalPrice",
-      render: (value: number) => <Text strong>Rs. {value}</Text>,
-    },
-  ];
-
   if (!isLoggedIn) {
     return null;
   }
@@ -187,26 +132,8 @@ const CustomerProfile: React.FC = () => {
           {
             key: "orders",
             label: "Orders",
-            children: (
-              <ContentWrapper>
-                <HeaderRow style={{ marginBottom: 16 }}>
-                  <StyledTitle level={4}>Your Order History</StyledTitle>
-                </HeaderRow>
-                {customerOrders.length ? (
-                  <Table
-                    rowKey="id"
-                    columns={orderColumns}
-                    dataSource={customerOrders}
-                    pagination={{ pageSize: 6 }}
-                    scroll={{ x: 600 }}
-                  />
-                ) : (
-                  <Empty description="You haven't placed any orders yet" />
-                )}
-              </ContentWrapper>
-            ),
+            children: <ProfileOrdersCard orders={customerOrders} />,
           },
-
           {
             key: "profile",
             label: "Profile",
@@ -241,83 +168,12 @@ const CustomerProfile: React.FC = () => {
                 </SectionContainer>
 
                 {/* Addresses Section */}
-                <SectionContainer>
-                  <Flex justify="space-between" align="center" style={{ marginBottom: 12 }}>
-                    <StyledTitle level={5}>Delivery Addresses</StyledTitle>
-                    <Button
-                      icon={<PlusOutlined />}
-                      type="primary"
-                      shape="round"
-                      onClick={() => setIsAddressModalOpen(true)}
-                    >
-                      Add Address
-                    </Button>
-                  </Flex>
-
-                  {addresses.length === 0 ? (
-                    <StyledCard>
-                      <Flex align="center" gap={8}>
-                        <EnvironmentOutlined />
-                        <Text type="secondary">
-                          No delivery addresses saved yet. Add one for rapid checkout!
-                        </Text>
-                      </Flex>
-                    </StyledCard>
-                  ) : (
-                    <Flex vertical gap={12} style={{ width: "100%" }}>
-                      {addresses.map((addr) => (
-                        <StyledCard key={addr.id} size="small">
-                          <Flex justify="space-between" align="start">
-                            <div>
-                              <Flex align="center" gap={8} style={{ marginBottom: 4 }}>
-                                <Text strong>{addr.recipientName}</Text>
-                                {addr.isDefault && (
-                                  <Tag color="blue" icon={<CheckCircleOutlined />}>
-                                    DEFAULT
-                                  </Tag>
-                                )}
-                              </Flex>
-                              <Text style={{ display: "block" }}>{addr.addressLine1}</Text>
-                              {addr.addressLine2 && (
-                                <Text type="secondary" style={{ display: "block" }}>
-                                  {addr.addressLine2}
-                                </Text>
-                              )}
-                              <Text type="secondary" style={{ display: "block" }}>
-                                {addr.city} {addr.postalCode || ""} • {addr.phone}
-                              </Text>
-                            </div>
-
-                            <Space>
-                              {!addr.isDefault && (
-                                <Button
-                                  size="small"
-                                  onClick={() => handleSetDefaultAddress(addr.id)}
-                                >
-                                  Set as Default
-                                </Button>
-                              )}
-                              <Popconfirm
-                                title="Remove this address?"
-                                onConfirm={() => handleDeleteAddress(addr.id)}
-                                okText="Remove"
-                                cancelText="Cancel"
-                                okType="danger"
-                              >
-                                <Button
-                                  type="text"
-                                  danger
-                                  size="small"
-                                  icon={<DeleteOutlined />}
-                                />
-                              </Popconfirm>
-                            </Space>
-                          </Flex>
-                        </StyledCard>
-                      ))}
-                    </Flex>
-                  )}
-                </SectionContainer>
+                <ProfileAddressesCard
+                  addresses={addresses}
+                  onOpenAddModal={() => setIsAddressModalOpen(true)}
+                  onSetDefault={handleSetDefaultAddress}
+                  onDelete={handleDeleteAddress}
+                />
 
                 {/* Marketing Preferences Section */}
                 <SectionContainer>

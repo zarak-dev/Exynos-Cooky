@@ -10,7 +10,6 @@ import userHistoryReducer from "./slices/userHistorySlice";
 import reviewReducer from "./slices/reviewSlice";
 import profileReducer from "./slices/profileSlice";
 import couponReducer from "./slices/couponSlice";
-import notificationReducer from "./slices/notificationSlice";
 import aiReducer from "./slices/aiSlice";
 
 // Import Centralized Root Saga
@@ -30,7 +29,6 @@ export const store = configureStore({
     reviews: reviewReducer,
     profile: profileReducer,
     coupons: couponReducer,
-    notifications: notificationReducer,
     ai: aiReducer,
   },
   middleware: (getDefaultMiddleware) =>

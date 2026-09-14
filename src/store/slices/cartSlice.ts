@@ -1,8 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type Cookie } from "../../utils/mockData";
+import type { Cookie } from "../../types/product";
+import type { BoxSize } from "../../types/cart";
 import { loadFromStorage } from "../../utils/storage";
 
-export type BoxSize = 4 | 6 | 12;
+export type { BoxSize };
 
 interface SavedCart {
   boxSize: BoxSize;

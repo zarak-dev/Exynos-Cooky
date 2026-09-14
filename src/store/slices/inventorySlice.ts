@@ -92,20 +92,6 @@ const inventorySlice = createSlice({
     deleteProductFailure: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
-
-    // Synchronous action compatibility
-    toggleItemAvailability: (
-      state,
-      action: PayloadAction<{ id: number; isAvailable: boolean }>,
-    ) => {
-      const item = state.items.find((item) => item.id === action.payload.id);
-      if (item) {
-        item.isAvailable = action.payload.isAvailable;
-      }
-    },
-    deleteItem: (state, action: PayloadAction<number>) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
-    },
   },
 });
 
@@ -125,8 +111,6 @@ export const {
   deleteProductRequest,
   deleteProductSuccess,
   deleteProductFailure,
-  toggleItemAvailability,
-  deleteItem,
 } = inventorySlice.actions;
 
 export default inventorySlice.reducer;

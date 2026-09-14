@@ -3,19 +3,11 @@ import type { UserProfile, UserRole } from "../../types/auth";
 
 export type { UserProfile, UserRole };
 
-export interface RegisteredUser {
-  id?: string;
-  name: string;
-  email: string;
-  role: UserRole;
-}
-
 interface AuthState {
   isAuthModalOpen: boolean;
   isLoggedIn: boolean;
   isRestoringSession: boolean;
   user: UserProfile | null;
-  registeredUsers: RegisteredUser[];
   loading: boolean;
   error: string | null;
 }
@@ -25,7 +17,6 @@ const initialState: AuthState = {
   isLoggedIn: false,
   isRestoringSession: true,
   user: null,
-  registeredUsers: [],
   loading: false,
   error: null,
 };
@@ -108,27 +99,6 @@ const authSlice = createSlice({
       }
     },
 
-    // Synchronous action compatibility
-    loginUser: (
-      state,
-      action: PayloadAction<{ name?: string; email: string; role?: UserRole }>,
-    ) => {
-      const assignedRole: UserRole = action.payload.role || "customer";
-
-      state.isLoggedIn = true;
-      state.user = {
-        id: `user-${Date.now()}`,
-        name: action.payload.name || "Valued Customer",
-        email: action.payload.email,
-        role: assignedRole,
-      };
-      state.isAuthModalOpen = false;
-    },
-
-    registerUser: (state, action: PayloadAction<RegisteredUser>) => {
-      state.registeredUsers.push(action.payload);
-    },
-
     logoutUser: (state) => {
       state.isLoggedIn = false;
       state.user = null;
@@ -162,8 +132,6 @@ export const {
   signupFailure,
   restoreSessionRequest,
   restoreSessionSuccess,
-  loginUser,
-  registerUser,
   logoutUser,
   updateUserProfile,
 } = authSlice.actions;
