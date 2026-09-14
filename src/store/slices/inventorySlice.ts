@@ -27,6 +27,14 @@ const inventorySlice = createSlice({
       state.items = action.payload;
       state.loading = false;
       state.error = null;
+      try {
+        localStorage.setItem(
+          "exynos_inventory",
+          JSON.stringify(action.payload),
+        );
+      } catch {
+        // Ignore quota
+      }
     },
     fetchInventoryFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;

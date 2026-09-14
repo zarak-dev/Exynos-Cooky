@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Tag, message, Rate, Avatar, Spin, Flex } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReviewUsers } from "../../../store/slices/reviewSlice";
-import { type Cookie } from "../../../utils/mockData";
+import { type Cookie, COOKIE_MOCK_DATA } from "../../../utils/mockData";
 import { type RootState } from "../../../store";
 import HomeCarousel from "./components/HomeCarousel";
 import { StyledCard } from "../../../components/StyledCard";
@@ -21,6 +21,8 @@ import {
   TrendingStack,
   TrendingCard,
   TrendingCardHeader,
+  TrendingDots,
+  TrendingDot,
   ReviewsSection,
   ReviewsSectionTitle,
   ReviewCard,
@@ -39,7 +41,7 @@ import {
 import { addCookieWithFeedback } from "../../../utils/cartActions";
 
 const BEST_COOKIE_IDS = [2, 3, 6, 9, 10, 4];
-const TRENDING_COOKIE_IDS = [13, 18, 17];
+const TRENDING_CANDIDATE_IDS = [13, 17, 18, 3, 6, 8, 2, 7];
 const REVIEWS = [
   {
     comment:
@@ -136,17 +138,45 @@ const Home: React.FC = () => {
   }, [dispatch]);
 
   const carouselCookies = cookies.slice(0, 6);
-  // Build a lookup table once — each cookie is instantly accessible by its id
-  const cookieMap = new Map(cookies.map((cookie) => [cookie.id, cookie]));
-  // Map over the ID list  replacign each id with its matching cookie from the table
-  // Filter out any undefined if id doesn't exist in the map, for  TypeScript the result is Cookie[]
-  const bestCookies = BEST_COOKIE_IDS.map((id) => cookieMap.get(id)).filter(
-    (cookie): cookie is Cookie => !!cookie,
+
+  const cookieMap = useMemo(
+    () => new Map(cookies.map((cookie) => [cookie.id, cookie])),
+    [cookies],
   );
 
-  const trendingCookies = TRENDING_COOKIE_IDS.map((id) =>
-    cookieMap.get(id),
-  ).filter((cookie): cookie is Cookie => !!cookie);
+  const bestCookies = useMemo(
+    () =>
+      BEST_COOKIE_IDS.map((id) => cookieMap.get(id)).filter(
+        (cookie): cookie is Cookie => !!cookie,
+      ),
+    [cookieMap],
+  );
+
+  const trendingCookies = useMemo(() => {
+    // 1. Check for cookies matching candidate IDs
+    const candidates = TRENDING_CANDIDATE_IDS.map((id) => cookieMap.get(id)).filter(
+      (cookie): cookie is Cookie => !!cookie && cookie.isAvailable,
+    );
+
+    if (candidates.length >= 3) {
+      return candidates.slice(0, 3);
+    }
+
+    // 2. Supplement with any other available cookies from inventory
+    const others = cookies.filter(
+      (c) => c.isAvailable && !candidates.some((cand) => cand.id === c.id),
+    );
+    const combined = [...candidates, ...others];
+    if (combined.length >= 3) {
+      return combined.slice(0, 3);
+    }
+
+    // 3. Guaranteed fallback to mock data to ensure at least 3 distinct cards
+    const mockRemaining = COOKIE_MOCK_DATA.filter(
+      (m) => m.isAvailable && !combined.some((c) => c.id === m.id),
+    );
+    return [...combined, ...mockRemaining].slice(0, 3);
+  }, [cookies, cookieMap]);
 
   const handleAddToCart = (cookie: Cookie) => {
     addCookieWithFeedback(
@@ -224,23 +254,18 @@ const Home: React.FC = () => {
           🔥 Discover what everyone is ordering right now
         </SectionBadge>
         <TrendingStack>
-          {[
-            { cookie: trendingCookies[1], pos: "left" as const, idx: 1 },
-            { cookie: trendingCookies[0], pos: "center" as const, idx: 0 },
-            { cookie: trendingCookies[2], pos: "right" as const, idx: 2 },
-          ].map(({ cookie, pos, idx }) =>
-            cookie ? (
+          {trendingCookies.map((cookie, idx) => {
+            const pos: "center" | "left" | "right" =
+              idx === activeTrending
+                ? "center"
+                : idx === (activeTrending + 1) % 3
+                  ? "right"
+                  : "left";
+
+            return (
               <TrendingCard
                 key={cookie.id}
-                $pos={
-                  activeTrending === idx
-                    ? "center"
-                    : pos === "center" && activeTrending !== idx
-                      ? activeTrending === 1
-                        ? "right"
-                        : "left"
-                      : pos
-                }
+                $pos={pos}
                 onClick={() => setActiveTrending(idx)}
               >
                 <img src={cookie.imageUrl} alt={cookie.name} />
@@ -275,9 +300,21 @@ const Home: React.FC = () => {
                   </StyledButton>
                 </TrendingCardBody>
               </TrendingCard>
-            ) : null,
-          )}
+            );
+          })}
         </TrendingStack>
+        {trendingCookies.length > 1 && (
+          <TrendingDots>
+            {trendingCookies.map((cookie, idx) => (
+              <TrendingDot
+                key={cookie.id}
+                $active={activeTrending === idx}
+                onClick={() => setActiveTrending(idx)}
+                aria-label={`View ${cookie.name}`}
+              />
+            ))}
+          </TrendingDots>
+        )}
       </TrendingSection>
 
       <ReviewsSection>

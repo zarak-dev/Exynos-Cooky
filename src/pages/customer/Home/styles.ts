@@ -287,51 +287,114 @@ export const TrendingStack = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
 
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     height: auto;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
     width: 100%;
   }
 `;
 export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
   position: absolute;
-  width: 320px;
+  width: 330px;
   max-width: 100%;
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
   transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease;
-  box-shadow: 0 8px 32px rgba(0, 0, 56, 0.13);
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
+    opacity 0.35s ease,
+    filter 0.35s ease;
 
   ${({ $pos }) =>
-    $pos === "center" && `transform: translateX(0px) scale(1.05); z-index: 3;`}
+    $pos === "center" &&
+    `
+    transform: translateX(0px) scale(1.05);
+    z-index: 5;
+    opacity: 1;
+    filter: none;
+    box-shadow: 0 16px 40px rgba(0, 0, 80, 0.18);
+  `}
+
   ${({ $pos }) =>
     $pos === "left" &&
-    `transform: translateX(-220px) scale(0.88) rotate(-4deg); z-index: 2;`}
+    `
+    transform: translateX(-260px) scale(0.88) rotate(-4deg);
+    z-index: 2;
+    opacity: 0.88;
+    filter: brightness(0.96);
+    box-shadow: 0 8px 24px rgba(0, 0, 56, 0.12);
+  `}
+
   ${({ $pos }) =>
     $pos === "right" &&
-    `transform: translateX(220px) scale(0.88) rotate(4deg); z-index: 2;`}
+    `
+    transform: translateX(260px) scale(0.88) rotate(4deg);
+    z-index: 2;
+    opacity: 0.88;
+    filter: brightness(0.96);
+    box-shadow: 0 8px 24px rgba(0, 0, 56, 0.12);
+  `}
+
+  &:hover {
+    ${({ $pos }) =>
+      $pos !== "center" &&
+      `
+      opacity: 1;
+      filter: brightness(1.02);
+      transform: translateX(${
+        $pos === "left" ? "-260px" : "260px"
+      }) scale(0.92) rotate(${$pos === "left" ? "-2deg" : "2deg"});
+    `}
+  }
 
   .ant-card-body {
-    padding: 12px 14px;
+    padding: 14px 16px;
   }
   img {
-    height: 180px;
+    height: 190px;
     object-fit: cover;
     width: 100%;
+    display: block;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     position: static;
     width: 100%;
     max-width: 340px;
     margin: 0 auto;
     transform: none !important;
     rotate: none;
+    opacity: 1 !important;
+    filter: none !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 56, 0.1);
+  }
+`;
+
+export const TrendingDots = styled(Flex)`
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+`;
+
+export const TrendingDot = styled.button<{ $active: boolean }>`
+  width: ${({ $active }) => ($active ? "28px" : "9px")};
+  height: 9px;
+  border-radius: 5px;
+  background: ${({ $active }) => ($active ? "#00009c" : "#cbd5e1")};
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &:hover {
+    background: ${({ $active }) => ($active ? "#00009c" : "#94a3b8")};
   }
 `;
 export const TrendingCardHeader = styled(Flex)`

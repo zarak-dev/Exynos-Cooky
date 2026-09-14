@@ -14,7 +14,7 @@ export const productService = {
         .order("id", { ascending: true });
 
       if (!error && data && data.length > 0) {
-        return data.map((item) => ({
+        const products = data.map((item) => ({
           id: item.id,
           name: item.name,
           price: Number(item.price),
@@ -24,6 +24,15 @@ export const productService = {
           isAvailable: item.is_available ?? item.isAvailable ?? true,
           category: item.category || "classic",
         }));
+        try {
+          localStorage.setItem(
+            LOCAL_STORAGE_INVENTORY_KEY,
+            JSON.stringify(products),
+          );
+        } catch {
+          // Ignore storage quota errors
+        }
+        return products;
       }
     }
 
