@@ -38,7 +38,6 @@ const Subtitle = styled.p`
   margin: 0;
 `;
 
-
 const SocialButtonGroup = styled.div`
   display: flex;
   flex-direction: column;

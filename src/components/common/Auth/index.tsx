@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { type RootState } from "../../../store";
 import { setOpenAuthModal } from "../../../store/slices/authSlice";
 import { LoginForm } from "./components/Login";
@@ -54,13 +55,21 @@ const SwitchFooter = styled.div`
 
 export const AuthModal: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isOpen = useSelector((state: RootState) => state.auth.isAuthModalOpen);
+  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
   const [isSignUp, setIsSignUp] = useState(false);
 
   const handleClose = () => {
     dispatch(setOpenAuthModal(false));
     setIsSignUp(false);
   };
+
+  useEffect(() => {
+    if (isLoggedIn && user?.role === "admin") {
+      navigate("/admin");
+    }
+  }, [isLoggedIn, user?.role, navigate]);
 
   return (
     <Modal

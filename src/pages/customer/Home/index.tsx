@@ -30,10 +30,8 @@ const Home: React.FC = () => {
   );
 
   useEffect(() => {
-    if (reviews.length === 0 && !reviewLoading) {
-      dispatch(fetchReviewsRequest());
-    }
-  }, []);
+    dispatch(fetchReviewsRequest());
+  }, [dispatch]);
   
   const carouselCookies = useMemo(() => cookies.slice(0, 6), [cookies]);
 
