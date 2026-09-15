@@ -36,10 +36,10 @@ export const AdminOverview: React.FC = () => {
   const users = useSelector((state: RootState) => state.userHistory.users);
 
   useEffect(() => {
-    dispatch(fetchOrdersRequest());
-    dispatch(fetchInventoryRequest());
-    dispatch(fetchUsersStart());
-  }, [dispatch]);
+    if (orders.length === 0) dispatch(fetchOrdersRequest());
+    if (inventory.length === 0) dispatch(fetchInventoryRequest());
+    if (users.length === 0) dispatch(fetchUsersStart());
+  }, [dispatch, orders.length, inventory.length, users.length]);
 
   // Real computed metrics derived from database data
   const metrics = useMemo(() => {

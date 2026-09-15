@@ -49,7 +49,12 @@ const AboutUs: React.FC = () => {
           </LeftColumn>
 
           <RightColumn>
-            <StoryImage src={storyIllustration} alt="Exynos Cooky Mascot" />
+            <StoryImage
+              src={storyIllustration}
+              alt="Exynos Cooky Mascot"
+              loading="lazy"
+              decoding="async"
+            />
           </RightColumn>
         </HeroSection>
 

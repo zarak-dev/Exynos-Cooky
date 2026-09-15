@@ -50,13 +50,13 @@ const CustomerProfile: React.FC = () => {
   );
 
   useEffect(() => {
-    if (user?.id) {
+    if (user?.id && addresses.length === 0) {
       dispatch(fetchAddressesRequest(user.id));
     }
-    if (user?.email) {
+    if (user?.email && orders.length === 0) {
       dispatch(fetchOrdersRequest({ userEmail: user.email }));
     }
-  }, [user?.id, user?.email, dispatch]);
+  }, [user?.id, user?.email, addresses.length, orders.length, dispatch]);
 
   const customerOrders = user
     ? orders.filter(

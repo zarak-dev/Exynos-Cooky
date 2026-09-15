@@ -49,7 +49,12 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
 
             <Col xs={24} md={12}>
               <ImageWrapper>
-                <HeroImage src={cookie.imageUrl} alt={cookie.name} />
+                <HeroImage
+                  src={cookie.imageUrl}
+                  alt={cookie.name}
+                  loading="lazy"
+                  decoding="async"
+                />
               </ImageWrapper>
             </Col>
           </Row>
@@ -59,4 +64,5 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
   );
 };
 
-export default HomeCarousel;
+export default React.memo(HomeCarousel);
+

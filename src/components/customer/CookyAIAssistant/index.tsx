@@ -45,6 +45,8 @@ export const CookyAIAssistant: React.FC = () => {
   const dispatch = useDispatch();
   const [inputText, setInputText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const isNearBottomRef = useRef<boolean>(true);
   const [messageApi, contextHolder] = message.useMessage();
 
   const { isAIAssistantOpen, messages, loading } = useSelector(
@@ -56,8 +58,18 @@ export const CookyAIAssistant: React.FC = () => {
   );
   const isMobile = useMediaQuery("(max-width: 480px)");
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const handleScroll = () => {
+    const el = messagesContainerRef.current;
+    if (!el) return;
+    // Consider near bottom if scrolled within 80px of bottom
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    isNearBottomRef.current = distanceFromBottom < 80;
+  };
+
+  const scrollToBottom = (force = false) => {
+    if (force || isNearBottomRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   useEffect(() => {
@@ -72,6 +84,11 @@ export const CookyAIAssistant: React.FC = () => {
 
     dispatch(askAIRequest({ prompt: text.trim() }));
     setInputText("");
+    // User triggered send: force smooth scroll to bottom and mark near bottom
+    isNearBottomRef.current = true;
+    requestAnimationFrame(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    });
   };
 
   const handleAddCookie = (productId: number) => {
@@ -119,6 +136,7 @@ export const CookyAIAssistant: React.FC = () => {
               type="primary"
               shape="circle"
               size="large"
+              aria-label="Chat on WhatsApp"
               icon={<WhatsAppOutlined style={{ fontSize: 28, color: "#ffffff" }} />}
               style={{
                 width: 56,
@@ -151,6 +169,7 @@ export const CookyAIAssistant: React.FC = () => {
               type="primary"
               shape="circle"
               size="large"
+              aria-label="Open Cooky AI assistant"
               icon={<ThunderboltOutlined style={{ fontSize: 22 }} />}
               style={{
                 width: 56,
@@ -232,7 +251,16 @@ export const CookyAIAssistant: React.FC = () => {
         }}
       >
         {/* Messages List */}
-        <div style={{ flex: 1, overflowY: "auto", marginBottom: 16 }}>
+        <div
+          ref={messagesContainerRef}
+          onScroll={handleScroll}
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+            marginBottom: 16,
+          }}
+        >
           {messages.map((msg) => {
             const isUser = msg.sender === "user";
             return (
@@ -352,14 +380,15 @@ export const CookyAIAssistant: React.FC = () => {
               <Tag
                 key={idx}
                 style={{
-                  cursor: "pointer",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  opacity: loading ? 0.6 : 1,
                   background: "#ffffff",
                   borderColor: "#d9d9d9",
                   borderRadius: 12,
                   fontSize: 11,
                   padding: "2px 8px",
                 }}
-                onClick={() => handleSendMessage(q)}
+                onClick={() => !loading && handleSendMessage(q)}
               >
                 {q}
               </Tag>
@@ -382,6 +411,7 @@ export const CookyAIAssistant: React.FC = () => {
             size="large"
             icon={<SendOutlined />}
             loading={loading}
+            disabled={loading || !inputText.trim()}
             onClick={() => handleSendMessage()}
           />
         </Space.Compact>

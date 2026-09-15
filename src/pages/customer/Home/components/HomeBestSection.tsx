@@ -40,7 +40,7 @@ interface HomeBestSectionProps {
   isMobile: boolean;
 }
 
-export const HomeBestSection: React.FC<HomeBestSectionProps> = ({
+const HomeBestSectionComponent: React.FC<HomeBestSectionProps> = ({
   cookies,
   onAddToCart,
   isMobile,
@@ -104,3 +104,6 @@ export const HomeBestSection: React.FC<HomeBestSectionProps> = ({
     </BestSection>
   );
 };
+
+export const HomeBestSection = React.memo(HomeBestSectionComponent);
+

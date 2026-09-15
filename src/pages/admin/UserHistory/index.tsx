@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Table, Button, Input, message } from "antd";
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,8 +25,10 @@ const UserHistory: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchUsersStart());
-  }, [dispatch]);
+    if (users.length === 0) {
+      dispatch(fetchUsersStart());
+    }
+  }, [dispatch, users.length]);
 
   const filteredUsers = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -38,12 +40,18 @@ const UserHistory: React.FC = () => {
     );
   }, [users, searchTerm]);
 
-  const handleDelete = (uuid: string) => {
-    dispatch(deleteUser(uuid));
-    messageApi.success("Customer removed.");
-  };
+  const handleDelete = useCallback(
+    (uuid: string) => {
+      dispatch(deleteUser(uuid));
+      messageApi.success("Customer removed.");
+    },
+    [dispatch, messageApi],
+  );
 
-  const columns = getUserHistoryColumns(handleDelete);
+  const columns = useMemo(
+    () => getUserHistoryColumns(handleDelete),
+    [handleDelete],
+  );
 
   return (
     <>

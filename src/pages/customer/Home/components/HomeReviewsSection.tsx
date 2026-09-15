@@ -73,7 +73,7 @@ interface HomeReviewsSectionProps {
   isMobile: boolean;
 }
 
-export const HomeReviewsSection: React.FC<HomeReviewsSectionProps> = ({
+const HomeReviewsSectionComponent: React.FC<HomeReviewsSectionProps> = ({
   reviews,
   loading,
   isMobile,
@@ -133,3 +133,6 @@ export const HomeReviewsSection: React.FC<HomeReviewsSectionProps> = ({
     </ReviewsSection>
   );
 };
+
+export const HomeReviewsSection = React.memo(HomeReviewsSectionComponent);
+

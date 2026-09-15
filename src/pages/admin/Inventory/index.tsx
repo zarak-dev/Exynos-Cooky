@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { Table, message, Button } from "antd";
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,30 +26,36 @@ const AdminInventory: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCookie, setEditingCookie] = useState<Product | null>(null);
 
-  const handleAvailabilityChange = (id: number, checked: boolean) => {
-    dispatch(toggleAvailabilityRequest({ id, isAvailable: checked }));
-    const item = inventory.find((cookie) => cookie.id === id);
-    message[checked ? "success" : "warning"](
-      checked
-        ? `"${item?.name}" is now active on the storefront!`
-        : `"${item?.name}" marked as Sold Out.`,
-    );
-  };
+  const handleAvailabilityChange = useCallback(
+    (id: number, checked: boolean) => {
+      dispatch(toggleAvailabilityRequest({ id, isAvailable: checked }));
+      const item = inventory.find((cookie) => cookie.id === id);
+      message[checked ? "success" : "warning"](
+        checked
+          ? `"${item?.name}" is now active on the storefront!`
+          : `"${item?.name}" marked as Sold Out.`,
+      );
+    },
+    [dispatch, inventory],
+  );
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteProductRequest(id));
-    message.success("Cookie removed from inventory.");
-  };
+  const handleDelete = useCallback(
+    (id: number) => {
+      dispatch(deleteProductRequest(id));
+      message.success("Cookie removed from inventory.");
+    },
+    [dispatch],
+  );
 
   const handleOpenAdd = () => {
     setEditingCookie(null);
     setModalOpen(true);
   };
 
-  const handleOpenEdit = (cookie: Product) => {
+  const handleOpenEdit = useCallback((cookie: Product) => {
     setEditingCookie(cookie);
     setModalOpen(true);
-  };
+  }, []);
 
   const handleModalSubmit = (values: Omit<Product, "id">, id?: number) => {
     if (id) {
@@ -62,16 +68,21 @@ const AdminInventory: React.FC = () => {
     setModalOpen(false);
   };
 
-  const columns = getInventoryColumns({
-    onToggle: (id: number, checked: boolean) =>
-      handleAvailabilityChange(id, checked),
-    onEdit: handleOpenEdit,
-    onDelete: handleDelete,
-  });
-
-  const filteredInventory = inventory.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase()),
+  const columns = useMemo(
+    () =>
+      getInventoryColumns({
+        onToggle: handleAvailabilityChange,
+        onEdit: handleOpenEdit,
+        onDelete: handleDelete,
+      }),
+    [handleAvailabilityChange, handleOpenEdit, handleDelete],
   );
+
+  const filteredInventory = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return inventory;
+    return inventory.filter((item) => item.name.toLowerCase().includes(query));
+  }, [inventory, search]);
 
   return (
     <>

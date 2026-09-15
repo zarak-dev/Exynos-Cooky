@@ -5,7 +5,6 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
 }
 
 body {
@@ -49,10 +48,9 @@ img {
   -webkit-transform: translate3d(0, 0, 0);
 }
 
-/* GPU Accelerated Interactive Elements */
+/* Interactive Card Transitions without GPU memory exhaustion */
 .ant-card {
   transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0.2, 1);
-  will-change: transform;
 }
 
 /* Smooth Touch Deceleration */

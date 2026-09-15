@@ -45,7 +45,9 @@ function* handleDeleteUser(action: PayloadAction<string>): Generator {
   }
 }
 
-export function* watchUserHistory() {
+export function* userHistorySaga() {
   yield takeLatest(fetchUsersStart.type, handleFetchUsers);
   yield takeLatest(deleteUser.type, handleDeleteUser);
 }
+
+export const watchUserHistory = userHistorySaga;

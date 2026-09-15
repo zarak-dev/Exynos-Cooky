@@ -12,7 +12,7 @@ import { NavUser } from "./components/NavUser";
 const LayoutRoot = styled.div`
   display: flex;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
   background: #fbfbfb;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

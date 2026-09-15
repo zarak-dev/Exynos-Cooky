@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReviewsRequest } from "../../../store/slices/reviewSlice";
@@ -29,10 +29,12 @@ const Home: React.FC = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchReviewsRequest());
-  }, [dispatch]);
+    if (reviews.length === 0 && !reviewLoading) {
+      dispatch(fetchReviewsRequest());
+    }
+  }, [dispatch, reviews.length, reviewLoading]);
 
-  const carouselCookies = cookies.slice(0, 6);
+  const carouselCookies = useMemo(() => cookies.slice(0, 6), [cookies]);
 
   const cookieMap = useMemo(
     () => new Map(cookies.map((cookie) => [cookie.id, cookie])),
@@ -75,15 +77,18 @@ const Home: React.FC = () => {
     return [...combined, ...mockRemaining].slice(0, 3);
   }, [cookies, cookieMap]);
 
-  const handleAddToCart = (cookie: Cookie) => {
-    addCookieWithFeedback(
-      cookie,
-      cartItems.length,
-      boxSize,
-      dispatch,
-      messageApi,
-    );
-  };
+  const handleAddToCart = useCallback(
+    (cookie: Cookie) => {
+      addCookieWithFeedback(
+        cookie,
+        cartItems.length,
+        boxSize,
+        dispatch,
+        messageApi,
+      );
+    },
+    [cartItems.length, boxSize, dispatch, messageApi],
+  );
 
   return (
     <>

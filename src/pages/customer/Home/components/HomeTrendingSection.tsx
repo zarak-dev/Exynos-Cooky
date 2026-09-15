@@ -21,7 +21,7 @@ interface HomeTrendingSectionProps {
   onAddToCart: (cookie: Cookie) => void;
 }
 
-export const HomeTrendingSection: React.FC<HomeTrendingSectionProps> = ({
+const HomeTrendingSectionComponent: React.FC<HomeTrendingSectionProps> = ({
   cookies,
   onAddToCart,
 }) => {
@@ -46,6 +46,7 @@ export const HomeTrendingSection: React.FC<HomeTrendingSectionProps> = ({
             <TrendingCard
               key={cookie.id}
               $pos={pos}
+              $isActiveMobile={idx === activeTrending}
               onClick={() => setActiveTrending(idx)}
             >
               <img
@@ -103,3 +104,6 @@ export const HomeTrendingSection: React.FC<HomeTrendingSectionProps> = ({
     </TrendingSection>
   );
 };
+
+export const HomeTrendingSection = React.memo(HomeTrendingSectionComponent);
+

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   Col,
   message,
@@ -109,18 +109,24 @@ const BuyCooky: React.FC = () => {
       );
   }, [cookies, debouncedSearch, selectedCategory, sortBy]);
 
-  const visibleCookies = filteredCookies.slice(0, visibleCount);
+  const visibleCookies = useMemo(
+    () => filteredCookies.slice(0, visibleCount),
+    [filteredCookies, visibleCount],
+  );
   const hasMore = visibleCount < filteredCookies.length;
 
-  const handleAddToCart = (cookie: Cookie) => {
-    addCookieWithFeedback(
-      cookie,
-      cartItems.length,
-      boxSize,
-      dispatch,
-      messageApi,
-    );
-  };
+  const handleAddToCart = useCallback(
+    (cookie: Cookie) => {
+      addCookieWithFeedback(
+        cookie,
+        cartItems.length,
+        boxSize,
+        dispatch,
+        messageApi,
+      );
+    },
+    [cartItems.length, boxSize, dispatch, messageApi],
+  );
 
   return (
     <MainContent>

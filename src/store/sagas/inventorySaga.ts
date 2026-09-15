@@ -1,5 +1,6 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, select, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../index";
 import {
   fetchInventoryRequest,
   fetchInventorySuccess,
@@ -20,9 +21,15 @@ import {
 import { productService } from "../../services/supabase/productService";
 import type { Product } from "../../types/product";
 
-function* handleFetchInventory(): Generator<unknown, void, Product[]> {
+function* handleFetchInventory(): Generator<unknown, void, unknown> {
   try {
-    const products = yield call(productService.fetchProducts);
+    const existing = (yield select(
+      (state: RootState) => state.inventory.items,
+    )) as Product[];
+    if (existing && existing.length > 0) {
+      return;
+    }
+    const products = (yield call(productService.fetchProducts)) as Product[];
     yield put(fetchInventorySuccess(products));
   } catch (err: unknown) {
     const message =

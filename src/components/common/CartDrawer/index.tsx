@@ -14,12 +14,14 @@ import { SlotGrid, CookieSlot, DrawerFooter, TotalRow } from "./styles";
 import { StyledTitle } from "../../StyledTitle";
 import Text from "antd/es/typography/Text";
 import { Wrapper } from "../../Wrapper";
-import type { Cookie } from "../../../utils/mockData";
+import type { Cookie } from "../../../types/product";
 import type { RootState } from "../../../store";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 export const CartDrawer: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 480px)");
   const { isCartOpen, items, boxSize } = useSelector(
     (state: RootState) => state.cart,
   );
@@ -44,7 +46,7 @@ export const CartDrawer: React.FC = () => {
     <Drawer
       title={<StyledTitle level={4}>Your Cookie Box</StyledTitle>}
       placement="right"
-      width={typeof window !== "undefined" && window.innerWidth < 420 ? "100%" : 400}
+      width={isMobile ? "100%" : 400}
       onClose={() => dispatch(setCartOpen(false))}
       open={isCartOpen}
     >
@@ -96,6 +98,7 @@ export const CartDrawer: React.FC = () => {
                 type="text"
                 danger
                 icon={<DeleteOutlined />}
+                aria-label={`Remove ${item.name} from box`}
                 onClick={() => dispatch(removeCookieFromBox(index))}
               />,
             ]}

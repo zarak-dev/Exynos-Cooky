@@ -56,4 +56,6 @@ export const {
   deleteUser,
 } = userHistorySlice.actions;
 
+export const fetchUsersRequest = fetchUsersStart;
+
 export default userHistorySlice.reducer;

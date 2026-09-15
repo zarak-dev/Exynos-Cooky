@@ -249,7 +249,7 @@ export const BestCardSlide = styled.div`
 
   @media (max-width: 768px) {
     padding: 0 8px 12px;
-    max-width: 340px;
+    max-width: min(340px, 100%);
     margin: 0 auto;
   }
 `;
@@ -294,11 +294,14 @@ export const TrendingStack = styled.div`
   @media (max-width: 768px) {
     height: auto;
     flex-direction: column;
-    gap: 24px;
+    gap: 0;
     width: 100%;
   }
 `;
-export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
+export const TrendingCard = styled(Card)<{
+  $pos: "left" | "center" | "right";
+  $isActiveMobile?: boolean;
+}>`
   position: absolute;
   width: 330px;
   max-width: 100%;
@@ -366,13 +369,14 @@ export const TrendingCard = styled(Card)<{ $pos: "left" | "center" | "right" }>`
   @media (max-width: 768px) {
     position: static;
     width: 100%;
-    max-width: 340px;
+    max-width: min(340px, 100%);
     margin: 0 auto;
     transform: none !important;
     rotate: none;
     opacity: 1 !important;
     filter: none !important;
     box-shadow: 0 8px 24px rgba(0, 0, 56, 0.1);
+    display: ${({ $isActiveMobile }) => ($isActiveMobile ? "block" : "none")} !important;
   }
 `;
 

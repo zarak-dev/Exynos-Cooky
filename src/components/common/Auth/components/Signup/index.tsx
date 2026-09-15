@@ -2,8 +2,8 @@ import React from "react";
 import { Form, Input, Button, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { signupRequest } from "../../../../../store/slices/authSlice";
-import { type RootState } from "../../../../../store";
-import type { SignUpFormValues } from "../../Types";
+import type { RootState } from "../../../../../store";
+import type { SignUpFormValues } from "../../../../../types/auth";
 
 export const SignUpForm: React.FC = () => {
   const dispatch = useDispatch();

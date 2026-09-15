@@ -1,3 +1,4 @@
+import { useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getCartColumns } from "./components/cartTableColumns";
 import {
@@ -43,53 +44,69 @@ export const CartPage = () => {
     (state: RootState) => state.cart,
   );
 
-  const groupedCartItems = groupCartItems(cartItems);
+  const groupedCartItems = useMemo(
+    () => groupCartItems(cartItems),
+    [cartItems],
+  );
 
-  const subtotal = cartItems.reduce((sum, item) => sum + Number(item.price), 0);
+  const subtotal = useMemo(
+    () => cartItems.reduce((sum, item) => sum + Number(item.price), 0),
+    [cartItems],
+  );
 
   const deliveryFee = subtotal > 0 ? DELIVERY_FEE : 0;
   const totalAmount = subtotal + deliveryFee;
 
-  const removeCookie = (record: GroupedCartItem, showMessage = false) => {
-    const lastIndex = [...cartItems]
-      .map((item) => item.name)
-      .lastIndexOf(record.name);
-    dispatch(removeCookieFromBox(lastIndex));
+  const removeCookie = useCallback(
+    (record: GroupedCartItem, showMessage = false) => {
+      const lastIndex = [...cartItems]
+        .map((item) => item.name)
+        .lastIndexOf(record.name);
+      dispatch(removeCookieFromBox(lastIndex));
 
-    if (showMessage) {
-      message.success({
-        content: `One "${record.name}" removed from cart.`,
-        key: "cart_remove_feedback",
-      });
-    }
-  };
+      if (showMessage) {
+        message.success({
+          content: `One "${record.name}" removed from cart.`,
+          key: "cart_remove_feedback",
+        });
+      }
+    },
+    [cartItems, dispatch],
+  );
 
-  const addCookie = (record: GroupedCartItem) => {
-    if (cartItems.length >= boxSize) {
-      message.warning({
-        content: `Your ${boxSize}-Pack is already full!`,
-        key: "cart_full_warning",
-      });
-      return;
-    }
+  const addCookie = useCallback(
+    (record: GroupedCartItem) => {
+      if (cartItems.length >= boxSize) {
+        message.warning({
+          content: `Your ${boxSize}-Pack is already full!`,
+          key: "cart_full_warning",
+        });
+        return;
+      }
 
-    const originalCookie = inventory.find((c) => c.id === record.id);
-    if (!originalCookie) return;
+      const originalCookie = inventory.find((c) => c.id === record.id);
+      if (!originalCookie) return;
 
-    dispatch(addCookieToBox(originalCookie));
-  };
+      dispatch(addCookieToBox(originalCookie));
+    },
+    [cartItems.length, boxSize, inventory, dispatch],
+  );
 
   const checkoutButtonText =
     cartItems.length === boxSize
       ? "PROCEED TO CHECKOUT"
       : `ADD ${boxSize - cartItems.length} MORE TO CHECKOUT`;
 
-  const columns = getCartColumns({
-    cartItemsLength: cartItems.length,
-    boxSize,
-    onAdd: addCookie,
-    onRemove: removeCookie,
-  });
+  const columns = useMemo(
+    () =>
+      getCartColumns({
+        cartItemsLength: cartItems.length,
+        boxSize,
+        onAdd: addCookie,
+        onRemove: removeCookie,
+      }),
+    [cartItems.length, boxSize, addCookie, removeCookie],
+  );
 
   if (cartItems.length === 0) {
     return (

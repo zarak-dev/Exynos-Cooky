@@ -3,7 +3,7 @@ import { authSaga } from "./sagas/authSaga";
 import { inventorySaga } from "./sagas/inventorySaga";
 import { orderSaga } from "./sagas/orderSaga";
 import { reviewSaga } from "./sagas/reviewSaga";
-import { watchUserHistory } from "./sagas/userHistorySaga";
+import { userHistorySaga } from "./sagas/userHistorySaga";
 import { profileSaga } from "./sagas/profileSaga";
 import { couponSaga } from "./sagas/couponSaga";
 import { aiSaga } from "./sagas/aiSaga";
@@ -14,7 +14,7 @@ export function* rootSaga() {
     fork(inventorySaga),
     fork(orderSaga),
     fork(reviewSaga),
-    fork(watchUserHistory),
+    fork(userHistorySaga),
     fork(profileSaga),
     fork(couponSaga),
     fork(aiSaga),

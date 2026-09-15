@@ -59,6 +59,7 @@ export const AIBoxBuilderModal: React.FC<AIBoxBuilderModalProps> = ({
   } = useSelector((state: RootState) => state.ai);
 
   const handleGenerateBox = () => {
+    if (boxLoading) return;
     const preferences =
       customPrompt.trim() || "A gourmet assortment of our bestselling flavors";
     dispatch(buildBoxRequest({ boxSize: selectedSize, preferences }));
@@ -220,6 +221,7 @@ export const AIBoxBuilderModal: React.FC<AIBoxBuilderModalProps> = ({
         block
         size="large"
         loading={boxLoading}
+        disabled={boxLoading}
         onClick={handleGenerateBox}
         style={{ marginBottom: 16 }}
       >

@@ -1,5 +1,6 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, select, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../index";
 import {
   fetchReviewsRequest,
   fetchReviewsSuccess,
@@ -11,9 +12,15 @@ import {
 import { reviewService } from "../../services/supabase/reviewService";
 import type { Review, ReviewInput } from "../../types/review";
 
-function* handleFetchReviews(): Generator<unknown, void, Review[]> {
+function* handleFetchReviews(): Generator<unknown, void, unknown> {
   try {
-    const reviews = yield call(reviewService.fetchReviews);
+    const existing = (yield select(
+      (state: RootState) => state.reviews.reviews,
+    )) as Review[];
+    if (existing && existing.length > 0) {
+      return;
+    }
+    const reviews = (yield call(reviewService.fetchReviews)) as Review[];
     yield put(fetchReviewsSuccess(reviews));
   } catch (err: unknown) {
     const message =

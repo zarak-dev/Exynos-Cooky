@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, Badge, message, Image, Typography, Tooltip } from "antd";
@@ -43,49 +43,55 @@ const Header: React.FC = () => {
   const totalCartCount = useSelector(
     (state: RootState) => state.cart.items.length,
   );
-  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const user = useSelector((state: RootState) => state.auth.user);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
-  const userMenu = {
-    items: [
-      {
-        key: "profile-info",
-        label: (
-          <Text>
-            Hi, <Text strong>{user?.name}</Text>
-          </Text>
-        ),
-        disabled: true,
-      },
-      { type: "divider" as const },
-      ...(user?.role === "admin"
-        ? [
-            {
-              key: "admin-dashboard",
-              label: <Text>Admin Dashboard</Text>,
-              onClick: () => navigate("/admin"),
-            },
-          ]
-        : [
-            {
-              key: "customer-profile",
-              label: "👤 My Profile & Orders",
-              onClick: () => navigate("/profile"),
-            },
-          ]),
-      { type: "divider" as const },
-      {
-        key: "logout",
-        label: "Log Out",
-        danger: true,
-        onClick: () => {
-          dispatch(logoutUser());
-          message.info("Logged out!");
-          navigate("/");
+  const userMenu = useMemo(
+    () => ({
+      items: [
+        {
+          key: "profile-info",
+          label: (
+            <Text>
+              Hi, <Text strong>{user?.name}</Text>
+            </Text>
+          ),
+          disabled: true,
         },
-      },
-    ],
-  };
+        { type: "divider" as const },
+        ...(user?.role === "admin"
+          ? [
+              {
+                key: "admin-dashboard",
+                label: <Text>Admin Dashboard</Text>,
+                onClick: () => navigate("/admin"),
+              },
+            ]
+          : [
+              {
+                key: "customer-profile",
+                label: "👤 My Profile & Orders",
+                onClick: () => navigate("/profile"),
+              },
+            ]),
+        { type: "divider" as const },
+        {
+          key: "logout",
+          label: "Log Out",
+          danger: true,
+          onClick: () => {
+            dispatch(logoutUser());
+            message.info({
+              content: "You have been logged out.",
+              key: "auth_feedback",
+            });
+          },
+        },
+      ],
+    }),
+    [user?.name, user?.role, navigate, dispatch],
+  );
 
   const leftNavItems = [
     { key: "/", label: "Home" },
@@ -106,6 +112,7 @@ const Header: React.FC = () => {
     <StyledHeader>
       <MobileMenuButton
         icon={<MenuOutlined />}
+        aria-label="Open navigation menu"
         onClick={() => setIsMobileMenuOpen(true)}
       />
 
@@ -123,7 +130,7 @@ const Header: React.FC = () => {
         <LogoContainer to="/">
           <Image
             src={logoSvg}
-            alt="logo"
+            alt="Exynos Cooky Logo"
             preview={false}
             style={{ maxWidth: "100%", height: "auto" }}
           />
@@ -142,7 +149,18 @@ const Header: React.FC = () => {
 
       <IconActions>
         <Tooltip title="Track Order">
-          <TrackIcon onClick={() => navigate("/track-order")}>
+          <TrackIcon
+            aria-label="Track Order"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/track-order")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                navigate("/track-order");
+              }
+            }}
+          >
             <AimOutlined />
           </TrackIcon>
         </Tooltip>
@@ -153,7 +171,18 @@ const Header: React.FC = () => {
           offset={[2, 0]}
           color="#fa8c16"
         >
-          <CartIcon onClick={() => navigate("/cart")}>
+          <CartIcon
+            aria-label="Shopping Cart"
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/cart")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                navigate("/cart");
+              }
+            }}
+          >
             <ShoppingOutlined />
           </CartIcon>
         </Badge>
@@ -165,12 +194,27 @@ const Header: React.FC = () => {
             arrow
             trigger={["click"]}
           >
-            <ActionIcon>
+            <ActionIcon
+              aria-label="User profile and account menu"
+              role="button"
+              tabIndex={0}
+            >
               <UserOutlined />
             </ActionIcon>
           </Dropdown>
         ) : (
-          <ActionIcon onClick={() => dispatch(setOpenAuthModal(true))}>
+          <ActionIcon
+            aria-label="Log in or sign up"
+            role="button"
+            tabIndex={0}
+            onClick={() => dispatch(setOpenAuthModal(true))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                dispatch(setOpenAuthModal(true));
+              }
+            }}
+          >
             <UserOutlined />
           </ActionIcon>
         )}

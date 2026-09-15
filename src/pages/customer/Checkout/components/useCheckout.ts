@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -43,15 +43,25 @@ export function useCheckout() {
   const confirmedOrderId = currentOrder?.id || null;
   const confirmedOrder = currentOrder;
 
-  const groupedCartItems = groupCartItems(cartItems);
+  const groupedCartItems = useMemo(
+    () => groupCartItems(cartItems),
+    [cartItems],
+  );
 
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + (Number(item.price) || 0),
-    0,
+  const subtotal = useMemo(
+    () =>
+      cartItems.reduce(
+        (sum, item) => sum + (Number(item.price) || 0),
+        0,
+      ),
+    [cartItems],
   );
 
   const deliveryFee = cartItems.length > 0 ? DELIVERY_FEE : 0;
-  const totalAmount = Math.max(0, subtotal + deliveryFee - discountAmount);
+  const totalAmount = useMemo(
+    () => Math.max(0, subtotal + deliveryFee - discountAmount),
+    [subtotal, deliveryFee, discountAmount],
+  );
 
   // When order completes successfully, clean up cart and notify
   useEffect(() => {

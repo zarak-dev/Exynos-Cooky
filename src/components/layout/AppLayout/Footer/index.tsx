@@ -18,7 +18,14 @@ const Footer: React.FC = () => {
         {/* Column 1: Brand details */}
         <FooterColumn>
           <FooterBrand>
-            <LogoImage src={logoSvg} alt="Exynos Cooky Logo" />
+            <LogoImage
+              src={logoSvg}
+              alt="Exynos Cooky Logo"
+              loading="lazy"
+              decoding="async"
+              width={125}
+              height={38}
+            />
           </FooterBrand>
         </FooterColumn>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Table } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,20 +21,40 @@ const AdminOrders: React.FC = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    dispatch(fetchOrdersRequest());
-  }, [dispatch]);
+    if (orders.length === 0) {
+      dispatch(fetchOrdersRequest());
+    }
+  }, [dispatch, orders.length]);
 
-  const columns = getOrderColumns({
-    onStatusChange: (id, status) =>
+  const handleStatusChange = useCallback(
+    (id: string, status: Parameters<typeof updateOrderStatusRequest>[0]["status"]) =>
       dispatch(updateOrderStatusRequest({ id, status })),
-    onDelete: (id) => dispatch(deleteOrderRequest(id)),
-  });
-
-  const filteredOrders = orders.filter(
-    (order) =>
-      order.customerName.toLowerCase().includes(search.toLowerCase()) ||
-      order.id.toLowerCase().includes(search.toLowerCase()),
+    [dispatch],
   );
+
+  const handleDelete = useCallback(
+    (id: string) => dispatch(deleteOrderRequest(id)),
+    [dispatch],
+  );
+
+  const columns = useMemo(
+    () =>
+      getOrderColumns({
+        onStatusChange: handleStatusChange,
+        onDelete: handleDelete,
+      }),
+    [handleStatusChange, handleDelete],
+  );
+
+  const filteredOrders = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return orders;
+    return orders.filter(
+      (order) =>
+        order.customerName.toLowerCase().includes(query) ||
+        order.id.toLowerCase().includes(query),
+    );
+  }, [orders, search]);
 
   return (
     <>
