@@ -1,19 +1,13 @@
 import React, { useState, useMemo, useCallback } from "react";
 import {
-  Col,
   message,
-  Row,
   Select,
   Tooltip,
   Button,
-  Tag,
-  Typography,
   Segmented,
-  Empty,
 } from "antd";
 import {
   SearchOutlined,
-  DownCircleTwoTone,
   ThunderboltOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,25 +20,16 @@ import { BOX_SIZES } from "../../../constants/pricing";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { AIBoxBuilderModal } from "../../../components/customer/AIBoxBuilderModal";
 import { CookieDetailModal } from "./components/CookieDetailModal";
-import {
-  CoverImage,
-  CardHeader,
-  StyledButton,
-  ExploreSection,
-  NoResults,
-  StyledMeta,
-} from "../Home/styles";
+import { CookieCatalogGrid } from "./components/CookieCatalogGrid";
+import { ExploreSection } from "../Home/styles";
 import {
   MainContent,
-  LoadMoreWrapper,
-  EqualCard,
-  CardFooter,
   FilterBar,
   FilterGroup,
+  CategoryNavWrapper,
 } from "./styles";
 import { addCookieWithFeedback } from "../../../utils/cartActions";
 
-const { Text } = Typography;
 const PAGE_SIZE = 12;
 
 const FILTER_OPTIONS = [
@@ -128,6 +113,10 @@ const BuyCooky: React.FC = () => {
     [cartItems.length, boxSize, dispatch, messageApi],
   );
 
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, filteredCookies.length));
+  }, [filteredCookies.length]);
+
   return (
     <MainContent>
       {contextHolder}
@@ -148,7 +137,7 @@ const BuyCooky: React.FC = () => {
       </ExploreSection>
 
       {/* Flavor Category Navigation */}
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 24, overflowX: "auto" }}>
+      <CategoryNavWrapper>
         <Segmented
           options={CATEGORY_OPTIONS}
           value={selectedCategory}
@@ -159,7 +148,7 @@ const BuyCooky: React.FC = () => {
           size="large"
           style={{ padding: 4 }}
         />
-      </div>
+      </CategoryNavWrapper>
 
       <FilterBar>
         <FilterGroup>
@@ -211,96 +200,18 @@ const BuyCooky: React.FC = () => {
         </Tooltip>
       </FilterBar>
 
-      {visibleCookies.length ? (
-        <>
-          <Row gutter={[24, 24]}>
-            {visibleCookies.map((cookie) => (
-              <Col xs={24} sm={12} md={8} key={cookie.id}>
-                <EqualCard
-                  hoverable
-                  $isAvailable={cookie.isAvailable}
-                  cover={
-                    <CoverImage
-                      src={cookie.imageUrl}
-                      alt={cookie.name}
-                      preview={false}
-                      loading="lazy"
-                    />
-                  }
-                >
-                  <CardHeader justify="space-between" align="center">
-                    <StyledTitle level={4}>{cookie.name}</StyledTitle>
-                    <Tag
-                      color={cookie.isAvailable ? "blue" : "red"}
-                      variant="solid"
-                    >
-                      {cookie.isAvailable ? `Rs. ${cookie.price}` : "Sold Out"}
-                    </Tag>
-                  </CardHeader>
-                  <StyledMeta description={cookie.description} />
-                  <CardFooter justify="space-between" align="center">
-                    <StyledButton
-                      shape="round"
-                      onClick={() => setSelectedCookie(cookie)}
-                    >
-                      View
-                    </StyledButton>
-                    <StyledButton
-                      type="primary"
-                      shape="round"
-                      disabled={!cookie.isAvailable}
-                      onClick={() => handleAddToCart(cookie)}
-                    >
-                      {cookie.isAvailable ? "Add" : "Sold Out"}
-                    </StyledButton>
-                  </CardFooter>
-                </EqualCard>
-              </Col>
-            ))}
-          </Row>
+      {/* Catalog Grid & Empty State */}
+      <CookieCatalogGrid
+        visibleCookies={visibleCookies}
+        totalFilteredCount={filteredCookies.length}
+        hasMore={hasMore}
+        searchQuery={debouncedSearch}
+        onSelectCookie={setSelectedCookie}
+        onAddToCart={handleAddToCart}
+        onLoadMore={handleLoadMore}
+      />
 
-          {hasMore && (
-            <LoadMoreWrapper justify="center" align="center">
-              <Button
-                shape="round"
-                size="large"
-                icon={<DownCircleTwoTone />}
-                onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
-              >
-                Load More
-              </Button>
-            </LoadMoreWrapper>
-          )}
-        </>
-      ) : (
-        <NoResults>
-          <Empty
-            description={
-              <div>
-                <Text strong style={{ fontSize: 16, display: "block" }}>
-                  No cookies matched your search!
-                </Text>
-                <Text type="secondary">
-                  Try searching for another flavor or clearing the category filter.
-                </Text>
-              </div>
-            }
-          >
-            <Button
-              type="primary"
-              onClick={() => {
-                setSearch("");
-                setSelectedCategory("all");
-                setSortBy(undefined);
-              }}
-            >
-              Reset All Filters
-            </Button>
-          </Empty>
-        </NoResults>
-      )}
-
-      {/* Cookie Detail Modal */}
+      {/* Detail Modal */}
       <CookieDetailModal
         cookie={selectedCookie}
         onClose={() => setSelectedCookie(null)}

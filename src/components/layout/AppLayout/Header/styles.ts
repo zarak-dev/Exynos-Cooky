@@ -19,6 +19,8 @@ export const StyledHeader = styled(Header)`
   background-color: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  transform: translateZ(0);
+  will-change: transform;
   box-shadow:
     0 2px 16px rgba(0, 0, 156, 0.08),
     0 1px 4px rgba(0, 0, 0, 0.06);
@@ -31,6 +33,9 @@ export const StyledHeader = styled(Header)`
   @media (max-width: 576px) {
     padding: 0 12px;
     height: 58px;
+    background-color: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 `;
 

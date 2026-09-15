@@ -455,7 +455,7 @@ export const ReviewSlide = styled.div`
 
   @media (max-width: 768px) {
     padding: 0 8px 12px;
-    max-width: 360px;
+    max-width: min(360px, 100%);
     margin: 0 auto;
   }
 `;

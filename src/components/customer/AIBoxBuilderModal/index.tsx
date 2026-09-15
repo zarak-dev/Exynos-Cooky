@@ -204,8 +204,13 @@ export const AIBoxBuilderModal: React.FC<AIBoxBuilderModalProps> = ({
             {PRESET_PROMPTS.map((prompt, idx) => (
               <Tag
                 key={idx}
-                style={{ cursor: "pointer" }}
-                onClick={() => setCustomPrompt(prompt)}
+                style={{
+                  cursor: boxLoading ? "not-allowed" : "pointer",
+                  opacity: boxLoading ? 0.6 : 1,
+                }}
+                onClick={() => {
+                  if (!boxLoading) setCustomPrompt(prompt);
+                }}
               >
                 {prompt}
               </Tag>

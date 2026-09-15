@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useCallback } from "react";
 import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReviewsRequest } from "../../../store/slices/reviewSlice";
-import { type Cookie, COOKIE_MOCK_DATA } from "../../../utils/mockData";
+import type { Cookie } from "../../../types";
+import { COOKIE_MOCK_DATA } from "../../../utils/mockData";
 import { type RootState } from "../../../store";
 import { useMediaQuery } from "../../../hooks/useMediaQuery";
 import { addCookieWithFeedback } from "../../../utils/cartActions";
@@ -32,8 +33,8 @@ const Home: React.FC = () => {
     if (reviews.length === 0 && !reviewLoading) {
       dispatch(fetchReviewsRequest());
     }
-  }, [dispatch, reviews.length, reviewLoading]);
-
+  }, []);
+  
   const carouselCookies = useMemo(() => cookies.slice(0, 6), [cookies]);
 
   const cookieMap = useMemo(

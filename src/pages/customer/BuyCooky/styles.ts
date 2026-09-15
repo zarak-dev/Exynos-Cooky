@@ -252,3 +252,23 @@ export const ModalActions = styled(Flex)`
 // Backwards-compatible aliases
 export const ModalImage = ModalImageContainer;
 export const BlinkingTag = StatusBadge;
+
+export const CategoryNavWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 4px 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+  }
+`;
+

@@ -28,7 +28,7 @@ export const ProfileAddressesCard: React.FC<ProfileAddressesCardProps> = ({
 }) => {
   return (
     <SectionContainer>
-      <Flex justify="space-between" align="center" style={{ marginBottom: 12 }}>
+      <Flex justify="space-between" align="center" wrap="wrap" gap={8} style={{ marginBottom: 12 }}>
         <StyledTitle level={5}>Delivery Addresses</StyledTitle>
         <Button
           icon={<PlusOutlined />}
@@ -53,9 +53,9 @@ export const ProfileAddressesCard: React.FC<ProfileAddressesCardProps> = ({
         <Flex vertical gap={12} style={{ width: "100%" }}>
           {addresses.map((addr) => (
             <StyledCard key={addr.id} size="small">
-              <Flex justify="space-between" align="start">
-                <div>
-                  <Flex align="center" gap={8} style={{ marginBottom: 4 }}>
+              <Flex justify="space-between" align="start" wrap="wrap" gap={10}>
+                <div style={{ flex: "1 1 190px", minWidth: 0 }}>
+                  <Flex align="center" gap={8} wrap="wrap" style={{ marginBottom: 4 }}>
                     <Text strong>{addr.recipientName}</Text>
                     {addr.isDefault && (
                       <Tag color="blue" icon={<CheckCircleOutlined />}>
@@ -63,9 +63,9 @@ export const ProfileAddressesCard: React.FC<ProfileAddressesCardProps> = ({
                       </Tag>
                     )}
                   </Flex>
-                  <Text style={{ display: "block" }}>{addr.addressLine1}</Text>
+                  <Text style={{ display: "block", wordBreak: "break-word" }}>{addr.addressLine1}</Text>
                   {addr.addressLine2 && (
-                    <Text type="secondary" style={{ display: "block" }}>
+                    <Text type="secondary" style={{ display: "block", wordBreak: "break-word" }}>
                       {addr.addressLine2}
                     </Text>
                   )}
@@ -74,7 +74,7 @@ export const ProfileAddressesCard: React.FC<ProfileAddressesCardProps> = ({
                   </Text>
                 </div>
 
-                <Space>
+                <Space style={{ flexShrink: 0, alignSelf: "flex-start" }}>
                   {!addr.isDefault && (
                     <Button
                       size="small"

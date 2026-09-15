@@ -45,6 +45,7 @@ export const CookieDetailModal: React.FC<CookieDetailModalProps> = ({
                 src={cookie.imageUrl}
                 alt={cookie.name}
                 loading="lazy"
+                decoding="async"
               />
             </ModalImageContainer>
           </ModalLeft>

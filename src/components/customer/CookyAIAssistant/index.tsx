@@ -1,29 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  Drawer,
-  Button,
-  Input,
-  Flex,
-  Typography,
-  Card,
-  Avatar,
-  Tag,
-  Spin,
-  Space,
-  Badge,
-  message,
-  Tooltip,
-} from "antd";
-import {
-  ThunderboltOutlined,
-  SendOutlined,
-  PlusOutlined,
-  ClearOutlined,
-  WhatsAppOutlined,
-} from "@ant-design/icons";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { Drawer, Button, Flex, Typography, message } from "antd";
+import { ThunderboltOutlined, ClearOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../store";
-import { whatsappService } from "../../../services/whatsapp/whatsappService";
 import {
   askAIRequest,
   clearAIConversation,
@@ -31,8 +10,11 @@ import {
 } from "../../../store/slices/aiSlice";
 import { addCookieWithFeedback } from "../../../utils/cartActions";
 import { useMediaQuery } from "../../../hooks/useMediaQuery";
+import { FloatingActionButtons } from "./components/FloatingActionButtons";
+import { ChatMessagesList } from "./components/ChatMessagesList";
+import { ChatInputBar } from "./components/ChatInputBar";
 
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 
 const SUGGESTED_QUESTIONS = [
   "What's warm & gooey right now? 🍫",
@@ -58,144 +40,81 @@ export const CookyAIAssistant: React.FC = () => {
   );
   const isMobile = useMediaQuery("(max-width: 480px)");
 
-  const handleScroll = () => {
-    const el = messagesContainerRef.current;
-    if (!el) return;
-    // Consider near bottom if scrolled within 80px of bottom
-    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-    isNearBottomRef.current = distanceFromBottom < 80;
-  };
+  const rafIdRef = useRef<number | null>(null);
 
-  const scrollToBottom = (force = false) => {
+  const handleScroll = useCallback(() => {
+    if (rafIdRef.current !== null) return;
+
+    rafIdRef.current = requestAnimationFrame(() => {
+      rafIdRef.current = null;
+      const el = messagesContainerRef.current;
+      if (!el) return;
+      const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+      isNearBottomRef.current = distanceFromBottom < 80;
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, []);
+
+  const scrollToBottom = useCallback((force = false) => {
     if (force || isNearBottomRef.current) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isAIAssistantOpen) {
       scrollToBottom();
     }
-  }, [messages, isAIAssistantOpen]);
+  }, [messages, isAIAssistantOpen, scrollToBottom]);
 
-  const handleSendMessage = (textToSend?: string) => {
-    const text = textToSend || inputText;
-    if (!text.trim() || loading) return;
+  const handleSendMessage = useCallback(
+    (textToSend?: string) => {
+      const text = textToSend || inputText;
+      if (!text.trim() || loading) return;
 
-    dispatch(askAIRequest({ prompt: text.trim() }));
-    setInputText("");
-    // User triggered send: force smooth scroll to bottom and mark near bottom
-    isNearBottomRef.current = true;
-    requestAnimationFrame(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    });
-  };
+      dispatch(askAIRequest({ prompt: text.trim() }));
+      setInputText("");
+      isNearBottomRef.current = true;
+      requestAnimationFrame(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      });
+    },
+    [inputText, loading, dispatch],
+  );
 
-  const handleAddCookie = (productId: number) => {
-    const targetCookie = cookies.find((c) => c.id === productId);
-    if (!targetCookie) {
-      messageApi.error("Cookie not found in current kitchen inventory");
-      return;
-    }
-    addCookieWithFeedback(
-      targetCookie,
-      cartItems.length,
-      boxSize,
-      dispatch,
-      messageApi,
-    );
-  };
+  const handleAddCookie = useCallback(
+    (productId: number) => {
+      const targetCookie = cookies.find((c) => c.id === productId);
+      if (!targetCookie) {
+        messageApi.error("Cookie not found in current kitchen inventory");
+        return;
+      }
+      addCookieWithFeedback(
+        targetCookie,
+        cartItems.length,
+        boxSize,
+        dispatch,
+        messageApi,
+      );
+    },
+    [cookies, cartItems.length, boxSize, dispatch, messageApi],
+  );
 
   return (
     <>
       {contextHolder}
 
-      {/* Floating Action Buttons (WhatsApp + Cooky AI) */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 24,
-          right: 24,
-          zIndex: 999,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 14,
-        }}
-      >
-        {/* WhatsApp Button */}
-        <Tooltip title="Chat with us on WhatsApp" placement="left">
-          <a
-            href={whatsappService.getSupportChatUrl("Hello Exynos Cooky! 🍪✨ I'd love to chat about your fresh cookies.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Chat with us on WhatsApp"
-            style={{ display: "inline-block", textDecoration: "none" }}
-          >
-            <Button
-              type="primary"
-              shape="circle"
-              size="large"
-              aria-label="Chat on WhatsApp"
-              icon={<WhatsAppOutlined style={{ fontSize: 28, color: "#ffffff" }} />}
-              style={{
-                width: 56,
-                height: 56,
-                boxShadow: "0 6px 20px rgba(37, 211, 102, 0.45)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
-                border: "none",
-                cursor: "pointer",
-                transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.1)";
-                e.currentTarget.style.boxShadow = "0 8px 24px rgba(37, 211, 102, 0.6)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 6px 20px rgba(37, 211, 102, 0.45)";
-              }}
-            />
-          </a>
-        </Tooltip>
-
-        {/* Cooky AI Button */}
-        <Tooltip title="Ask Cooky AI" placement="left">
-          <Badge count="AI" color="#fa8c16">
-            <Button
-              type="primary"
-              shape="circle"
-              size="large"
-              aria-label="Open Cooky AI assistant"
-              icon={<ThunderboltOutlined style={{ fontSize: 22 }} />}
-              style={{
-                width: 56,
-                height: 56,
-                boxShadow: "0 6px 20px rgba(0, 0, 156, 0.35)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "linear-gradient(135deg, #00009c 0%, #391085 100%)",
-                border: "none",
-                cursor: "pointer",
-                transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.1)";
-                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 156, 0.5)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 6px 20px rgba(0, 0, 156, 0.35)";
-              }}
-              onClick={() => dispatch(setAIAssistantOpen(true))}
-            />
-          </Badge>
-        </Tooltip>
-      </div>
+      {/* Floating Action Buttons (WhatsApp + AI Assistant) */}
+      <FloatingActionButtons
+        onOpenAssistant={() => dispatch(setAIAssistantOpen(true))}
+      />
 
       {/* AI Assistant Drawer */}
       <Drawer
@@ -250,172 +169,28 @@ export const CookyAIAssistant: React.FC = () => {
           },
         }}
       >
-        {/* Messages List */}
-        <div
-          ref={messagesContainerRef}
+        {/* Messages List & Recommendations */}
+        <ChatMessagesList
+          messages={messages}
+          loading={loading}
+          containerRef={messagesContainerRef}
+          endRef={messagesEndRef}
           onScroll={handleScroll}
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            WebkitOverflowScrolling: "touch",
-            marginBottom: 16,
-          }}
-        >
-          {messages.map((msg) => {
-            const isUser = msg.sender === "user";
-            return (
-              <div
-                key={msg.id}
-                style={{
-                  display: "flex",
-                  justifyContent: isUser ? "flex-end" : "flex-start",
-                  marginBottom: 14,
-                }}
-              >
-                {!isUser && (
-                  <Avatar
-                    size={32}
-                    icon={<ThunderboltOutlined />}
-                    style={{
-                      background: "#00009c",
-                      color: "#ffd666",
-                      marginRight: 8,
-                      flexShrink: 0,
-                    }}
-                  />
-                )}
-                <div style={{ maxWidth: "82%" }}>
-                  <div
-                    style={{
-                      padding: "10px 14px",
-                      borderRadius: isUser
-                        ? "16px 16px 2px 16px"
-                        : "16px 16px 16px 2px",
-                      background: isUser ? "#00009c" : "#ffffff",
-                      color: isUser ? "#ffffff" : "#1f1f1f",
-                      boxShadow: isUser
-                        ? "0 2px 8px rgba(0,0,156,0.2)"
-                        : "0 2px 8px rgba(0,0,0,0.06)",
-                      fontSize: 14,
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {msg.content}
-                  </div>
+          onAddCookie={handleAddCookie}
+        />
 
-                  {/* Grounded Recommendations */}
-                  {msg.recommendations && msg.recommendations.length > 0 && (
-                    <div style={{ marginTop: 8 }}>
-                      <Flex vertical gap={8} style={{ width: "100%" }}>
-                        {msg.recommendations.map((rec) => (
-                          <Card
-                            key={rec.productId}
-                            size="small"
-                            style={{
-                              background: "#ffffff",
-                              borderRadius: 8,
-                              borderColor: "#d6e4ff",
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
-                            }}
-                          >
-                            <Flex justify="space-between" align="center">
-                              <div>
-                                <Text strong style={{ fontSize: 13, display: "block" }}>
-                                  {rec.productName}
-                                </Text>
-                                {rec.price && (
-                                  <Tag color="blue" style={{ marginTop: 2 }}>
-                                    Rs. {rec.price}
-                                  </Tag>
-                                )}
-                              </div>
-                              <Button
-                                type="primary"
-                                size="small"
-                                shape="round"
-                                icon={<PlusOutlined />}
-                                onClick={() => handleAddCookie(rec.productId)}
-                              >
-                                Add to Box
-                              </Button>
-                            </Flex>
-                            <Paragraph
-                              type="secondary"
-                              style={{
-                                fontSize: 11,
-                                margin: "6px 0 0 0",
-                              }}
-                            >
-                              {rec.reason}
-                            </Paragraph>
-                          </Card>
-                        ))}
-                      </Flex>
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-
-          {loading && (
-            <Flex align="center" gap={8} style={{ padding: 8 }}>
-              <Spin size="small" />
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                Cooky AI is baking your answer...
-              </Text>
-            </Flex>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Suggested Prompts */}
-        <div style={{ marginBottom: 12 }}>
-          <Text type="secondary" style={{ fontSize: 11, display: "block", marginBottom: 6 }}>
-            Suggested Questions:
-          </Text>
-          <Space wrap size={[4, 6]}>
-            {SUGGESTED_QUESTIONS.map((q, idx) => (
-              <Tag
-                key={idx}
-                style={{
-                  cursor: loading ? "not-allowed" : "pointer",
-                  opacity: loading ? 0.6 : 1,
-                  background: "#ffffff",
-                  borderColor: "#d9d9d9",
-                  borderRadius: 12,
-                  fontSize: 11,
-                  padding: "2px 8px",
-                }}
-                onClick={() => !loading && handleSendMessage(q)}
-              >
-                {q}
-              </Tag>
-            ))}
-          </Space>
-        </div>
-
-        {/* Input Bar */}
-        <Space.Compact style={{ width: "100%" }}>
-          <Input
-            placeholder="Ask about flavors, ingredients, boxes..."
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onPressEnter={() => handleSendMessage()}
-            size="large"
-            disabled={loading}
-          />
-          <Button
-            type="primary"
-            size="large"
-            icon={<SendOutlined />}
-            loading={loading}
-            disabled={loading || !inputText.trim()}
-            onClick={() => handleSendMessage()}
-          />
-        </Space.Compact>
+        {/* Input Bar & Suggestion Chips */}
+        <ChatInputBar
+          inputText={inputText}
+          setInputText={setInputText}
+          loading={loading}
+          onSend={handleSendMessage}
+          suggestedQuestions={SUGGESTED_QUESTIONS}
+          messagesCount={messages.length}
+        />
       </Drawer>
     </>
   );
 };
+
+export default CookyAIAssistant;

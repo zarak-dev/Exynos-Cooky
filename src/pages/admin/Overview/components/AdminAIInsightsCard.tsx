@@ -33,6 +33,7 @@ export const AdminAIInsightsCard: React.FC<AdminAIInsightsCardProps> = ({
   );
 
   const handleGenerateInsights = () => {
+    if (insightsLoading) return;
     dispatch(
       fetchAdminInsightsRequest({
         netRevenue: totalRevenue,
@@ -102,6 +103,7 @@ export const AdminAIInsightsCard: React.FC<AdminAIInsightsCardProps> = ({
             fontWeight: 600,
           }}
           loading={insightsLoading}
+          disabled={insightsLoading}
           onClick={handleGenerateInsights}
         >
           {adminInsights.length > 0 ? "Re-Analyze Operations" : "Generate AI Insights"}

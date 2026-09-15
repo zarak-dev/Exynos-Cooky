@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { type RootState } from "../../../store";
@@ -9,6 +9,7 @@ import {
   updateOrderStatusSuccess,
 } from "../../../store/slices/orderSlice";
 import { orderService } from "../../../services/supabase/orderService";
+import { whatsappService } from "../../../services/whatsapp/whatsappService";
 import {
   Input,
   Steps,
@@ -29,6 +30,7 @@ import {
   CarOutlined,
   SolutionOutlined,
   DeleteOutlined,
+  WhatsAppOutlined,
 } from "@ant-design/icons";
 import {
   TrackContainer,
@@ -101,29 +103,35 @@ export const TrackOrder: React.FC = () => {
     messageApi.success("Order cancellation initiated and baking slots restored.");
   };
 
-  // Realtime subscription for searched order updates
+  const currentStatusRef = useRef(searchedOrder?.status);
+
   useEffect(() => {
-    if (searchedOrder?.id) {
-      const unsubscribe = orderService.subscribeToOrderStatus(
-        searchedOrder.id,
-        (newStatus) => {
-          if (newStatus !== searchedOrder.status) {
-            dispatch(
-              updateOrderStatusSuccess({
-                id: searchedOrder.id,
-                status: newStatus as Order["status"],
-              }),
-            );
-            messageApi.info(`Order status updated to "${newStatus}"! 🍪`);
-          }
-        },
-        (err) => {
-          console.warn("Realtime order subscription notice:", err);
-        },
-      );
-      return () => unsubscribe();
-    }
-  }, [searchedOrder?.id, searchedOrder?.status, dispatch, messageApi]);
+    currentStatusRef.current = searchedOrder?.status;
+  }, [searchedOrder?.status]);
+
+  // Realtime subscription for searched order updates (stable lifecycle)
+  useEffect(() => {
+    if (!searchedOrder?.id) return;
+
+    const unsubscribe = orderService.subscribeToOrderStatus(
+      searchedOrder.id,
+      (newStatus) => {
+        if (newStatus !== currentStatusRef.current) {
+          dispatch(
+            updateOrderStatusSuccess({
+              id: searchedOrder.id,
+              status: newStatus as Order["status"],
+            }),
+          );
+          messageApi.info(`Order status updated to "${newStatus}"! 🍪`);
+        }
+      },
+      (err) => {
+        console.warn("Realtime order subscription notice:", err);
+      },
+    );
+    return () => unsubscribe();
+  }, [searchedOrder?.id, dispatch, messageApi]);
 
   const handleSearch = () => {
     const normalizedOrderId = orderId.trim().toUpperCase();
@@ -194,6 +202,13 @@ export const TrackOrder: React.FC = () => {
                   status={searchedOrder.status === "Cancelled" ? "error" : "processing"}
                   text={<BadgeText strong>{searchedOrder.status}</BadgeText>}
                 />
+                <Button
+                  icon={<WhatsAppOutlined style={{ color: "#25D366" }} />}
+                  size="small"
+                  onClick={() => whatsappService.openOrderInquiry(searchedOrder.id)}
+                >
+                  Order Help
+                </Button>
                 {searchedOrder.status !== "Cancelled" && (
                   <Popconfirm
                     title="Cancel Order"
