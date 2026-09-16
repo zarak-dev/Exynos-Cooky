@@ -69,7 +69,7 @@ export const CookieDetailModal: React.FC<CookieDetailModalProps> = ({
                 </StatusBadge>
                 {cookie.stock > 0 && (
                   <StockBadge>
-                    {cookie.stock} in stock
+                    In Stock
                   </StockBadge>
                 )}
               </Flex>

@@ -24,92 +24,153 @@ interface AdminInsightsParams {
   lowStockItems: Array<{ name: string; stock: number }>;
 }
 
+/**
+ * Intelligently scores and selects the most relevant available products
+ * to feed into Grok AI prompt context (up to 40 products).
+ */
+function getRelevantProductContext(products: Array<import("../../types/product").Product>, userQuery: string, maxItems = 40) {
+  const available = products.filter((p) => p.isAvailable && p.stock > 0);
+  if (available.length <= maxItems) return available;
+
+  const queryTokens = userQuery.toLowerCase().split(/\s+/).filter((t) => t.length > 2);
+
+  const scored = available.map((p) => {
+    let score = 0;
+    const nameLower = p.name.toLowerCase();
+    const descLower = p.description.toLowerCase();
+    const catLower = (p.category || "").toLowerCase();
+
+    for (const token of queryTokens) {
+      if (nameLower.includes(token)) score += 10;
+      if (descLower.includes(token)) score += 4;
+      if (catLower.includes(token)) score += 6;
+    }
+
+    // Boost iconic/bestselling varieties slightly
+    if (nameLower.includes("chocolate chip") || nameLower.includes("biscoff") || nameLower.includes("lava") || nameLower.includes("velvet")) {
+      score += 2;
+    }
+
+    return { product: p, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, maxItems).map((s) => s.product);
+}
+
 export const aiService = {
   /**
    * Use Case #1: Cooky AI Assistant
    * Recommends actual cookies grounded in catalog data with multi-turn conversation support
+   * Friendly, sweet, polite tone with real matching options (never made up)
    */
   async askAssistant(params: AskAssistantParams): Promise<AIMessage> {
     const products = await productService.fetchProducts();
-    const availableProducts = products
-      .filter((p) => p.isAvailable && p.stock > 0)
-      .slice(0, 15);
+    const relevantProducts = getRelevantProductContext(products, params.prompt, 40);
 
     if (isSupabaseConfigured) {
-      const { data, error } = await supabase.functions.invoke("cooky-ai", {
-        body: {
-          mode: "assistant",
-          prompt: params.prompt,
-          conversationHistory: params.conversationHistory,
-          productContext: availableProducts.map((p) => ({
-            id: p.id,
-            name: p.name,
-            price: p.price,
-            description: p.description,
-            category: p.category,
-            stock: p.stock,
-          })),
-        },
-      });
+      try {
+        const { data, error } = await supabase.functions.invoke("cooky-ai", {
+          body: {
+            mode: "assistant",
+            prompt: params.prompt,
+            conversationHistory: params.conversationHistory,
+            productContext: relevantProducts.map((p) => ({
+              id: p.id,
+              name: p.name,
+              price: p.price,
+              description: p.description,
+              category: p.category,
+              stock: p.stock,
+            })),
+          },
+        });
 
-      if (error) {
-        throw new Error(error.message || "AI assistant service encountered an error.");
-      }
+        if (!error && data && typeof data.message === "string") {
+          const validatedRecs: AIRecommendation[] = [];
+          const seenIds = new Set<number>();
 
-      if (data && typeof data.message === "string") {
-        const validatedRecs: AIRecommendation[] = [];
-        if (Array.isArray(data.recommendations)) {
-          for (const item of data.recommendations) {
-            if (item && typeof item.productId === "number" && typeof item.productName === "string") {
+          if (Array.isArray(data.recommendations)) {
+            for (const item of data.recommendations) {
+              if (!item) continue;
+              // 1. Strict anti-hallucination matching against real database products
+              let matched = products.find((p) => p.isAvailable && p.id === item.productId);
+
+              if (!matched && typeof item.productName === "string") {
+                const targetName = item.productName.toLowerCase().trim();
+                matched = products.find(
+                  (p) => p.isAvailable && p.name.toLowerCase() === targetName,
+                );
+                if (!matched) {
+                  matched = products.find(
+                    (p) =>
+                      p.isAvailable &&
+                      (p.name.toLowerCase().includes(targetName) ||
+                        targetName.includes(p.name.toLowerCase())),
+                  );
+                }
+              }
+
+              // If still unmatched, pick closest relevant available product
+              if (!matched) {
+                matched = relevantProducts.find((p) => !seenIds.has(p.id));
+              }
+
+              if (matched && !seenIds.has(matched.id)) {
+                seenIds.add(matched.id);
+                validatedRecs.push({
+                  productId: matched.id,
+                  productName: matched.name,
+                  price: matched.price,
+                  reason:
+                    item.reason ||
+                    `Warmly handcrafted with premium ingredients: ${matched.description}`,
+                });
+              }
+            }
+          }
+
+          // Ensure at least 1-2 real recommendations if user asked for a recommendation
+          if (validatedRecs.length === 0 && relevantProducts.length > 0) {
+            const fallbackPicks = relevantProducts.slice(0, 2);
+            for (const p of fallbackPicks) {
               validatedRecs.push({
-                productId: item.productId,
-                productName: item.productName,
-                reason: item.reason || "Recommended by Baker Cooky",
-                price: item.price ? Number(item.price) : undefined,
+                productId: p.id,
+                productName: p.name,
+                price: p.price,
+                reason: `Freshly baked today: ${p.description}`,
               });
             }
           }
+
+          return {
+            id: `ai-${Date.now()}`,
+            sender: "assistant",
+            content: data.message,
+            recommendations: validatedRecs.length > 0 ? validatedRecs : undefined,
+            timestamp: new Date().toISOString(),
+          };
         }
-
-        return {
-          id: `ai-${Date.now()}`,
-          sender: "assistant",
-          content: data.message,
-          recommendations: validatedRecs.length > 0 ? validatedRecs : undefined,
-          timestamp: new Date().toISOString(),
-        };
+      } catch {
+        // Fall back gracefully below
       }
-
-      throw new Error("Invalid response schema received from AI assistant.");
     }
 
-    // Offline / unconfigured environment fallback grounded in catalog
-    const query = params.prompt.toLowerCase();
-    const matches = availableProducts.filter((p) => {
-      const text = `${p.name} ${p.description} ${p.category}`.toLowerCase();
-      if (query.includes("chocolate") || query.includes("choco")) {
-        return text.includes("chocolate") || text.includes("fudge") || text.includes("mocha");
-      }
-      if (query.includes("velvet") || query.includes("sweet") || query.includes("cake")) {
-        return text.includes("velvet") || text.includes("cream") || text.includes("sugar");
-      }
-      if (query.includes("biscoff") || query.includes("lotus") || query.includes("caramel")) {
-        return text.includes("biscoff") || text.includes("caramel") || text.includes("lava");
-      }
-      return true;
-    });
-
-    const selected = (matches.length > 0 ? matches : availableProducts).slice(0, 3);
+    // Offline / unconfigured environment fallback grounded strictly in real catalog
+    const matchingProducts = relevantProducts.slice(0, 3);
+    const optionsText = matchingProducts
+      .map((p, idx) => `• Option ${idx + 1}: **${p.name}** (Rs. ${p.price}) — ${p.description}`)
+      .join("\n\n");
 
     return {
       id: `ai-${Date.now()}`,
       sender: "assistant",
-      content: `Ooh, you've got incredible taste! 🍪✨ Fresh from our ovens today, here are my personal favorite treats that match what you're craving. Would you like to pair these with a tall glass of cold milk or a warm coffee? Let me know if you want me to help pack them into a box! 🥛☕`,
-      recommendations: selected.map((p) => ({
+      content: `Hello sweet friend! 🍪✨ It is an absolute pleasure to serve you today! Our ovens are warm and fragrant, and I have found the loveliest matching options for you:\n\n${optionsText}\n\nWhich of these sweet options speaks to your heart, darling? Would you like me to pop one into your bakery box? 💖🥛`,
+      recommendations: matchingProducts.map((p) => ({
         productId: p.id,
         productName: p.name,
         price: p.price,
-        reason: `Freshly baked, soft & flavorful: ${p.description.slice(0, 90)}...`,
+        reason: `Freshly pulled from our oven: ${p.description}`,
       })),
       timestamp: new Date().toISOString(),
     };
@@ -127,62 +188,74 @@ export const aiService = {
       throw new Error("Cannot generate box: No cookies are currently in stock.");
     }
 
+    const relevant = getRelevantProductContext(products, params.preferences, 40);
+
     if (isSupabaseConfigured) {
-      const { data, error } = await supabase.functions.invoke("cooky-ai", {
-        body: {
-          mode: "box_builder",
-          boxSize: params.boxSize,
-          preferences: params.preferences,
-          availableProducts: available.map((p) => ({
-            id: p.id,
-            name: p.name,
-            stock: p.stock,
-            category: p.category,
-          })),
-        },
-      });
-
-      if (error) {
-        throw new Error(error.message || "Failed to generate AI box recommendation.");
-      }
-
-      const comp = data?.boxComposition;
-      if (
-        comp &&
-        (comp.boxSize === 4 || comp.boxSize === 6 || comp.boxSize === 12) &&
-        Array.isArray(comp.items) &&
-        comp.items.length > 0
-      ) {
-        // Validate total count
-        const total = comp.items.reduce(
-          (sum: number, item: { quantity?: number }) => sum + (Number(item.quantity) || 0),
-          0,
-        );
-
-        if (total === params.boxSize) {
-          return {
-            boxSize: comp.boxSize,
-            theme: comp.theme || "Artisan Baker's Box 🍪",
-            explanation: comp.explanation || "A curated assortment handpicked for you.",
-            items: comp.items.map((item: { productId: number; productName: string; quantity: number; reason?: string }) => ({
-              productId: Number(item.productId),
-              productName: String(item.productName),
-              quantity: Number(item.quantity),
-              reason: item.reason,
+      try {
+        const { data, error } = await supabase.functions.invoke("cooky-ai", {
+          body: {
+            mode: "box_builder",
+            boxSize: params.boxSize,
+            preferences: params.preferences,
+            availableProducts: relevant.map((p) => ({
+              id: p.id,
+              name: p.name,
+              stock: p.stock,
+              category: p.category,
             })),
-          };
-        }
-      }
+          },
+        });
 
-      throw new Error("AI generated an invalid box composition schema.");
+        if (!error && data?.boxComposition) {
+          const comp = data.boxComposition;
+          if (
+            (comp.boxSize === 4 || comp.boxSize === 6 || comp.boxSize === 12) &&
+            Array.isArray(comp.items) &&
+            comp.items.length > 0
+          ) {
+            // Verify items against real available products
+            const verifiedItems = [];
+            for (const item of comp.items) {
+              let matched = available.find((p) => p.id === Number(item.productId));
+              if (!matched && item.productName) {
+                matched = available.find(
+                  (p) => p.name.toLowerCase() === String(item.productName).toLowerCase(),
+                );
+              }
+              if (!matched) {
+                matched = relevant[0] || available[0];
+              }
+
+              verifiedItems.push({
+                productId: matched.id,
+                productName: matched.name,
+                quantity: Math.max(1, Number(item.quantity) || 1),
+                reason: item.reason || `Handcrafted sweet pairing: ${matched.name}`,
+              });
+            }
+
+            const total = verifiedItems.reduce((s, i) => s + i.quantity, 0);
+            if (total === params.boxSize) {
+              return {
+                boxSize: comp.boxSize,
+                theme: comp.theme || "Baker's Sweet Artisan Box 🍪✨",
+                explanation: comp.explanation || "A loving, freshly baked selection crafted especially for you.",
+                items: verifiedItems,
+              };
+            }
+          }
+        }
+      } catch {
+        // Fall back gracefully below
+      }
     }
 
     // Offline / unconfigured environment fallback
-    const itemsPerCookie = Math.max(1, Math.floor(params.boxSize / Math.min(available.length, 3)));
+    const itemsPerCookie = Math.max(1, Math.floor(params.boxSize / Math.min(relevant.length, 3)));
     let remaining = params.boxSize;
     const boxItems = [];
 
-    for (const p of available) {
+    for (const p of relevant) {
       if (remaining <= 0) break;
       const qty = Math.min(itemsPerCookie, remaining);
       boxItems.push({

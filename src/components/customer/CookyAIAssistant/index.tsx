@@ -17,10 +17,10 @@ import { ChatInputBar } from "./components/ChatInputBar";
 const { Text } = Typography;
 
 const SUGGESTED_QUESTIONS = [
-  "What's warm & gooey right now? 🍫",
-  "Recommend something not too sweet ☕",
-  "What are your top kid-friendly favorites? 🎈",
-  "Tell me about the Lotus Biscoff Lava! 🤤",
+  "What sweet chocolate options do you have? 🍫",
+  "Recommend 2 caramel & nutty options 🥜",
+  "Give me something velvety or fruity 🍓",
+  "Show me your bestselling lava cookies! 🤤",
 ];
 
 export const CookyAIAssistant: React.FC = () => {
@@ -157,10 +157,14 @@ export const CookyAIAssistant: React.FC = () => {
           </Flex>
         }
         placement="right"
-        width={isMobile ? "100%" : 420}
+        size={isMobile ? "large" : "default"}
         onClose={() => dispatch(setAIAssistantOpen(false))}
         open={isAIAssistantOpen}
         styles={{
+          wrapper: {
+            width: isMobile ? "100%" : 420,
+            maxWidth: "100vw",
+          },
           body: {
             display: "flex",
             flexDirection: "column",
@@ -177,6 +181,7 @@ export const CookyAIAssistant: React.FC = () => {
           endRef={messagesEndRef}
           onScroll={handleScroll}
           onAddCookie={handleAddCookie}
+          cookies={cookies}
         />
 
         {/* Input Bar & Suggestion Chips */}

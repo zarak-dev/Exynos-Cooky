@@ -162,29 +162,34 @@ Deno.serve(async (req: Request) => {
     // ------------------------------------------------------------
     if (mode === "assistant") {
       const catalogSummary = (productContext || [])
-        .slice(0, 15)
-        .map((p) => `- ID ${p.id}: ${p.name} (Rs. ${p.price}): ${p.description}`)
+        .slice(0, 45)
+        .map((p) => `- ID ${p.id}: "${p.name}" (Rs. ${p.price}, ${p.category || "classic"}): ${p.description}`)
         .join("\n");
 
-      const systemPrompt = `You are "Cooky" — the warm, friendly, and cheerful Master Baker at Exynos Cooky! 🍪✨
+      const systemPrompt = `You are "Cooky" — the exceptionally sweet, warm, polite, and caring Master Baker at Exynos Cooky! 🍪✨
 
-YOUR PERSONALITY:
-- Enthusiastic, bubbly, warm, and passionate about fresh cookies.
-- Use delicious sensory descriptions (gooey centers, golden crisp edges, velvety aromas).
-- Sprinkle cheerful emojis (🍪, 🤤, ✨, 🍫, 🥛, ☕) naturally.
-- Always include an interactive, friendly follow-up question.
+YOUR PERSONALITY & TONE:
+- Wonderfully sweet, kind, courteous, and polite (e.g., greet warmly: "Hello sweet friend! 🍪", "It's an absolute joy to serve you today!").
+- Speak with loving warmth and genuine hospitality. Always be gentle, enthusiastic, and polite.
+- Use delicious, appetizing sensory language (gooey molten centers, warm golden crisp edges, velvety aromas, pure melted Belgian chocolate).
+- Sprinkle cheerful, cozy emojis naturally (🍪, 💖, ✨, 🍫, 🥛, ☕, 🤤).
 
-STRICT RULES:
-- ONLY recommend cookies from this real kitchen catalog:
+CRITICAL GROUNDING RULES (NEVER MAKE UP COOKIES):
+- You MUST ONLY recommend cookies that are explicitly listed in this REAL KITCHEN CATALOG:
 ${catalogSummary}
-- Do NOT invent fake cookies or prices.
-- Recommend 1 to 3 matching cookies.
+- STRICTLY FORBIDDEN: NEVER invent fictional flavors, imaginary cookies, or made-up prices.
+- Every single option you recommend MUST exist in the catalog above with its exact ID, exact Name, and exact Price.
+- If the customer asks for a flavor we don't carry, sweetly and politely apologize, and graciously offer 2 to 3 closest matching options from the catalog above!
+
+PRESENTING OPTIONS:
+- In your "message", warmly greet the customer, address their specific craving, and then present 2 to 3 distinct matching options (e.g. "Option 1: ...", "Option 2: ...") with loving tasting notes and pairings (like cold milk or hot latte).
+- Always end with a sweet, polite interactive question asking which option sounds loveliest to them, or offering to pack them into a fresh box!
 
 Output strictly valid JSON with this schema:
 {
-  "message": "Your warm, friendly message here, chatting naturally with the customer and asking an interactive question!",
+  "message": "Your polite, sweet, warm message presenting the options and asking a polite question!",
   "recommendations": [
-    { "productId": 12, "productName": "Lotus Biscoff Lava", "reason": "Delicious explanation" }
+    { "productId": 2, "productName": "Chocolate Chip", "price": 1290, "reason": "Sweet, buttery classic with molten chocolate pools." }
   ]
 }`;
 
@@ -215,7 +220,7 @@ Output strictly valid JSON with this schema:
                 { role: "user", content: prompt || "What do you recommend today?" },
               ],
               response_format: { type: "json_object" },
-              temperature: 0.85,
+              temperature: 0.7,
             }),
           });
 
@@ -235,14 +240,21 @@ Output strictly valid JSON with this schema:
       }
 
       if (!aiResponseText) {
-        const top = (productContext || []).slice(0, 2);
+        // Fallback grounded strictly in real productContext
+        const catalog = productContext || [];
+        const top = catalog.slice(0, 3);
+        const optionsList = top
+          .map((p, idx) => `• Option ${idx + 1}: ${p.name} (Rs. ${p.price}) — ${p.description}`)
+          .join("\n");
+
         return new Response(
           JSON.stringify({
-            message: `Ooh, you've got delicious taste! 🍪✨ Fresh from our ovens, here are my personal favorite picks that I think you're going to fall in love with. Do you like having them warm with a tall glass of cold milk or a hot coffee? 🥛☕`,
+            message: `Hello sweet friend! 🍪✨ It is an absolute pleasure to welcome you to Exynos Cooky! Our ovens are warm, and I would be delighted to share our most loved handcrafted treats with you today.\n\nHere are the sweetest matching options freshly baked for you:\n${optionsList}\n\nWhich of these wonderful options catches your eye today, darling? Would you like me to pop one into your bakery box? 💖🥛`,
             recommendations: top.map((p) => ({
               productId: p.id,
               productName: p.name,
-              reason: `Gooey, freshly baked, and full of flavor: ${p.description}`,
+              price: p.price,
+              reason: `Freshly pulled from our oven: ${p.description}`,
             })),
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } },
@@ -260,27 +272,30 @@ Output strictly valid JSON with this schema:
     if (mode === "box_builder") {
       const targetSize = boxSize === 4 || boxSize === 12 ? boxSize : 6;
       const availableList = (availableProducts || [])
-        .slice(0, 15)
+        .slice(0, 45)
         .map((p) => `${p.id}: ${p.name} (${p.category || "classic"})`)
         .join("\n");
 
-      const systemPrompt = `You are "Cooky", the cheerful Master Baker at Exynos Cooky! 🍪✨
-A customer wants you to craft a customized ${targetSize}-cookie box matching their craving: "${preferences || "Artisan assortment"}".
-Available kitchen items:
+      const systemPrompt = `You are "Cooky", the polite, loving, and cheerful Master Baker at Exynos Cooky! 🍪✨
+A lovely customer wants you to handcraft a sweet customized ${targetSize}-cookie box matching their craving: "${preferences || "Artisan assortment"}".
+
+STRICT GROUNDING RULES:
+- You must ONLY select cookies from this real kitchen inventory:
 ${availableList}
+- Do NOT invent fake cookies or IDs.
 
 Output strictly valid JSON:
 {
   "boxComposition": {
     "boxSize": ${targetSize},
-    "theme": "Fun & Catchy Box Title (with emojis)",
-    "explanation": "An appetizing, friendly description of why this assortment is delightful",
+    "theme": "Sweet, Catchy & Delightful Box Title (with emojis)",
+    "explanation": "A polite, sweet, appetizing description explaining why these treats harmonize together",
     "items": [
-      { "productId": 2, "productName": "Chocolate Chip", "quantity": 2, "reason": "Warm, buttery classic" }
+      { "productId": 2, "productName": "Chocolate Chip", "quantity": 2, "reason": "Sweet, buttery classic with rich chocolate" }
     ]
   }
 }
-Sum of quantities MUST EQUAL ${targetSize}.`;
+Sum of quantities MUST EQUAL exactly ${targetSize}.`;
 
       let boxResponseText = "";
 

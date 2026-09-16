@@ -23,7 +23,7 @@ const initialState: AIState = {
       id: "ai-init",
       sender: "assistant",
       content:
-        "Hey there, sweet friend! 🍪✨ Welcome to Exynos Cooky! I'm Cooky, your personal baker buddy. What are you craving today — gooey chocolate pools, decadent caramel Biscoff, or something soft and velvety? Tell me what you love and let's find your dream cookie!",
+        "Hello sweet friend! 🍪✨ Welcome to Exynos Cooky! I'm Cooky, your personal artisan baker. Every single one of our 190+ cookies is lovingly handcrafted and baked fresh daily. What delicious flavor are you craving today — warm gooey chocolate, golden caramel Biscoff, or something velvety and fruity? Tell me what you adore and I'll share the sweetest options with you! 💖",
       timestamp: new Date().toISOString(),
     },
   ],
@@ -69,7 +69,7 @@ const aiSlice = createSlice({
       state.messages.push({
         id: `ai-err-${Date.now()}`,
         sender: "assistant",
-        content: `I encountered an issue finding that cookie: ${action.payload}. Please try again!`,
+        content: `Oh dear sweet friend, my oven timer chimed and I had a tiny moment of trouble looking that up! Please ask me again, sweetheart, and I will be overjoyed to find the sweetest matching options for you. 🍪✨`,
         timestamp: new Date().toISOString(),
       });
     },
