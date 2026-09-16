@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Tag, Rate } from "antd";
 import type { Cookie } from "../../../../types/product";
 import { StyledTitle } from "../../../../components/StyledTitle";
+import { DEFAULT_COOKIE_IMAGE } from "../../../../constants";
 import {
   TrendingSection,
   TrendingSectionTitle,
@@ -50,10 +51,13 @@ const HomeTrendingSectionComponent: React.FC<HomeTrendingSectionProps> = ({
               onClick={() => setActiveTrending(idx)}
             >
               <img
-                src={cookie.imageUrl}
+                src={cookie.imageUrl || DEFAULT_COOKIE_IMAGE}
                 alt={cookie.name}
                 loading="lazy"
                 decoding="async"
+                onError={(e) => {
+                  e.currentTarget.src = DEFAULT_COOKIE_IMAGE;
+                }}
               />
               <TrendingCardBody>
                 <TrendingCardHeader>

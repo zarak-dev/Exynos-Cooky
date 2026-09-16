@@ -15,6 +15,7 @@ import {
   StyledCarousel,
 } from "./styles";
 import type { Cookie } from "../../../../../types";
+import { DEFAULT_COOKIE_IMAGE } from "../../../../../constants";
 
 interface HomeCarouselProps {
   cookies: Cookie[];
@@ -50,10 +51,13 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
             <Col xs={24} md={12}>
               <ImageWrapper>
                 <HeroImage
-                  src={cookie.imageUrl}
+                  src={cookie.imageUrl || DEFAULT_COOKIE_IMAGE}
                   alt={cookie.name}
                   loading="lazy"
                   decoding="async"
+                  onError={(e) => {
+                    e.currentTarget.src = DEFAULT_COOKIE_IMAGE;
+                  }}
                 />
               </ImageWrapper>
             </Col>

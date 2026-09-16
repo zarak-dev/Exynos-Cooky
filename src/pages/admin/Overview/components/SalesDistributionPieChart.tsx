@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { Pie } from "@ant-design/charts";
+import { Empty } from "antd";
 import { StyledChartCard, ChartWrapper } from "../styles";
 
 interface SalesDistributionPieChartProps {
@@ -10,19 +11,10 @@ export const SalesDistributionPieChart: React.FC<SalesDistributionPieChartProps>
   topSellers,
 }) => {
   const pieData = useMemo(() => {
-    if (topSellers.length > 0) {
-      return topSellers.slice(0, 5).map((s) => ({
-        type: s.name,
-        value: s.count,
-      }));
-    }
-    return [
-      { type: "Chilled Sugar", value: 40 },
-      { type: "Chocolate Chip", value: 25 },
-      { type: "Pink Velvet", value: 15 },
-      { type: "Lotus Biscoff Lava", value: 12 },
-      { type: "Chocolate Fudge", value: 8 },
-    ];
+    return topSellers.slice(0, 5).map((s) => ({
+      type: s.name,
+      value: s.count,
+    }));
   }, [topSellers]);
 
   const pieConfig = {
@@ -38,8 +30,15 @@ export const SalesDistributionPieChart: React.FC<SalesDistributionPieChartProps>
 
   return (
     <StyledChartCard title="Sales Distribution Share" variant="borderless">
-      <ChartWrapper>
-        <Pie {...pieConfig} />
+      <ChartWrapper style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {topSellers.length > 0 ? (
+          <Pie {...pieConfig} />
+        ) : (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="No cookie sales recorded yet"
+          />
+        )}
       </ChartWrapper>
     </StyledChartCard>
   );

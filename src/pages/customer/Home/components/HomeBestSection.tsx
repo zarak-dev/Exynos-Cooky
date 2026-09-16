@@ -2,6 +2,7 @@ import React from "react";
 import { Tag } from "antd";
 import type { Cookie } from "../../../../types/product";
 import { StyledCard } from "../../../../components/StyledCard";
+import { DEFAULT_COOKIE_IMAGE } from "../../../../constants";
 import {
   BestSection,
   BestSectionTitle,
@@ -67,7 +68,8 @@ const HomeBestSectionComponent: React.FC<HomeBestSectionProps> = ({
               $isAvailable={cookie.isAvailable}
               cover={
                 <BestCoverImage
-                  src={cookie.imageUrl}
+                  src={cookie.imageUrl || DEFAULT_COOKIE_IMAGE}
+                  fallback={DEFAULT_COOKIE_IMAGE}
                   alt={cookie.name}
                   preview={false}
                   loading="lazy"

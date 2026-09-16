@@ -3,7 +3,6 @@ import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReviewsRequest } from "../../../store/slices/reviewSlice";
 import type { Cookie } from "../../../types";
-import { COOKIE_MOCK_DATA } from "../../../utils/mockData";
 import { type RootState } from "../../../store";
 import { useMediaQuery } from "../../../hooks/useMediaQuery";
 import { addCookieWithFeedback } from "../../../utils/cartActions";
@@ -40,13 +39,13 @@ const Home: React.FC = () => {
     [cookies],
   );
 
-  const bestCookies = useMemo(
-    () =>
-      BEST_COOKIE_IDS.map((id) => cookieMap.get(id)).filter(
-        (cookie): cookie is Cookie => !!cookie,
-      ),
-    [cookieMap],
-  );
+  const bestCookies = useMemo(() => {
+    const curated = BEST_COOKIE_IDS.map((id) => cookieMap.get(id)).filter(
+      (cookie): cookie is Cookie => Boolean(cookie) && Boolean(cookie?.isAvailable),
+    );
+    if (curated.length >= 3) return curated;
+    return cookies.filter((c) => c.isAvailable).slice(0, 6);
+  }, [cookieMap, cookies]);
 
   const trendingCookies = useMemo(() => {
     // 1. Gather candidates from inventory matching the preferred curated list
@@ -64,16 +63,7 @@ const Home: React.FC = () => {
     const others = cookies.filter(
       (c) => c.isAvailable && !candidates.some((cand) => cand.id === c.id),
     );
-    const combined = [...candidates, ...others];
-    if (combined.length >= 3) {
-      return combined.slice(0, 3);
-    }
-
-    // 3. Guaranteed fallback to mock data to ensure at least 3 distinct cards
-    const mockRemaining = COOKIE_MOCK_DATA.filter(
-      (m) => m.isAvailable && !combined.some((c) => c.id === m.id),
-    );
-    return [...combined, ...mockRemaining].slice(0, 3);
+    return [...candidates, ...others].slice(0, 3);
   }, [cookies, cookieMap]);
 
   const handleAddToCart = useCallback(

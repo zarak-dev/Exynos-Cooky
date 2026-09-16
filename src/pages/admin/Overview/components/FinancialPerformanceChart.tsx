@@ -1,24 +1,46 @@
 import React, { useMemo } from "react";
 import { Column } from "@ant-design/charts";
+import { Empty } from "antd";
+import type { Order } from "../../../../types/order";
 import { StyledChartCard, ChartWrapper } from "../styles";
 
 interface FinancialPerformanceChartProps {
   netRevenue: number;
+  orders?: Order[];
 }
 
 export const FinancialPerformanceChart: React.FC<FinancialPerformanceChartProps> = ({
   netRevenue,
+  orders = [],
 }) => {
   const chartData = useMemo(() => {
-    return [
-      { month: "Jan", revenue: 45000 },
-      { month: "Feb", revenue: 52000 },
-      { month: "Mar", revenue: 61000 },
-      { month: "Apr", revenue: 58000 },
-      { month: "May", revenue: 74000 },
-      { month: "Jun", revenue: netRevenue > 95000 ? netRevenue : 95000 },
-    ];
-  }, [netRevenue]);
+    if (!orders || orders.length === 0) {
+      return [];
+    }
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthlyMap = new Map<string, number>();
+
+    const currentMonth = new Date().getMonth();
+    for (let i = 0; i <= currentMonth; i++) {
+      monthlyMap.set(months[i], 0);
+    }
+
+    for (const order of orders) {
+      if (order.status !== "Cancelled" && order.createdAt) {
+        const orderDate = new Date(order.createdAt);
+        if (!isNaN(orderDate.getTime())) {
+          const m = months[orderDate.getMonth()];
+          monthlyMap.set(m, (monthlyMap.get(m) || 0) + (Number(order.totalPrice) || 0));
+        }
+      }
+    }
+
+    return Array.from(monthlyMap.entries()).map(([month, revenue]) => ({
+      month,
+      revenue,
+    }));
+  }, [orders]);
 
   const columnConfig = {
     data: chartData,
@@ -45,8 +67,15 @@ export const FinancialPerformanceChart: React.FC<FinancialPerformanceChartProps>
       title="Gross Financial Performance Trajectory"
       variant="borderless"
     >
-      <ChartWrapper height="350px">
-        <Column {...columnConfig} />
+      <ChartWrapper height="350px" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {netRevenue > 0 && chartData.length > 0 ? (
+          <Column {...columnConfig} />
+        ) : (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="No financial transactions recorded yet"
+          />
+        )}
       </ChartWrapper>
     </StyledChartCard>
   );

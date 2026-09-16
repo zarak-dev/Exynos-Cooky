@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Flex, Typography } from "antd";
 import type { Cookie } from "../../../../types/product";
+import { DEFAULT_COOKIE_IMAGE } from "../../../../constants";
 import {
   StyledDetailModal,
   ModalBodyWrapper,
@@ -42,10 +43,13 @@ export const CookieDetailModal: React.FC<CookieDetailModalProps> = ({
           <ModalLeft>
             <ModalImageContainer>
               <img
-                src={cookie.imageUrl}
+                src={cookie.imageUrl || DEFAULT_COOKIE_IMAGE}
                 alt={cookie.name}
                 loading="lazy"
                 decoding="async"
+                onError={(e) => {
+                  e.currentTarget.src = DEFAULT_COOKIE_IMAGE;
+                }}
               />
             </ModalImageContainer>
           </ModalLeft>

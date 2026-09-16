@@ -203,7 +203,6 @@ const BuyCooky: React.FC = () => {
       {/* Catalog Grid & Empty State */}
       <CookieCatalogGrid
         visibleCookies={visibleCookies}
-        totalFilteredCount={filteredCookies.length}
         hasMore={hasMore}
         searchQuery={debouncedSearch}
         onSelectCookie={setSelectedCookie}

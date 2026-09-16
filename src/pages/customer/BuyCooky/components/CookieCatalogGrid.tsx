@@ -1,8 +1,8 @@
-import React from "react";
-import { Row, Col, Tag, Button, Empty, Typography } from "antd";
-import { DownCircleTwoTone } from "@ant-design/icons";
+import React, { useEffect, useRef } from "react";
+import { Row, Col, Tag, Spin, Empty, Typography } from "antd";
 import type { Cookie } from "../../../../types/product";
 import { StyledTitle } from "../../../../components/StyledTitle";
+import { DEFAULT_COOKIE_IMAGE } from "../../../../constants";
 import {
   CoverImage,
   CardHeader,
@@ -20,7 +20,6 @@ const { Text } = Typography;
 
 interface CookieCatalogGridProps {
   visibleCookies: Cookie[];
-  totalFilteredCount: number;
   hasMore: boolean;
   searchQuery: string;
   onSelectCookie: (cookie: Cookie) => void;
@@ -30,13 +29,43 @@ interface CookieCatalogGridProps {
 
 export const CookieCatalogGrid: React.FC<CookieCatalogGridProps> = ({
   visibleCookies,
-  totalFilteredCount,
   hasMore,
   searchQuery,
   onSelectCookie,
   onAddToCart,
   onLoadMore,
 }) => {
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!hasMore || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          onLoadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "350px",
+        threshold: 0.1,
+      },
+    );
+
+    const currentSentinel = sentinelRef.current;
+    if (currentSentinel) {
+      observer.observe(currentSentinel);
+    }
+
+    return () => {
+      if (currentSentinel) {
+        observer.unobserve(currentSentinel);
+      }
+    };
+  }, [hasMore, onLoadMore]);
+
   if (visibleCookies.length === 0) {
     return (
       <NoResults>
@@ -63,7 +92,8 @@ export const CookieCatalogGrid: React.FC<CookieCatalogGridProps> = ({
               $isAvailable={cookie.isAvailable}
               cover={
                 <CoverImage
-                  src={cookie.imageUrl}
+                  src={cookie.imageUrl || DEFAULT_COOKIE_IMAGE}
+                  fallback={DEFAULT_COOKIE_IMAGE}
                   alt={cookie.name}
                   preview={false}
                   loading="lazy"
@@ -102,18 +132,31 @@ export const CookieCatalogGrid: React.FC<CookieCatalogGridProps> = ({
         ))}
       </Row>
 
-      {hasMore && (
-        <LoadMoreWrapper>
-          <Button
-            type="dashed"
-            size="large"
-            icon={<DownCircleTwoTone />}
-            onClick={onLoadMore}
-          >
-            Load More Flavors ({totalFilteredCount - visibleCookies.length} remaining)
-          </Button>
+      {hasMore ? (
+        <LoadMoreWrapper
+          ref={sentinelRef}
+          style={{
+            minHeight: 56,
+            padding: "28px 0 36px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Spin size="default" />
         </LoadMoreWrapper>
-      )}
+      ) : visibleCookies.length > 0 ? (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "32px 0 16px",
+            color: "#8c8c8c",
+            fontSize: "13px",
+            fontWeight: 500,
+          }}
+        >
+          🍪 You've reached the end of our cookie menu
+        </div>
+      ) : null}
     </>
   );
 };

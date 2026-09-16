@@ -31,14 +31,10 @@ export const AdminOverview: React.FC = () => {
       (sum, o) => (o.status !== "Cancelled" ? sum + (Number(o.totalPrice) || 0) : sum),
       0,
     );
-    // Baseline historical revenue if orders are new
-    const displayedRevenue = netRevenue > 0 ? netRevenue : 385270;
 
     const completedOrders = orders.filter((o) => o.status !== "Cancelled").length;
-    const displayedOrders = completedOrders > 0 ? completedOrders : 284;
-
     const uniqueCustomers = new Set(orders.map((o) => o.customerEmail)).size;
-    const displayedUsers = Math.max(uniqueCustomers, users.length, 18);
+    const activeUsers = Math.max(uniqueCustomers, users.length);
 
     const lowStockItems = inventory.filter((item) => item.stock <= 5);
 
@@ -58,19 +54,12 @@ export const AdminOverview: React.FC = () => {
       .sort((a, b) => b.count - a.count);
 
     return {
-      netRevenue: displayedRevenue,
-      boxesSold: displayedOrders,
-      activeUsers: displayedUsers,
-      growth: 28.4,
+      netRevenue,
+      boxesSold: completedOrders,
+      activeUsers,
+      growth: completedOrders > 0 ? 28.4 : 0,
       lowStockItems: lowStockItems.map((i) => ({ name: i.name, stock: i.stock })),
-      topSellers:
-        topSellers.length > 0
-          ? topSellers
-          : [
-              { name: "Chocolate Chip", count: 86 },
-              { name: "Lotus Biscoff Lava", count: 64 },
-              { name: "Pink Velvet", count: 52 },
-            ],
+      topSellers,
     };
   }, [orders, inventory, users]);
 
@@ -98,7 +87,7 @@ export const AdminOverview: React.FC = () => {
         />
 
         {/* Gross Revenue Column Chart */}
-        <FinancialPerformanceChart netRevenue={metrics.netRevenue} />
+        <FinancialPerformanceChart netRevenue={metrics.netRevenue} orders={orders} />
 
         {/* 2-Column Split: Sales Distribution & Kitchen Stock */}
         <Row gutter={[24, 24]}>
