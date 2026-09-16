@@ -12,6 +12,19 @@ export const OrdersContainer = styled.div`
 export const OrdersCard = styled(Card)`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
+  .ant-table-wrapper {
+    overflow-x: hidden;
+  }
+
+  .ant-table-container {
+    overflow-x: hidden !important;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    padding: 12px 10px;
+  }
+
   @media (max-width: 768px) {
     .ant-card-body {
       padding: 12px;

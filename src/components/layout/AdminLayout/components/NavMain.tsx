@@ -5,6 +5,7 @@ import {
   Cookie,
   ShoppingBag,
   Users,
+  UserCog,
   type LucideIcon,
 } from "lucide-react";
 import styled from "styled-components";
@@ -54,8 +55,8 @@ const NavButton = styled.button<{ $active?: boolean; $collapsed?: boolean }>`
   padding: 8px 10px;
   border-radius: 8px;
   border: none;
-  background: ${(props) => (props.$active ? "#f4f4f5" : "transparent")};
-  color: ${(props) => (props.$active ? "#09090b" : "#52525b")};
+  background: ${(props) => (props.$active ? "#eef2ff" : "transparent")};
+  color: ${(props) => (props.$active ? "#00009c" : "#52525b")};
   font-weight: ${(props) => (props.$active ? "600" : "500")};
   font-size: 13.5px;
   cursor: pointer;
@@ -64,8 +65,12 @@ const NavButton = styled.button<{ $active?: boolean; $collapsed?: boolean }>`
   position: relative;
 
   &:hover {
-    background: ${(props) => (props.$active ? "#f4f4f5" : "#fafafa")};
-    color: #09090b;
+    background: #eef2ff;
+    color: #00009c;
+
+    span {
+      color: #00009c;
+    }
   }
 
   ${(props) =>
@@ -80,7 +85,7 @@ const IconWrapper = styled.span<{ $active?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${(props) => (props.$active ? "#09090b" : "#71717a")};
+  color: ${(props) => (props.$active ? "#00009c" : "#71717a")};
   transition: color 0.15s ease;
 `;
 
@@ -96,18 +101,18 @@ const ActiveIndicator = styled.div`
   left: 0;
   top: 6px;
   bottom: 6px;
-  width: 3px;
-  background: #09090b;
+  width: 3.5px;
+  background: #00009c;
   border-radius: 0 4px 4px 0;
 `;
 
-const Badge = styled.span`
+const Badge = styled.span<{ $active?: boolean }>`
   font-size: 10.5px;
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 9999px;
-  background: #f4f4f5;
-  color: #52525b;
+  background: ${(props) => (props.$active ? "#c7d2fe" : "#e0e7ff")};
+  color: #00009c;
 `;
 
 export const NavMain: React.FC<NavMainProps> = ({ collapsed, onNavigate }) => {
@@ -135,6 +140,11 @@ export const NavMain: React.FC<NavMainProps> = ({ collapsed, onNavigate }) => {
       title: "Customer History",
       url: "/admin/history",
       icon: Users,
+    },
+    {
+      title: "Admin Profile",
+      url: "/admin/profile",
+      icon: UserCog,
     },
   ];
 
@@ -166,7 +176,7 @@ export const NavMain: React.FC<NavMainProps> = ({ collapsed, onNavigate }) => {
             {!collapsed && (
               <>
                 <NavTitle>{item.title}</NavTitle>
-                {item.badge && <Badge>{item.badge}</Badge>}
+                {item.badge && <Badge $active={isActive}>{item.badge}</Badge>}
               </>
             )}
           </NavButton>

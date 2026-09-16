@@ -89,7 +89,6 @@ const UserHistory: React.FC = () => {
             columns={columns}
             dataSource={filteredUsers}
             loading={loading}
-            scroll={{ x: 800 }}
             pagination={{
               defaultPageSize: 20,
               showSizeChanger: true,

@@ -26,6 +26,7 @@ const AdminOverview = lazy(() => import("@src/pages/admin/Overview/index"));
 const AdminInventory = lazy(() => import("@src/pages/admin/Inventory/index"));
 const AdminOrders = lazy(() => import("@src/pages/admin/Orders"));
 const UserHistory = lazy(() => import("@src/pages/admin/UserHistory"));
+const AdminProfile = lazy(() => import("@src/pages/admin/Profile/index"));
 const LoginPage = lazy(() => import("@src/pages/auth/LoginPage"));
 const SignupPage = lazy(() => import("@src/pages/auth/SignupPage"));
 
@@ -60,6 +61,7 @@ const AppRoute = () => {
               <Route path="inventory" element={<AdminInventory />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="history" element={<UserHistory />} />
+              <Route path="profile" element={<AdminProfile />} />
             </Route>
           </Route>
 

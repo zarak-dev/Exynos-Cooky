@@ -25,7 +25,7 @@ const UserButton = styled.button<{ $collapsed?: boolean }>`
   transition: background-color 0.15s ease;
 
   &:hover {
-    background-color: #f4f4f5;
+    background-color: #eef2ff;
   }
 
   ${(props) =>
@@ -40,7 +40,7 @@ const Avatar = styled.div`
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #27272a;
+  background: #00009c;
   color: #fafafa;
   font-weight: 600;
   font-size: 13px;
@@ -48,6 +48,7 @@ const Avatar = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 156, 0.2);
 `;
 
 const UserInfo = styled.div`
@@ -119,8 +120,8 @@ export const NavUser: React.FC<NavUserProps> = ({ collapsed }) => {
     {
       key: "profile",
       icon: <User size={15} />,
-      label: <span style={{ fontSize: 13 }}>My Profile</span>,
-      onClick: () => navigate("/profile"),
+      label: <span style={{ fontSize: 13 }}>Admin Profile & Security</span>,
+      onClick: () => navigate("/admin/profile"),
     },
     { type: "divider" },
     {

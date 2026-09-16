@@ -2,7 +2,9 @@ import { supabase, isSupabaseConfigured } from "./client";
 import type { Order, OrderStatus } from "@src/types/order";
 
 export const orderService = {
-  async fetchOrders(userEmail?: string): Promise<Order[]> {
+  async fetchOrders(
+    params?: string | { userEmail?: string; userId?: string },
+  ): Promise<Order[]> {
     if (!isSupabaseConfigured) {
       throw new Error("Supabase is not configured. Cannot load orders.");
     }
@@ -12,8 +14,17 @@ export const orderService = {
       .select(`*, order_items(*)`)
       .order("created_at", { ascending: false });
 
-    if (userEmail) {
-      query = query.eq("customer_email", userEmail.trim());
+    const userEmail = typeof params === "string" ? params : params?.userEmail;
+    const userId = typeof params === "object" ? params?.userId : undefined;
+
+    if (userId && userEmail) {
+      query = query.or(
+        `user_id.eq.${userId},customer_email.ilike.${userEmail.trim()}`,
+      );
+    } else if (userId) {
+      query = query.eq("user_id", userId);
+    } else if (userEmail) {
+      query = query.ilike("customer_email", userEmail.trim());
     }
 
     const { data, error } = await query;

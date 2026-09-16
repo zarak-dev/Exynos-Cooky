@@ -56,8 +56,12 @@ const LinkButton = styled.button<{ $collapsed?: boolean }>`
   transition: all 0.15s ease;
 
   &:hover {
-    background: #fafafa;
-    color: #09090b;
+    background: #eef2ff;
+    color: #00009c;
+
+    span {
+      color: #00009c;
+    }
   }
 
   ${(props) =>

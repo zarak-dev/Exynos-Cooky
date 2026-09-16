@@ -82,7 +82,6 @@ const AdminOrders: React.FC = () => {
             dataSource={filteredOrders}
             loading={loading}
             pagination={{ pageSize: 10 }}
-            scroll={{ x: 900 }}
           />
         </OrdersCard>
       </Wrapper>

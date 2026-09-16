@@ -26,13 +26,15 @@ const orderSlice = createSlice({
     fetchOrdersRequest: {
       reducer: (
         state,
-        action: PayloadAction<{ userEmail?: string } | undefined>,
+        action: PayloadAction<
+          { userEmail?: string; userId?: string } | undefined
+        >,
       ) => {
         void action;
         state.loading = true;
         state.error = null;
       },
-      prepare: (payload?: { userEmail?: string }) => ({
+      prepare: (payload?: { userEmail?: string; userId?: string }) => ({
         payload,
       }),
     },

@@ -74,18 +74,19 @@ export const getOrderColumns = ({
     title: "ORDER ID",
     dataIndex: "id",
     sorter: (a, b) => a.id.localeCompare(b.id),
-    render: (id) => <Link>{id}</Link>,
+    render: (id) => <Link style={{ whiteSpace: "nowrap" }}>{id}</Link>,
   },
   {
     title: "CUSTOMER",
     dataIndex: "customerName",
     sorter: (a, b) => a.customerName.localeCompare(b.customerName),
-    render: (name) => <Text>{name}</Text>,
+    render: (name) => <Text style={{ whiteSpace: "nowrap" }}>{name}</Text>,
   },
   {
     title: "BOX SELECTION",
     dataIndex: "boxSize",
     sorter: (a, b) => a.boxSize.localeCompare(b.boxSize),
+    render: (box: string) => <span style={{ whiteSpace: "nowrap" }}>{box}</span>,
   },
   {
     title: "CONTENTS SUMMARY",
@@ -96,7 +97,7 @@ export const getOrderColumns = ({
     title: "TOTAL",
     dataIndex: "totalPrice",
     sorter: (a, b) => a.totalPrice - b.totalPrice,
-    render: (price) => <Text strong>Rs. {price}</Text>,
+    render: (price) => <Text strong style={{ whiteSpace: "nowrap" }}>Rs. {price}</Text>,
   },
   {
     title: "STATUS",
@@ -109,11 +110,12 @@ export const getOrderColumns = ({
       { text: "Delivered", value: "Delivered" },
     ],
     onFilter: (value, record) => record.status === value,
-    render: (status: Order["status"]) => statusTags[status],
+    render: (status: Order["status"]) => (
+      <span style={{ whiteSpace: "nowrap" }}>{statusTags[status]}</span>
+    ),
   },
   {
     title: "ACTIONS",
-    width: 200,
     render: (_, order) => (
       <OrderActions
         order={order}

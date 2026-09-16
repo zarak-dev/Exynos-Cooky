@@ -21,12 +21,14 @@ import { orderService } from "@src/services/supabase/orderService";
 import type { Order, OrderStatus } from "@src/types/order";
 
 function* handleFetchOrders(
-  action?: PayloadAction<{ userEmail?: string } | undefined>,
+  action?: PayloadAction<
+    { userEmail?: string; userId?: string } | undefined
+  >,
 ): Generator<unknown, void, Order[]> {
   try {
     const orders = yield call(
       orderService.fetchOrders,
-      action?.payload?.userEmail,
+      action?.payload,
     );
     yield put(fetchOrdersSuccess(orders));
   } catch (err: unknown) {

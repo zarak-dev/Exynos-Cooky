@@ -15,11 +15,15 @@ import {
   SectionTitle,
   StyledCard,
 } from "./styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@src/store";
 
 export const CheckoutPage: React.FC = () => {
   const [form] = Form.useForm<FormValues>();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const addresses = useSelector((state: RootState) => state.profile.addresses);
+
   const {
     contextHolder,
     confirmedOrderId,
@@ -37,6 +41,25 @@ export const CheckoutPage: React.FC = () => {
     handleSubmit,
     navigate,
   } = useCheckout();
+
+  React.useEffect(() => {
+    if (user) {
+      const nameParts = (user.name || "").trim().split(" ");
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
+      const defaultAddr = addresses.find((a) => a.isDefault) || addresses[0];
+
+      form.setFieldsValue({
+        firstName: form.getFieldValue("firstName") || firstName,
+        lastName: form.getFieldValue("lastName") || lastName,
+        email: form.getFieldValue("email") || user.email || "",
+        phone: form.getFieldValue("phone") || user.phone || defaultAddr?.phone || "",
+        address: form.getFieldValue("address") || defaultAddr?.addressLine1 || "",
+        city: form.getFieldValue("city") || defaultAddr?.city || "Islamabad",
+        zipCode: form.getFieldValue("zipCode") || defaultAddr?.postalCode || "",
+      });
+    }
+  }, [user, addresses, form]);
 
   if (isOrdered && confirmedOrderId && confirmedOrder) {
     return (

@@ -119,7 +119,6 @@ const AdminInventory: React.FC = () => {
             dataSource={filteredInventory}
             loading={loading}
             pagination={{ pageSize: 8 }}
-            scroll={{ x: "max-content" }}
           />
         </StyledCard>
       </Wrapper>

@@ -47,6 +47,17 @@ export const profileService = {
     updates: Partial<UserProfile>,
   ): Promise<UserProfile> {
     if (!isSupabaseConfigured) {
+      const localSession = localStorage.getItem("exynos_admin_session");
+      if (localSession) {
+        const parsed = JSON.parse(localSession) as UserProfile;
+        const updated: UserProfile = {
+          ...parsed,
+          name: updates.name?.trim() || parsed.name,
+          phone: updates.phone?.trim() || parsed.phone,
+        };
+        localStorage.setItem("exynos_admin_session", JSON.stringify(updated));
+        return updated;
+      }
       throw new Error("Supabase is not configured. Cannot update profile.");
     }
 
@@ -72,14 +83,35 @@ export const profileService = {
       .update(updatePayload)
       .eq("id", userId)
       .select()
-      .single();
+      .maybeSingle();
 
-    if (error) {
-      throw new Error(`Profile update failed: ${error.message}`);
+    if (error || !data) {
+      const localSession = localStorage.getItem("exynos_admin_session");
+      if (localSession) {
+        const parsed = JSON.parse(localSession) as UserProfile;
+        const updated: UserProfile = {
+          ...parsed,
+          name: updates.name?.trim() || parsed.name,
+          phone: updates.phone?.trim() || parsed.phone,
+        };
+        localStorage.setItem("exynos_admin_session", JSON.stringify(updated));
+        return updated;
+      }
+      throw new Error(`Profile update failed: ${error?.message || "Record not found"}`);
     }
 
-    if (!data) {
-      throw new Error("Profile record not found.");
+    if (data.role === "admin") {
+      try {
+        localStorage.setItem("exynos_admin_session", JSON.stringify({
+          id: data.id,
+          email: data.email,
+          name: data.full_name,
+          role: data.role,
+          phone: data.phone,
+          avatarUrl: data.avatar_url,
+          marketingPreferences: data.marketing_preferences,
+        }));
+      } catch {}
     }
 
     return {

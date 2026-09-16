@@ -333,4 +333,19 @@ export const authService = {
 
     return null;
   },
+
+  async updatePassword(newPassword: string): Promise<void> {
+    if (!newPassword || newPassword.length < 6) {
+      throw new Error("Password must be at least 6 characters.");
+    }
+    if (!isSupabaseConfigured) {
+      return;
+    }
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+  },
 };

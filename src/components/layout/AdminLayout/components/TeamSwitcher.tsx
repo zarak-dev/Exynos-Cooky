@@ -21,7 +21,7 @@ const SwitcherButton = styled.button<{ $collapsed?: boolean }>`
   transition: background-color 0.15s ease;
 
   &:hover {
-    background-color: #f4f4f5;
+    background-color: #eef2ff;
   }
 
   ${(props) =>
@@ -36,13 +36,13 @@ const LogoBox = styled.div`
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: #09090b;
+  background: #00009c;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 156, 0.25);
 `;
 
 const TextContainer = styled.div`
