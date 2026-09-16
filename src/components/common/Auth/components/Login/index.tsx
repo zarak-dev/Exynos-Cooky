@@ -1,7 +1,11 @@
 import React from "react";
 import { Form, Input, Button, Alert, Divider, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { loginRequest, loginOAuthRequest } from "@src/store/slices/authSlice";
+import {
+  loginRequest,
+  loginOAuthRequest,
+  resetAuthLoading,
+} from "@src/store/slices/authSlice";
 import { type RootState } from "@src/store";
 import type { LoginFormValues } from "@src/types/auth";
 import styled from "styled-components";
@@ -129,7 +133,24 @@ const GoogleIcon = () => (
 export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading, oauthLoading, error } = useSelector(
+    (state: RootState) => state.auth,
+  );
+
+  // Clear any stale loading state whenever the login form mounts
+  React.useEffect(() => {
+    dispatch(resetAuthLoading());
+  }, [dispatch]);
+
+  // Failsafe timer: automatically cancel any stuck loading spinners after 8s
+  React.useEffect(() => {
+    if (loading || oauthLoading) {
+      const timer = setTimeout(() => {
+        dispatch(resetAuthLoading());
+      }, 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, oauthLoading, dispatch]);
 
   const onFinish = ({ email, password }: LoginFormValues) => {
     dispatch(loginRequest({ email: email.trim(), password }));
@@ -159,9 +180,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
         shape="round"
         size="large"
         block
+        loading={Boolean(oauthLoading)}
+        disabled={Boolean(loading || oauthLoading)}
         onClick={handleOAuthGoogle}
       >
-        <GoogleIcon />
+        {!oauthLoading && <GoogleIcon />}
         Login with Google
       </GoogleButton>
 
@@ -223,7 +246,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup }) => {
             htmlType="submit"
             block
             size="large"
-            loading={loading}
+            loading={Boolean(loading)}
+            disabled={Boolean(oauthLoading)}
             style={{ marginTop: 6 }}
           >
             Login

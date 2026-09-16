@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Flex, Row } from "antd";
+import { Col, Row } from "antd";
 
 import {
   HeroContent,
@@ -9,8 +9,9 @@ import {
   ImageWrapper,
   OrderButton,
   Price,
+  PriceActionRow,
+  PriceContainer,
   PriceLabel,
-  PriceWrapper,
   SlideContainer,
   StyledCarousel,
 } from "./styles";
@@ -24,7 +25,16 @@ interface HomeCarouselProps {
 
 const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
   return (
-    <StyledCarousel autoplay autoplaySpeed={4000} infinite>
+    <StyledCarousel
+      autoplay
+      autoplaySpeed={4000}
+      infinite
+      draggable
+      swipe
+      touchMove
+      swipeToSlide
+      touchThreshold={10}
+    >
       {cookies.map((cookie) => (
         <SlideContainer key={cookie.id}>
           <Row
@@ -36,15 +46,15 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
               <HeroContent vertical justify="center">
                 <HeroTitle level={1}>{cookie.name}</HeroTitle>
                 <HeroDescription>{cookie.description}</HeroDescription>
-                <PriceWrapper>
+                <PriceContainer>
                   <PriceLabel>Starting from</PriceLabel>
-                  <Price level={2}>Rs {cookie.price.toLocaleString()}</Price>
-                </PriceWrapper>
-                <Flex gap={16} justify="center">
-                  <OrderButton type="primary" onClick={() => onAdd(cookie)}>
-                    Add to Box
-                  </OrderButton>
-                </Flex>
+                  <PriceActionRow align="center">
+                    <Price>Rs {cookie.price.toLocaleString()}</Price>
+                    <OrderButton type="primary" onClick={() => onAdd(cookie)}>
+                      Add to Box
+                    </OrderButton>
+                  </PriceActionRow>
+                </PriceContainer>
               </HeroContent>
             </Col>
 
@@ -69,4 +79,3 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
 };
 
 export default React.memo(HomeCarousel);
-

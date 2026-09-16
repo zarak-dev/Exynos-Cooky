@@ -11,42 +11,42 @@ import OrderActions from "./orderActions";
 
 const { Text, Link } = Typography;
 
-const nextStatus: Partial<Record<Order["status"], Order["status"]>> = {
+export const nextStatus: Partial<Record<Order["status"], Order["status"]>> = {
   Pending: "Baking",
   Baking: "Dispatched",
   Dispatched: "Delivered",
 };
 
-const actionLabel: Partial<Record<Order["status"], string>> = {
+export const actionLabel: Partial<Record<Order["status"], string>> = {
   Pending: "Start Baking",
   Baking: "Mark Dispatched",
   Dispatched: "Mark Delivered",
 };
 
-const statusTags: Partial<Record<Order["status"], React.ReactNode>> = {
+export const statusTags: Partial<Record<Order["status"], React.ReactNode>> = {
   Pending: (
-    <Tag icon={<ClockCircleOutlined />} color="warning">
-      PENDING QUEUE
+    <Tag icon={<ClockCircleOutlined />} color="warning" style={{ borderRadius: 6, fontWeight: 600 }}>
+      Pending
     </Tag>
   ),
   Baking: (
-    <Tag icon={<SyncOutlined spin />} color="processing">
-      IN OVEN / BAKING
+    <Tag icon={<SyncOutlined spin />} color="processing" style={{ borderRadius: 6, fontWeight: 600 }}>
+      Baking
     </Tag>
   ),
   Dispatched: (
-    <Tag icon={<CheckCircleOutlined />} color="success">
-      DISPATCHED
+    <Tag icon={<CheckCircleOutlined />} color="success" style={{ borderRadius: 6, fontWeight: 600 }}>
+      Dispatched
     </Tag>
   ),
   Delivered: (
-    <Tag icon={<CheckCircleOutlined />} color="default">
-      DELIVERED
+    <Tag icon={<CheckCircleOutlined />} color="default" style={{ borderRadius: 6, fontWeight: 600 }}>
+      Delivered
     </Tag>
   ),
   Cancelled: (
-    <Tag icon={<CloseCircleOutlined />} color="error">
-      CANCELLED
+    <Tag icon={<CloseCircleOutlined />} color="error" style={{ borderRadius: 6, fontWeight: 600 }}>
+      Cancelled
     </Tag>
   ),
 };
@@ -73,35 +73,58 @@ export const getOrderColumns = ({
   {
     title: "ORDER ID",
     dataIndex: "id",
+    width: "12%",
     sorter: (a, b) => a.id.localeCompare(b.id),
-    render: (id) => <Link style={{ whiteSpace: "nowrap" }}>{id}</Link>,
+    render: (id) => (
+      <Link style={{ whiteSpace: "nowrap", fontWeight: 700, color: "#00009c" }}>
+        {id}
+      </Link>
+    ),
   },
   {
     title: "CUSTOMER",
     dataIndex: "customerName",
+    width: "14%",
+    ellipsis: true,
     sorter: (a, b) => a.customerName.localeCompare(b.customerName),
-    render: (name) => <Text style={{ whiteSpace: "nowrap" }}>{name}</Text>,
+    render: (name) => <Text strong style={{ color: "#1e293b" }}>{name}</Text>,
   },
   {
-    title: "BOX SELECTION",
+    title: "PACKAGE",
     dataIndex: "boxSize",
+    width: "10%",
     sorter: (a, b) => a.boxSize.localeCompare(b.boxSize),
-    render: (box: string) => <span style={{ whiteSpace: "nowrap" }}>{box}</span>,
+    render: (box: string) => (
+      <Tag color="purple" style={{ borderRadius: 6, fontWeight: 600, fontSize: 11.5 }}>
+        {box || "Custom"}
+      </Tag>
+    ),
   },
   {
     title: "CONTENTS SUMMARY",
     dataIndex: "contents",
     ellipsis: true,
+    render: (contents: string) => (
+      <Text type="secondary" title={contents} style={{ fontSize: 12.5 }}>
+        {contents || "—"}
+      </Text>
+    ),
   },
   {
     title: "TOTAL",
     dataIndex: "totalPrice",
+    width: "11%",
     sorter: (a, b) => a.totalPrice - b.totalPrice,
-    render: (price) => <Text strong style={{ whiteSpace: "nowrap" }}>Rs. {price}</Text>,
+    render: (price) => (
+      <Text strong style={{ color: "#00009c", whiteSpace: "nowrap" }}>
+        Rs. {Number(price).toLocaleString()}
+      </Text>
+    ),
   },
   {
     title: "STATUS",
     dataIndex: "status",
+    width: "13%",
     sorter: (a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status],
     filters: [
       { text: "Pending", value: "Pending" },
@@ -116,6 +139,7 @@ export const getOrderColumns = ({
   },
   {
     title: "ACTIONS",
+    width: "19%",
     render: (_, order) => (
       <OrderActions
         order={order}

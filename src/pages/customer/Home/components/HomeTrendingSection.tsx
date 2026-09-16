@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Tag, Rate } from "antd";
 import type { Cookie } from "@src/types/product";
 import { StyledTitle } from "@src/components/StyledTitle";
@@ -28,13 +28,52 @@ const HomeTrendingSectionComponent: React.FC<HomeTrendingSectionProps> = ({
 }) => {
   const [activeTrending, setActiveTrending] = useState<number>(0);
 
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const touchEndY = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+    touchStartY.current = e.targetTouches[0].clientY;
+    touchEndX.current = null;
+    touchEndY.current = null;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+    touchEndY.current = e.targetTouches[0].clientY;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+    const deltaX = touchStartX.current - touchEndX.current;
+    const deltaY = (touchStartY.current || 0) - (touchEndY.current || 0);
+
+    // Only trigger if horizontal swipe was greater than vertical swipe (avoid canceling vertical scroll)
+    // and exceeded minimal threshold (35px for snappy response)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 35) {
+      if (deltaX > 0) {
+        // Swiped left -> next
+        setActiveTrending((prev) => (prev + 1) % cookies.length);
+      } else {
+        // Swiped right -> prev
+        setActiveTrending((prev) => (prev - 1 + cookies.length) % cookies.length);
+      }
+    }
+  };
+
   return (
     <TrendingSection>
       <TrendingSectionTitle level={2}>Trending</TrendingSectionTitle>
       <SectionBadge>
         🔥 Discover what everyone is ordering right now
       </SectionBadge>
-      <TrendingStack>
+      <TrendingStack
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {cookies.map((cookie, idx) => {
           const pos: "center" | "left" | "right" =
             idx === activeTrending
@@ -110,4 +149,3 @@ const HomeTrendingSectionComponent: React.FC<HomeTrendingSectionProps> = ({
 };
 
 export const HomeTrendingSection = React.memo(HomeTrendingSectionComponent);
-

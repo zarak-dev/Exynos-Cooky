@@ -44,6 +44,44 @@ const CookieBadge = styled.div`
   flex-shrink: 0;
 `;
 
+const DesktopOrdersCard = styled(StyledCard)`
+  padding: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+
+  .ant-card-body {
+    padding: 0;
+  }
+
+  .ant-table-wrapper,
+  .ant-table-container,
+  .ant-table-content {
+    overflow-x: hidden !important;
+  }
+
+  .ant-table-thead > tr > th {
+    background: #f8fafc;
+    color: #475569;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 12px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+  }
+
+  .ant-table-tbody > tr > td {
+    padding: 12px 14px;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .ant-table-tbody > tr:hover > td {
+    background: #f8fafc !important;
+  }
+`;
+
 export const ProfileOrdersCard: React.FC<ProfileOrdersCardProps> = ({ orders }) => {
   const navigate = useNavigate();
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -100,6 +138,7 @@ export const ProfileOrdersCard: React.FC<ProfileOrdersCardProps> = ({ orders }) 
       title: "Order ID",
       dataIndex: "id",
       key: "id",
+      width: "18%",
       render: (id: string) => (
         <Space size={6}>
           <Cookie size={16} style={{ color: "#00009c" }} />
@@ -117,6 +156,7 @@ export const ProfileOrdersCard: React.FC<ProfileOrdersCardProps> = ({ orders }) 
       title: "Order Date",
       dataIndex: "timestamp",
       key: "timestamp",
+      width: "18%",
       render: (value: string) => (
         <Space size={6} style={{ whiteSpace: "nowrap" }}>
           <Clock size={14} style={{ color: "#64748b" }} />
@@ -136,6 +176,7 @@ export const ProfileOrdersCard: React.FC<ProfileOrdersCardProps> = ({ orders }) 
       title: "Box Selection",
       dataIndex: "boxSize",
       key: "boxSize",
+      width: "18%",
       render: (boxSize: string) => (
         <Tag color="purple" style={{ borderRadius: 6, fontWeight: 600, fontSize: 12 }}>
           {boxSize || "Custom Box"}
@@ -146,12 +187,14 @@ export const ProfileOrdersCard: React.FC<ProfileOrdersCardProps> = ({ orders }) 
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: "18%",
       render: (status: string) => renderStatusTag(status),
     },
     {
       title: "Total Paid",
       dataIndex: "totalPrice",
       key: "totalPrice",
+      width: "16%",
       render: (value: number) => (
         <Text strong style={{ color: "#00009c", fontSize: 14, whiteSpace: "nowrap" }}>
           Rs. {Number(value || 0).toLocaleString()}
@@ -161,6 +204,7 @@ export const ProfileOrdersCard: React.FC<ProfileOrdersCardProps> = ({ orders }) 
     {
       title: "Track",
       key: "action",
+      width: "12%",
       render: (_: unknown, record: Order) => (
         <Button
           type="primary"
@@ -234,16 +278,16 @@ export const ProfileOrdersCard: React.FC<ProfileOrdersCardProps> = ({ orders }) 
           </Empty>
         </StyledCard>
       ) : isDesktop ? (
-        /* DESKTOP VIEW: Full Wide Table */
-        <StyledCard style={{ padding: 0, overflow: "hidden", borderRadius: 14 }}>
+        /* DESKTOP VIEW: Clean Table in Perfect Shape */
+        <DesktopOrdersCard>
           <Table
             rowKey="id"
+            tableLayout="fixed"
             columns={orderColumns}
             dataSource={orders}
             pagination={{ pageSize: 6, position: ["bottomCenter"] }}
-            scroll={{ x: 680 }}
           />
-        </StyledCard>
+        </DesktopOrdersCard>
       ) : (
         /* MOBILE VIEW: Clean Native Card List without horizontal scrollbar */
         <Flex vertical gap={4} style={{ width: "100%" }}>

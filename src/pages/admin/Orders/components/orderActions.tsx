@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Space, Tag } from "antd";
+import { Button, Popconfirm, Flex, Tag } from "antd";
 import { CloseCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { type Order } from "@src/store/slices/orderSlice";
 
@@ -21,25 +21,40 @@ const OrderActions = ({
     order.status !== "Cancelled" && order.status !== "Delivered";
 
   return (
-    <Space size="small">
+    <Flex align="center" gap={6} style={{ flexWrap: "nowrap" }}>
       {order.status === "Delivered" && (
-        <Tag color="green">Complete</Tag>
+        <Tag color="success" style={{ borderRadius: 6, fontWeight: 600, margin: 0 }}>
+          Completed
+        </Tag>
       )}
 
       {order.status === "Cancelled" && (
-        <Tag color="red">Cancelled</Tag>
+        <Tag color="error" style={{ borderRadius: 6, fontWeight: 600, margin: 0 }}>
+          Cancelled
+        </Tag>
       )}
 
-      {order.status !== "Delivered" && order.status !== "Cancelled" && buttonLabel && nextStatus && (
-        <Button
-          type="primary"
-          size="small"
-          shape="round"
-          onClick={() => onStatusChange(order.id, nextStatus)}
-        >
-          {buttonLabel}
-        </Button>
-      )}
+      {order.status !== "Delivered" &&
+        order.status !== "Cancelled" &&
+        buttonLabel &&
+        nextStatus && (
+          <Button
+            type="primary"
+            size="small"
+            shape="round"
+            style={{
+              background: "#00009c",
+              borderColor: "#00009c",
+              fontWeight: 600,
+              fontSize: 12,
+              height: 28,
+              padding: "0 10px",
+            }}
+            onClick={() => onStatusChange(order.id, nextStatus)}
+          >
+            {buttonLabel}
+          </Button>
+        )}
 
       {isCancellable && (
         <Popconfirm
@@ -55,7 +70,8 @@ const OrderActions = ({
             type="default"
             danger
             size="small"
-            icon={<CloseCircleOutlined />}
+            icon={<CloseCircleOutlined style={{ fontSize: 12 }} />}
+            style={{ height: 28, fontSize: 12, padding: "0 8px" }}
           >
             Cancel
           </Button>
@@ -75,11 +91,12 @@ const OrderActions = ({
           type="text"
           danger
           size="small"
-          icon={<DeleteOutlined />}
+          icon={<DeleteOutlined style={{ fontSize: 13 }} />}
           title="Delete record"
+          style={{ width: 28, height: 28 }}
         />
       </Popconfirm>
-    </Space>
+    </Flex>
   );
 };
 

@@ -67,7 +67,7 @@ export const CookieDetailModal: React.FC<CookieDetailModalProps> = ({
                   <span className="dot" />
                   {cookie.isAvailable ? "Available" : "Sold Out"}
                 </StatusBadge>
-                {cookie.stock > 0 && (
+                {cookie.isAvailable && cookie.stock > 0 && (
                   <StockBadge>
                     In Stock
                   </StockBadge>

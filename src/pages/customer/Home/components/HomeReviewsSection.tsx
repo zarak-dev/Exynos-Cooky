@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Rate, Avatar, Spin, Flex, Empty } from "antd";
 import type { Review } from "@src/types/review";
+import { useMediaQuery } from "@src/hooks/useMediaQuery";
 import {
   ReviewsSection,
   ReviewsSectionTitle,
@@ -18,18 +19,41 @@ const DEFAULT_AVATAR =
 
 const CAROUSEL_RESPONSIVE_SETTINGS = [
   {
-    breakpoint: 1024,
+    breakpoint: 1200,
     settings: {
-      slidesToShow: 2,
-      slidesToScroll: 2,
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      swipe: true,
+      draggable: true,
+      touchMove: true,
+      swipeToSlide: true,
+      touchThreshold: 10,
     },
   },
   {
-    breakpoint: 768,
+    breakpoint: 992,
+    settings: {
+      slidesToShow: 2,
+      slidesToScroll: 1,
+      swipe: true,
+      draggable: true,
+      touchMove: true,
+      swipeToSlide: true,
+      touchThreshold: 10,
+    },
+  },
+  {
+    breakpoint: 640,
     settings: {
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: false,
+      dots: true,
+      swipe: true,
+      draggable: true,
+      touchMove: true,
+      swipeToSlide: true,
+      touchThreshold: 10,
     },
   },
 ];
@@ -37,14 +61,22 @@ const CAROUSEL_RESPONSIVE_SETTINGS = [
 interface HomeReviewsSectionProps {
   reviews: Review[];
   loading: boolean;
-  isMobile: boolean;
+  isMobile?: boolean;
 }
 
 const HomeReviewsSectionComponent: React.FC<HomeReviewsSectionProps> = ({
   reviews,
   loading,
-  isMobile,
 }) => {
+  const isMobileScreen = useMediaQuery("(max-width: 640px)");
+  const isTabletScreen = useMediaQuery("(max-width: 992px)");
+
+  const slidesToShow = useMemo(() => {
+    if (isMobileScreen) return 1;
+    if (isTabletScreen) return Math.min(2, reviews.length);
+    return Math.min(4, reviews.length);
+  }, [isMobileScreen, isTabletScreen, reviews.length]);
+
   return (
     <ReviewsSection>
       <ReviewsSectionTitle level={2}>Customer Reviews</ReviewsSectionTitle>
@@ -55,12 +87,17 @@ const HomeReviewsSectionComponent: React.FC<HomeReviewsSectionProps> = ({
       <Spin spinning={loading}>
         {reviews.length > 0 ? (
           <BestCarousel
-            slidesToShow={Math.min(4, reviews.length)}
+            key={`reviews-carousel-${slidesToShow}`}
+            slidesToShow={slidesToShow}
             slidesToScroll={1}
             dots={true}
-            arrows={!isMobile}
-            infinite={reviews.length > 1}
+            arrows={!isMobileScreen}
+            infinite={reviews.length > slidesToShow}
+            draggable={true}
+            swipe={true}
+            touchMove={true}
             swipeToSlide={true}
+            touchThreshold={10}
             responsive={CAROUSEL_RESPONSIVE_SETTINGS}
           >
             {reviews.map((review, i) => {
@@ -109,4 +146,3 @@ const HomeReviewsSectionComponent: React.FC<HomeReviewsSectionProps> = ({
 };
 
 export const HomeReviewsSection = React.memo(HomeReviewsSectionComponent);
-

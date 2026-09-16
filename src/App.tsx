@@ -2,7 +2,11 @@ import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import AppRoute from "./routes/AppRoute";
-import { restoreSessionRequest, restoreSessionSuccess } from "./store/slices/authSlice";
+import {
+  restoreSessionRequest,
+  restoreSessionSuccess,
+  resetAuthLoading,
+} from "./store/slices/authSlice";
 import { fetchInventoryRequest } from "./store/slices/inventorySlice";
 import { supabase, isSupabaseConfigured } from "./services/supabase/client";
 
@@ -13,6 +17,18 @@ function App() {
     dispatch(restoreSessionRequest());
     dispatch(fetchInventoryRequest());
 
+    // Reset stuck OAuth/login spinners if user navigates back via browser Back button (bfcache) or refocuses window
+    const handlePageShow = () => {
+      dispatch(resetAuthLoading());
+    };
+    const handleFocus = () => {
+      dispatch(resetAuthLoading());
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("focus", handleFocus);
+
+    let unsubscribeAuth: (() => void) | undefined;
     if (isSupabaseConfigured) {
       const {
         data: { subscription },
@@ -24,10 +40,16 @@ function App() {
         }
       });
 
-      return () => {
+      unsubscribeAuth = () => {
         subscription.unsubscribe();
       };
     }
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("focus", handleFocus);
+      if (unsubscribeAuth) unsubscribeAuth();
+    };
   }, [dispatch]);
 
   return (

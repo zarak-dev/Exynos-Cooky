@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Space, Switch, Tag } from "antd";
+import { Button, Popconfirm, Flex, Switch, Tag } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Text from "antd/es/typography/Text";
 import { CookieImage, StatusTag } from "./styles";
@@ -14,44 +14,74 @@ export const getInventoryColumns = ({
     title: "IMAGE",
     dataIndex: "imageUrl",
     key: "imageUrl",
-    width: 90,
+    width: 65,
     render: (url: string, record: Product) => (
-      <CookieImage src={url} alt={record.name} width={55} />
+      <CookieImage
+        src={url}
+        alt={record.name}
+        width={42}
+        height={42}
+        style={{ borderRadius: 8, objectFit: "cover" }}
+      />
     ),
   },
   {
     title: "COOKIE NAME",
     dataIndex: "name",
     key: "name",
+    ellipsis: true,
     sorter: (a, b) => a.name.localeCompare(b.name),
-    render: (text: string) => <Text strong>{text}</Text>,
+    render: (text: string) => (
+      <Text strong style={{ color: "#0f172a" }}>
+        {text}
+      </Text>
+    ),
   },
   {
     title: "PRICE",
     dataIndex: "price",
     key: "price",
+    width: "15%",
     sorter: (a, b) => a.price - b.price,
-    render: (price: number) => <Text>Rs. {price}</Text>,
+    render: (price: number) => (
+      <Text strong style={{ color: "#00009c", whiteSpace: "nowrap" }}>
+        Rs. {price.toLocaleString()}
+      </Text>
+    ),
   },
   {
     title: "STOCK",
     dataIndex: "stock",
     key: "stock",
+    width: "17%",
     sorter: (a, b) => a.stock - b.stock,
     render: (stock: number) => {
       if (stock === 0) {
-        return <Tag color="error">Out of Stock</Tag>;
+        return (
+          <Tag color="error" style={{ borderRadius: 6, fontWeight: 600 }}>
+            Out of Stock
+          </Tag>
+        );
       }
       if (stock <= 5) {
-        return <Tag color="warning">Low Stock ({stock})</Tag>;
+        return (
+          <Tag color="warning" style={{ borderRadius: 6, fontWeight: 600 }}>
+            Low Stock ({stock})
+          </Tag>
+        );
       }
-      return <Text>{stock} units</Text>;
+      return (
+        <Tag color="default" style={{ borderRadius: 6 }}>
+          {stock} units
+        </Tag>
+      );
     },
   },
   {
     title: "STATUS",
     dataIndex: "isAvailable",
     key: "isAvailable",
+    width: "15%",
     sorter: (a, b) => Number(b.isAvailable) - Number(a.isAvailable),
     filters: [
       { text: "Available", value: true },
@@ -67,16 +97,18 @@ export const getInventoryColumns = ({
   {
     title: "ACTION",
     key: "action",
-    width: 180,
+    width: "16%",
     render: (_: unknown, record: Product) => (
-      <Space>
+      <Flex align="center" gap={6}>
         <Switch
+          size="small"
           checkedChildren="ON"
           unCheckedChildren="OFF"
           checked={record.isAvailable}
           onChange={(checked) => onToggle(record.id, checked)}
         />
         <Button
+          size="small"
           type="text"
           icon={<EditOutlined />}
           onClick={() => onEdit(record)}
@@ -90,9 +122,9 @@ export const getInventoryColumns = ({
           cancelText="Cancel"
           onConfirm={() => onDelete(record.id)}
         >
-          <Button type="text" danger icon={<DeleteOutlined />} />
+          <Button size="small" type="text" danger icon={<DeleteOutlined />} />
         </Popconfirm>
-      </Space>
+      </Flex>
     ),
   },
 ];

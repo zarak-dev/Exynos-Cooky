@@ -66,10 +66,13 @@ export const AuthModal: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isLoggedIn && user?.role === "admin") {
-      navigate("/admin");
+    if (isLoggedIn && isOpen) {
+      dispatch(setOpenAuthModal(false));
+      if (user?.role === "admin") {
+        navigate("/admin");
+      }
     }
-  }, [isLoggedIn, user?.role, navigate]);
+  }, [isLoggedIn, isOpen, user?.role, navigate, dispatch]);
 
   return (
     <Modal

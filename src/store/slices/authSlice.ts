@@ -9,6 +9,7 @@ interface AuthState {
   isRestoringSession: boolean;
   user: UserProfile | null;
   loading: boolean;
+  oauthLoading: boolean;
   error: string | null;
 }
 
@@ -18,6 +19,7 @@ const initialState: AuthState = {
   isRestoringSession: true,
   user: null,
   loading: false,
+  oauthLoading: false,
   error: null,
 };
 
@@ -28,6 +30,14 @@ const authSlice = createSlice({
     setOpenAuthModal: (state, action: PayloadAction<boolean>) => {
       state.isAuthModalOpen = action.payload;
       state.error = null;
+      state.loading = false;
+      state.oauthLoading = false;
+    },
+
+    resetAuthLoading: (state) => {
+      state.loading = false;
+      state.oauthLoading = false;
+      state.error = null;
     },
 
     // Saga Triggers
@@ -37,6 +47,7 @@ const authSlice = createSlice({
     ) => {
       void action;
       state.loading = true;
+      state.oauthLoading = false;
       state.error = null;
     },
     loginOAuthRequest: (
@@ -44,19 +55,22 @@ const authSlice = createSlice({
       action: PayloadAction<{ provider: "google" | "github" }>,
     ) => {
       void action;
-      state.loading = true;
+      state.oauthLoading = true;
+      state.loading = false;
       state.error = null;
     },
     loginSuccess: (state, action: PayloadAction<UserProfile>) => {
       state.isLoggedIn = true;
       state.user = action.payload;
       state.loading = false;
+      state.oauthLoading = false;
       state.isRestoringSession = false;
       state.error = null;
       state.isAuthModalOpen = false;
     },
     loginFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
+      state.oauthLoading = false;
       state.isRestoringSession = false;
       state.error = action.payload;
     },
@@ -67,10 +81,12 @@ const authSlice = createSlice({
     ) => {
       void action;
       state.loading = true;
+      state.oauthLoading = false;
       state.error = null;
     },
     signupSuccess: (state, action: PayloadAction<UserProfile>) => {
       state.loading = false;
+      state.oauthLoading = false;
       state.isRestoringSession = false;
       state.error = null;
       state.isAuthModalOpen = false;
@@ -79,20 +95,23 @@ const authSlice = createSlice({
     },
     signupFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
+      state.oauthLoading = false;
       state.isRestoringSession = false;
       state.error = action.payload;
     },
 
     restoreSessionRequest: (state) => {
-      state.loading = true;
+      // Do not set state.loading = true to prevent form button spinners on background checks
       state.isRestoringSession = true;
     },
     restoreSessionSuccess: (state, action: PayloadAction<UserProfile | null>) => {
       state.loading = false;
+      state.oauthLoading = false;
       state.isRestoringSession = false;
       if (action.payload) {
         state.isLoggedIn = true;
         state.user = action.payload;
+        state.isAuthModalOpen = false;
       } else {
         state.isLoggedIn = false;
         state.user = null;
@@ -103,6 +122,8 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
       state.error = null;
+      state.loading = false;
+      state.oauthLoading = false;
       state.isRestoringSession = false;
     },
 
@@ -123,6 +144,7 @@ const authSlice = createSlice({
 
 export const {
   setOpenAuthModal,
+  resetAuthLoading,
   loginRequest,
   loginOAuthRequest,
   loginSuccess,

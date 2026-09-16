@@ -3,6 +3,18 @@ import { Carousel, Typography, Button, Flex } from "antd";
 
 export const StyledCarousel = styled(Carousel)`
   width: 100%;
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .slick-slider,
+  .slick-list,
+  .slick-track {
+    touch-action: pan-y pinch-zoom;
+  }
 
   .slick-dots {
     bottom: 14px;
@@ -29,6 +41,9 @@ export const SlideContainer = styled.div`
   background: linear-gradient(135deg, #f8faff 0%, #eef3ff 100%);
   overflow: hidden;
   box-sizing: border-box;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
 
   @media (min-width: 993px) {
     height: 520px;
@@ -121,35 +136,53 @@ export const HeroDescription = styled(Typography.Paragraph)`
   }
 `;
 
-export const PriceWrapper = styled(Flex)`
-  flex-direction: column;
-  gap: 2px;
-  margin: 8px 0 16px;
+export const PriceContainer = styled.div`
+  margin-top: 20px;
+  margin-bottom: 6px;
 
   @media (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    margin: 2px 0 12px;
+    text-align: center;
+    margin-top: 14px;
   }
 `;
 
-export const PriceLabel = styled(Typography.Text)`
-  color: #8c8c8c;
+export const PriceLabel = styled.div`
+  color: #71717a;
   font-size: 13px;
   font-weight: 500;
+  margin-bottom: 6px;
+  line-height: 1.2;
 `;
 
-export const Price = styled(Typography.Title)`
-  &.ant-typography {
-    color: #00009c;
-    margin-bottom: 0;
-    font-weight: 700;
+export const PriceActionRow = styled(Flex)`
+  align-items: center;
+  gap: 20px;
 
-    @media (max-width: 992px) {
-      font-size: 1.4rem !important;
-    }
-    @media (max-width: 576px) {
-      font-size: 1.25rem !important;
-    }
+  @media (max-width: 576px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+`;
+
+export const Price = styled.div`
+  color: #00009c;
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+
+  @media (max-width: 992px) {
+    font-size: 1.6rem;
+  }
+  @media (max-width: 576px) {
+    font-size: 1.35rem;
   }
 `;
 
@@ -159,6 +192,17 @@ export const OrderButton = styled(Button)`
   border-radius: 12px;
   font-weight: 600;
   font-size: 15px;
+  background: #00009c;
+  border-color: #00009c;
+  box-shadow: 0 4px 14px rgba(0, 0, 156, 0.2);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #000080 !important;
+    border-color: #000080 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 156, 0.3);
+  }
 
   @media (max-width: 992px) {
     height: 42px;
@@ -198,6 +242,10 @@ export const HeroImage = styled.img`
   max-height: 420px;
   object-fit: cover;
   border-radius: 20px;
+  -webkit-user-drag: none;
+  user-drag: none;
+  user-select: none;
+  pointer-events: none;
 
   @media (max-width: 992px) {
     max-height: 280px;

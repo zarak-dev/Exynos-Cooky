@@ -137,6 +137,18 @@ export const BestSectionTitle = styled(Title)`
 export const BestCarousel = styled(Carousel)`
   width: 100%;
   max-width: 100%;
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .slick-slider,
+  .slick-list,
+  .slick-track {
+    touch-action: pan-y pinch-zoom;
+  }
 
   .slick-track {
     display: flex !important;
@@ -232,6 +244,9 @@ export const BestCardSlide = styled.div`
   padding: 0 8px 10px;
   box-sizing: border-box;
   height: 100%;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
 
   .ant-card {
     width: 100%;
@@ -290,12 +305,16 @@ export const TrendingStack = styled.div`
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
 
   @media (max-width: 768px) {
     height: auto;
     flex-direction: column;
     gap: 0;
     width: 100%;
+    touch-action: pan-y pinch-zoom;
   }
 `;
 export const TrendingCard = styled(Card)<{
@@ -308,6 +327,9 @@ export const TrendingCard = styled(Card)<{
   border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
   transition:
     transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.35s ease,
@@ -364,6 +386,9 @@ export const TrendingCard = styled(Card)<{
     object-fit: cover;
     width: 100%;
     display: block;
+    user-drag: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
   }
 
   @media (max-width: 768px) {
@@ -443,19 +468,22 @@ export const ReviewsSection = styled.div`
 `;
 
 export const ReviewSlide = styled.div`
-  padding: 0 8px 10px;
+  padding: 0 10px 14px;
   box-sizing: border-box;
   min-width: 0;
   height: 100%;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
 
   .ant-card {
     width: 100%;
     height: 100%;
   }
 
-  @media (max-width: 768px) {
-    padding: 0 8px 12px;
-    max-width: min(360px, 100%);
+  @media (max-width: 640px) {
+    padding: 0 12px 14px;
+    max-width: 380px;
     margin: 0 auto;
   }
 `;
@@ -475,34 +503,59 @@ export const ReviewsSectionTitle = styled(Title)`
 `;
 
 export const ReviewCard = styled(Card)`
-  border-radius: 14px;
+  border-radius: 16px;
   min-width: 0;
   word-break: break-word;
   height: 100%;
   box-shadow: 0 4px 16px rgba(0, 0, 56, 0.06);
+  border: 1px solid #eef2ff;
+  transition: all 0.25s ease;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 156, 0.1);
+    border-color: #c7d2fe;
+    transform: translateY(-2px);
+  }
 
   .ant-card-body {
-    padding: 16px;
+    padding: 18px 20px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     overflow: hidden;
     flex: 1;
+
+    @media (max-width: 640px) {
+      padding: 20px 18px;
+      gap: 12px;
+    }
+  }
+
+  .ant-rate {
+    white-space: nowrap !important;
   }
 `;
 
 export const ReviewText = styled(Paragraph)`
   &.ant-typography {
-    font-size: 0.85rem;
-    color: #444;
+    font-size: 0.88rem;
+    color: #334155;
     margin: 0;
     font-style: italic;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
-    line-height: 1.5;
+    line-height: 1.55;
+
+    @media (max-width: 640px) {
+      font-size: 0.92rem;
+      -webkit-line-clamp: 5;
+    }
   }
 `;
 

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Button, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { signupRequest } from "@src/store/slices/authSlice";
+import { signupRequest, resetAuthLoading } from "@src/store/slices/authSlice";
 import type { RootState } from "@src/store";
 import type { SignUpFormValues } from "@src/types/auth";
 
@@ -9,6 +9,19 @@ export const SignUpForm: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { loading, error } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    dispatch(resetAuthLoading());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => {
+        dispatch(resetAuthLoading());
+      }, 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, dispatch]);
 
   const onFinish = ({ name, email, password }: SignUpFormValues) => {
     dispatch(

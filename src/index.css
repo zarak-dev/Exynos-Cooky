@@ -34,9 +34,13 @@ img {
   display: block;
 }
 
-/* Slick Carousel */
-.slick-slider {
+/* Slick Carousel Touch and Drag Fixes */
+.slick-slider,
+.slick-list,
+.slick-track {
   max-width: 100%;
+  touch-action: pan-y pinch-zoom;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .slick-list {
@@ -48,6 +52,20 @@ img {
 .slick-track {
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
+}
+
+.slick-slide {
+  outline: none;
+  -webkit-touch-callout: none;
+}
+
+.slick-slide img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  user-select: none;
 }
 
 /* Interactive Card Transitions without GPU memory exhaustion */
