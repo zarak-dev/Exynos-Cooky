@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Review, ReviewInput } from "../../types/review";
+import type { Review, ReviewInput } from "@src/types/review";
 
 interface ReviewState {
   reviews: Review[];

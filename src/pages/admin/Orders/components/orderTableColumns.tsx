@@ -6,7 +6,7 @@ import {
   CloseCircleOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-import { type Order } from "../../../../store/slices/orderSlice";
+import { type Order } from "@src/store/slices/orderSlice";
 import OrderActions from "./orderActions";
 
 const { Text, Link } = Typography;

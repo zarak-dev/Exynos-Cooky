@@ -6,10 +6,10 @@ import {
   DeleteOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
-import type { Address } from "../../../../types/address";
-import { SectionContainer } from "../styles";
-import { StyledCard } from "../../../../components/StyledCard";
-import { StyledTitle } from "../../../../components/StyledTitle";
+import type { Address } from "@src/types/address";
+import { SectionContainer } from "@src/pages/customer/Profile/styles";
+import { StyledCard } from "@src/components/StyledCard";
+import { StyledTitle } from "@src/components/StyledTitle";
 
 const { Text } = Typography;
 

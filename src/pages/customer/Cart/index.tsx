@@ -13,13 +13,13 @@ import {
 } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { type RootState } from "../../../store";
+import { type RootState } from "@src/store";
 import {
   removeCookieFromBox,
   setBoxSize,
   addCookieToBox,
-} from "../../../store/slices/cartSlice";
-import { groupCartItems, type GroupedCartItem } from "../../../utils/cartUtils";
+} from "@src/store/slices/cartSlice";
+import { groupCartItems, type GroupedCartItem } from "@src/utils/cartUtils";
 import {
   CartContainer,
   EmptyCartContainer,
@@ -30,9 +30,9 @@ import {
   BoxCapacityText,
   SpacedDivider,
 } from "./styles";
-import { StyledTitle } from "../../../components/StyledTitle";
-import { StyledCard } from "../../../components/StyledCard";
-import { DELIVERY_FEE } from "../../../constants/pricing";
+import { StyledTitle } from "@src/components/StyledTitle";
+import { StyledCard } from "@src/components/StyledCard";
+import { DELIVERY_FEE } from "@src/constants/pricing";
 
 const { Text } = Typography;
 

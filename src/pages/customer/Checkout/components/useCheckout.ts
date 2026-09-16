@@ -2,16 +2,16 @@ import { useState, useEffect, useMemo } from "react";
 import { message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { type RootState } from "../../../../store";
-import { DELIVERY_FEE } from "../../../../constants/pricing";
-import { clearBox } from "../../../../store/slices/cartSlice";
-import { createOrderRequest, type Order } from "../../../../store/slices/orderSlice";
-import { clearCoupon } from "../../../../store/slices/couponSlice";
+import { type RootState } from "@src/store";
+import { DELIVERY_FEE } from "@src/constants/pricing";
+import { clearBox } from "@src/store/slices/cartSlice";
+import { createOrderRequest, type Order } from "@src/store/slices/orderSlice";
+import { clearCoupon } from "@src/store/slices/couponSlice";
 import {
   groupCartItems,
   buildContentsString,
-} from "../../../../utils/cartUtils";
-import type { FormValues, PaymentMethod } from "../types";
+} from "@src/utils/cartUtils";
+import type { FormValues, PaymentMethod } from "@src/pages/customer/Checkout/types";
 
 function generateOrderId(): string {
   return `EXY-${Math.floor(10000 + Math.random() * 90000)}`;

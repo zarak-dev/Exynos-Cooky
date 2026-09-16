@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Coupon, CouponValidationResult } from "../../types/coupon";
+import type { Coupon, CouponValidationResult } from "@src/types/coupon";
 
 interface CouponState {
   appliedCoupon: Coupon | null;

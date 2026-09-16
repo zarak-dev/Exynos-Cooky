@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { UserProfile, UserRole } from "../../types/auth";
+import type { UserProfile, UserRole } from "@src/types/auth";
 
 export type { UserProfile, UserRole };
 

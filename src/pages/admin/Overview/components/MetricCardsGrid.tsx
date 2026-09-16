@@ -6,7 +6,7 @@ import {
   DollarOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { MetricCard, MetricIcon } from "../styles";
+import { MetricCard, MetricIcon } from "@src/pages/admin/Overview/styles";
 
 interface MetricCardsGridProps {
   netRevenue: number;

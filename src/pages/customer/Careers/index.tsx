@@ -15,7 +15,7 @@ import {
   JobContentWrapper,
   JobDescriptionText,
 } from "./components/styles";
-import { StyledTitle } from "../../../components/StyledTitle";
+import { StyledTitle } from "@src/components/StyledTitle";
 import { PicCenterOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;

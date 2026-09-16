@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from "./client";
-import type { Product } from "../../types/product";
+import type { Product } from "@src/types/product";
 
 export const productService = {
   async fetchProducts(): Promise<Product[]> {

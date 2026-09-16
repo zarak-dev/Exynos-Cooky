@@ -3,17 +3,17 @@ import { Switch, Flex, Button, message, Typography } from "antd";
 import { EditOutlined, MailOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { type RootState } from "../../../store";
-import { logoutUser } from "../../../store/slices/authSlice";
-import { fetchOrdersRequest } from "../../../store/slices/orderSlice";
+import { type RootState } from "@src/store";
+import { logoutUser } from "@src/store/slices/authSlice";
+import { fetchOrdersRequest } from "@src/store/slices/orderSlice";
 import {
   fetchAddressesRequest,
   addAddressRequest,
   deleteAddressRequest,
   setDefaultAddressRequest,
   updateProfileRequest,
-} from "../../../store/slices/profileSlice";
-import type { AddressInput } from "../../../types/address";
+} from "@src/store/slices/profileSlice";
+import type { AddressInput } from "@src/types/address";
 import {
   ProfileContainer,
   SidebarTabs,
@@ -23,13 +23,13 @@ import {
   SignOutLink,
   HeaderRow,
 } from "./styles";
-import { StyledCard } from "../../../components/StyledCard";
-import { StyledTitle } from "../../../components/StyledTitle";
+import { StyledCard } from "@src/components/StyledCard";
+import { StyledTitle } from "@src/components/StyledTitle";
 import { EditContactModal } from "./components/EditContactModal";
 import { AddAddressModal } from "./components/AddAddressModal";
 import { ProfileOrdersCard } from "./components/ProfileOrdersCard";
 import { ProfileAddressesCard } from "./components/ProfileAddressesCard";
-import { useMediaQuery } from "../../../hooks/useMediaQuery";
+import { useMediaQuery } from "@src/hooks/useMediaQuery";
 
 const { Text } = Typography;
 

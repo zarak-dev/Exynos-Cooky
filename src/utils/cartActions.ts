@@ -1,7 +1,7 @@
-import type { Cookie } from "../types/product";
+import type { Cookie } from "@src/types/product";
 import type { MessageInstance } from "antd/es/message/interface";
-import type { AppDispatch } from "../store";
-import { addCookieToBox } from "../store/slices/cartSlice";
+import type { AppDispatch } from "@src/store";
+import { addCookieToBox } from "@src/store/slices/cartSlice";
 
 const NEXT_SIZE: Record<number, number | null> = { 4: 6, 6: 12, 12: null };
 

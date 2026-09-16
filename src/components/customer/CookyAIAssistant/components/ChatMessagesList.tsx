@@ -1,9 +1,9 @@
 import React from "react";
 import { Avatar, Typography, Card, Tag, Button, Flex, Spin } from "antd";
 import { ThunderboltOutlined, PlusOutlined } from "@ant-design/icons";
-import type { AIMessage } from "../../../../types/ai";
-import type { Product } from "../../../../types/product";
-import { DEFAULT_COOKIE_IMAGE } from "../../../../constants";
+import type { AIMessage } from "@src/types/ai";
+import type { Product } from "@src/types/product";
+import { DEFAULT_COOKIE_IMAGE } from "@src/constants";
 
 const { Text, Paragraph } = Typography;
 

@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from "./client";
-import type { Address, AddressInput } from "../../types/address";
+import type { Address, AddressInput } from "@src/types/address";
 
 export const addressService = {
   async fetchAddresses(userId: string): Promise<Address[]> {

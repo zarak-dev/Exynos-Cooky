@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Order, OrderStatus } from "../../types/order";
+import type { Order, OrderStatus } from "@src/types/order";
 
 export type { Order };
 

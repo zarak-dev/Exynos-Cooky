@@ -15,12 +15,12 @@ import {
   setDefaultAddressFailure,
   updateProfileRequest,
   updateProfileFailure,
-} from "../slices/profileSlice";
-import { updateUserProfile } from "../slices/authSlice";
-import { addressService } from "../../services/supabase/addressService";
-import { profileService } from "../../services/supabase/profileService";
-import type { Address, AddressInput } from "../../types/address";
-import type { UserProfile } from "../../types/auth";
+} from "@src/store/slices/profileSlice";
+import { updateUserProfile } from "@src/store/slices/authSlice";
+import { addressService } from "@src/services/supabase/addressService";
+import { profileService } from "@src/services/supabase/profileService";
+import type { Address, AddressInput } from "@src/types/address";
+import type { UserProfile } from "@src/types/auth";
 
 function* handleFetchAddresses(
   action: PayloadAction<string>,

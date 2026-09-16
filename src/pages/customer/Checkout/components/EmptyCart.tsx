@@ -1,6 +1,6 @@
 import React from "react";
 import { Result } from "antd";
-import { CenteredContainer, BrandButton } from "../styles";
+import { CenteredContainer, BrandButton } from "@src/pages/customer/Checkout/styles";
 
 interface EmptyCartProps {
   onFillBox: () => void;

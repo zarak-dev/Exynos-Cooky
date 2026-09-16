@@ -1,4 +1,4 @@
-import type { OrderStatus } from "../types/order";
+import type { OrderStatus } from "@src/types/order";
 
 export const ORDER_STATUSES: OrderStatus[] = [
   "Pending",

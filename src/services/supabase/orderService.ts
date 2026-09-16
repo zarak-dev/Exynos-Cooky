@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from "./client";
-import type { Order, OrderStatus } from "../../types/order";
+import type { Order, OrderStatus } from "@src/types/order";
 
 export const orderService = {
   async fetchOrders(userEmail?: string): Promise<Order[]> {

@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../index";
+import type { RootState } from "@src/store/index";
 import {
   askAIRequest,
   askAISuccess,
@@ -11,13 +11,13 @@ import {
   fetchAdminInsightsRequest,
   fetchAdminInsightsSuccess,
   fetchAdminInsightsFailure,
-} from "../slices/aiSlice";
-import { aiService } from "../../services/ai/aiService";
+} from "@src/store/slices/aiSlice";
+import { aiService } from "@src/services/ai/aiService";
 import type {
   AIMessage,
   AIBoxRecommendation,
   AdminAIInsight,
-} from "../../types/ai";
+} from "@src/types/ai";
 
 function* handleAskAI(
   action: PayloadAction<{ prompt: string }>,

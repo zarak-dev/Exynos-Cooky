@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { type RootState } from "../store";
-import { type UserRole } from "../store/slices/authSlice";
-import { PageLoader } from "../components/common/PageTransitionLoader";
+import { type RootState } from "@src/store";
+import { type UserRole } from "@src/store/slices/authSlice";
+import { PageLoader } from "@src/components/common/PageTransitionLoader";
 
 interface ProtectedRouteProps {
   role?: UserRole;

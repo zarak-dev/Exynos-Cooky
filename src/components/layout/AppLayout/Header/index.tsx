@@ -12,9 +12,9 @@ import {
 import {
   setOpenAuthModal,
   logoutUser,
-} from "../../../../store/slices/authSlice";
-import { type RootState } from "../../../../store";
-import logoSvg from "../../../../assets/images/exynos-favicon.png";
+} from "@src/store/slices/authSlice";
+import { type RootState } from "@src/store";
+import logoSvg from "@src/assets/images/exynos-favicon.png";
 
 import {
   StyledHeader,

@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { Column } from "@ant-design/charts";
 import { Empty } from "antd";
-import type { Order } from "../../../../types/order";
-import { StyledChartCard, ChartWrapper } from "../styles";
+import type { Order } from "@src/types/order";
+import { StyledChartCard, ChartWrapper } from "@src/pages/admin/Overview/styles";
 
 interface FinancialPerformanceChartProps {
   netRevenue: number;

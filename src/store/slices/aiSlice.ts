@@ -3,7 +3,7 @@ import type {
   AIMessage,
   AIBoxRecommendation,
   AdminAIInsight,
-} from "../../types/ai";
+} from "@src/types/ai";
 
 interface AIState {
   isAIAssistantOpen: boolean;

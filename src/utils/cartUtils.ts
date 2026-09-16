@@ -1,5 +1,5 @@
-import type { Cookie } from "../types/product";
-import type { GroupedCartItem } from "../types/cart";
+import type { Cookie } from "@src/types/product";
+import type { GroupedCartItem } from "@src/types/cart";
 export type { GroupedCartItem };
 
 export function groupCartItems(items: Cookie[]): GroupedCartItem[] {

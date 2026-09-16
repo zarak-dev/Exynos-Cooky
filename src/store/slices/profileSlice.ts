@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Address, AddressInput } from "../../types/address";
-import type { UserProfile } from "../../types/auth";
+import type { Address, AddressInput } from "@src/types/address";
+import type { UserProfile } from "@src/types/auth";
 
 interface ProfileState {
   addresses: Address[];

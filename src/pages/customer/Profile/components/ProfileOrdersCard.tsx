@@ -1,9 +1,9 @@
 import React from "react";
 import { Table, Empty, Button, Tag, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
-import type { Order } from "../../../../types/order";
-import { ContentWrapper, HeaderRow } from "../styles";
-import { StyledTitle } from "../../../../components/StyledTitle";
+import type { Order } from "@src/types/order";
+import { ContentWrapper, HeaderRow } from "@src/pages/customer/Profile/styles";
+import { StyledTitle } from "@src/components/StyledTitle";
 
 const { Text } = Typography;
 

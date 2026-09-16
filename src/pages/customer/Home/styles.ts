@@ -10,7 +10,7 @@ import {
   Tag,
 } from "antd";
 import Title from "antd/es/typography/Title";
-import { StyledTitle } from "../../../components/StyledTitle";
+import { StyledTitle } from "@src/components/StyledTitle";
 
 const { Text, Paragraph } = Typography;
 const { Meta } = Card;

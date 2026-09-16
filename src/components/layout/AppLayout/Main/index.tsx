@@ -1,13 +1,13 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Header from "../Header";
-import Footer from "../Footer";
-import { AuthModal } from "../../../common/Auth";
-import { CartDrawer } from "../../../common/CartDrawer";
+import Header from "@src/components/layout/AppLayout/Header";
+import Footer from "@src/components/layout/AppLayout/Footer";
+import { AuthModal } from "@src/components/common/Auth";
+import { CartDrawer } from "@src/components/common/CartDrawer";
 import { LayoutWrapper, ContentArea } from "./styles";
-import InfoBar from "../../../common/InfoBar";
+import InfoBar from "@src/components/common/InfoBar";
 
-import { CookyAIAssistant } from "../../../customer/CookyAIAssistant";
+import { CookyAIAssistant } from "@src/components/customer/CookyAIAssistant";
 
 const MainLayout: React.FC = () => {
   return (

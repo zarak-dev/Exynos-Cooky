@@ -1,6 +1,6 @@
 import { Button, Popconfirm, Space, Tag } from "antd";
 import { CloseCircleOutlined, DeleteOutlined } from "@ant-design/icons";
-import { type Order } from "../../../../store/slices/orderSlice";
+import { type Order } from "@src/store/slices/orderSlice";
 
 type Props = {
   order: Order;

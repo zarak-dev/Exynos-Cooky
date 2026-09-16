@@ -1,4 +1,4 @@
-import type { UserRole } from "../types/auth";
+import type { UserRole } from "@src/types/auth";
 
 export const USER_ROLES: Record<string, UserRole> = {
   CUSTOMER: "customer",

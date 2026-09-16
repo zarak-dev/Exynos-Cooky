@@ -7,15 +7,15 @@ import {
   deleteProductRequest,
   addProductRequest,
   updateProductRequest,
-} from "../../../store/slices/inventorySlice";
-import type { RootState } from "../../../store";
-import type { Product } from "../../../types/product";
-import { StyledCard } from "../../../components/StyledCard";
-import { StyledInput } from "../../../components/StyledInput";
+} from "@src/store/slices/inventorySlice";
+import type { RootState } from "@src/store";
+import type { Product } from "@src/types/product";
+import { StyledCard } from "@src/components/StyledCard";
+import { StyledInput } from "@src/components/StyledInput";
 import { getInventoryColumns } from "./columns";
 import { AddEditCookieModal } from "./components/AddEditCookieModal";
-import StyledPageHeader from "../../../components/PageHeader";
-import { Wrapper } from "../../../components/Wrapper";
+import StyledPageHeader from "@src/components/PageHeader";
+import { Wrapper } from "@src/components/Wrapper";
 
 const AdminInventory: React.FC = () => {
   const inventory = useSelector((state: RootState) => state.inventory.items);

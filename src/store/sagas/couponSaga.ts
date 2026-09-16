@@ -4,9 +4,9 @@ import {
   applyCouponRequest,
   applyCouponSuccess,
   applyCouponFailure,
-} from "../slices/couponSlice";
-import { couponService } from "../../services/supabase/couponService";
-import type { CouponValidationResult } from "../../types/coupon";
+} from "@src/store/slices/couponSlice";
+import { couponService } from "@src/services/supabase/couponService";
+import type { CouponValidationResult } from "@src/types/coupon";
 
 function* handleApplyCoupon(
   action: PayloadAction<{ code: string; subtotal: number }>,

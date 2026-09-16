@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Flex, Typography } from "antd";
-import type { Cookie } from "../../../../types/product";
-import { DEFAULT_COOKIE_IMAGE } from "../../../../constants";
+import type { Cookie } from "@src/types/product";
+import { DEFAULT_COOKIE_IMAGE } from "@src/constants";
 import {
   StyledDetailModal,
   ModalBodyWrapper,
@@ -13,8 +13,8 @@ import {
   StockBadge,
   FreshnessNotice,
   ModalActions,
-} from "../styles";
-import { StyledButton } from "../../../../components/StyledButton";
+} from "@src/pages/customer/BuyCooky/styles";
+import { StyledButton } from "@src/components/StyledButton";
 
 const { Text, Paragraph } = Typography;
 

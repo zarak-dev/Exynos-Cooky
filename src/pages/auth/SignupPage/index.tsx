@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Cookie } from "lucide-react";
 import { useSelector } from "react-redux";
-import type { RootState } from "../../../store";
-import { SignUpForm } from "../../../components/common/Auth/components/Signup";
+import type { RootState } from "@src/store";
+import { SignUpForm } from "@src/components/common/Auth/components/Signup";
 import styled from "styled-components";
 
 const PageContainer = styled.div`

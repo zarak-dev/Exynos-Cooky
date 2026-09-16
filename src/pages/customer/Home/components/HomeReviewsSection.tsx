@@ -1,6 +1,6 @@
 import React from "react";
 import { Rate, Avatar, Spin, Flex, Empty } from "antd";
-import type { Review } from "../../../../types/review";
+import type { Review } from "@src/types/review";
 import {
   ReviewsSection,
   ReviewsSectionTitle,
@@ -11,7 +11,7 @@ import {
   ReviewerName,
   ReviewEmail,
   ReviewText,
-} from "../styles";
+} from "@src/pages/customer/Home/styles";
 
 const DEFAULT_AVATAR =
   "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&q=80&auto=format&fit=crop";

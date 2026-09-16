@@ -14,8 +14,8 @@ import {
   SlideContainer,
   StyledCarousel,
 } from "./styles";
-import type { Cookie } from "../../../../../types";
-import { DEFAULT_COOKIE_IMAGE } from "../../../../../constants";
+import type { Cookie } from "@src/types";
+import { DEFAULT_COOKIE_IMAGE } from "@src/constants";
 
 interface HomeCarouselProps {
   cookies: Cookie[];

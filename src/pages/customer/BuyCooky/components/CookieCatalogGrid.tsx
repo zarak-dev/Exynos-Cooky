@@ -1,20 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import { Row, Col, Tag, Spin, Empty, Typography } from "antd";
-import type { Cookie } from "../../../../types/product";
-import { StyledTitle } from "../../../../components/StyledTitle";
-import { DEFAULT_COOKIE_IMAGE } from "../../../../constants";
+import type { Cookie } from "@src/types/product";
+import { StyledTitle } from "@src/components/StyledTitle";
+import { DEFAULT_COOKIE_IMAGE } from "@src/constants";
 import {
   CoverImage,
   CardHeader,
   StyledButton,
   NoResults,
   StyledMeta,
-} from "../../Home/styles";
+} from "@src/pages/customer/Home/styles";
 import {
   EqualCard,
   CardFooter,
   LoadMoreWrapper,
-} from "../styles";
+} from "@src/pages/customer/BuyCooky/styles";
 
 const { Text } = Typography;
 

@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from "./client";
-import type { UserProfile } from "../../types/auth";
+import type { UserProfile } from "@src/types/auth";
 
 export interface CustomerHistoryItem {
   index: number;

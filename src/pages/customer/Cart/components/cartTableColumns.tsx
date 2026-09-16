@@ -1,7 +1,7 @@
 import { Button, Avatar, Flex, Typography } from "antd";
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { QuantityControl } from "../styles";
-import type { GroupedCartItem } from "../../../../utils/cartUtils";
+import { QuantityControl } from "@src/pages/customer/Cart/styles";
+import type { GroupedCartItem } from "@src/utils/cartUtils";
 const { Text } = Typography;
 
 type Props = {

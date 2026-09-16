@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Pie } from "@ant-design/charts";
 import { Empty } from "antd";
-import { StyledChartCard, ChartWrapper } from "../styles";
+import { StyledChartCard, ChartWrapper } from "@src/pages/admin/Overview/styles";
 
 interface SalesDistributionPieChartProps {
   topSellers: Array<{ name: string; count: number }>;

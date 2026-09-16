@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../index";
+import type { RootState } from "@src/store/index";
 import {
   fetchInventoryRequest,
   fetchInventorySuccess,
@@ -17,9 +17,9 @@ import {
   deleteProductRequest,
   deleteProductSuccess,
   deleteProductFailure,
-} from "../slices/inventorySlice";
-import { productService } from "../../services/supabase/productService";
-import type { Product } from "../../types/product";
+} from "@src/store/slices/inventorySlice";
+import { productService } from "@src/services/supabase/productService";
+import type { Product } from "@src/types/product";
 
 function* handleFetchInventory(): Generator<unknown, void, unknown> {
   try {

@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import { Divider, Typography, Input, Button, Space, Tag } from "antd";
 import { ShoppingCartOutlined, TagOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../../store";
+import type { RootState } from "@src/store";
 import {
   applyCouponRequest,
   clearCoupon,
-} from "../../../../store/slices/couponSlice";
+} from "@src/store/slices/couponSlice";
 import {
   OrderSummarySticky,
   SummaryRow,
   TotalRow,
   TotalText,
   SubmitButton,
-} from "../styles";
-import type { GroupedCartItem } from "../../../../utils/cartUtils";
+} from "@src/pages/customer/Checkout/styles";
+import type { GroupedCartItem } from "@src/utils/cartUtils";
 
 const { Text } = Typography;
 

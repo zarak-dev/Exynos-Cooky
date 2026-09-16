@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Flex, Modal, Typography } from "antd";
-import { StyledCard } from "../../../components/StyledCard";
+import { StyledCard } from "@src/components/StyledCard";
 
 export const PageLayout = styled(Flex)`
   max-width: 1200px;

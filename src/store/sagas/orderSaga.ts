@@ -16,9 +16,9 @@ import {
   deleteOrderRequest,
   deleteOrderSuccess,
   deleteOrderFailure,
-} from "../slices/orderSlice";
-import { orderService } from "../../services/supabase/orderService";
-import type { Order, OrderStatus } from "../../types/order";
+} from "@src/store/slices/orderSlice";
+import { orderService } from "@src/services/supabase/orderService";
+import type { Order, OrderStatus } from "@src/types/order";
 
 function* handleFetchOrders(
   action?: PayloadAction<{ userEmail?: string } | undefined>,

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Tag, Rate } from "antd";
-import type { Cookie } from "../../../../types/product";
-import { StyledTitle } from "../../../../components/StyledTitle";
-import { DEFAULT_COOKIE_IMAGE } from "../../../../constants";
+import type { Cookie } from "@src/types/product";
+import { StyledTitle } from "@src/components/StyledTitle";
+import { DEFAULT_COOKIE_IMAGE } from "@src/constants";
 import {
   TrendingSection,
   TrendingSectionTitle,
@@ -15,7 +15,7 @@ import {
   TrendingCardBody,
   TrendingMeta,
   StyledButton,
-} from "../styles";
+} from "@src/pages/customer/Home/styles";
 
 interface HomeTrendingSectionProps {
   cookies: Cookie[];

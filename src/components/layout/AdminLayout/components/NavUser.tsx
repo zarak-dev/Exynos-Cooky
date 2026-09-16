@@ -3,8 +3,8 @@ import { Dropdown, type MenuProps } from "antd";
 import { ChevronsUpDown, LogOut, User, Sparkles, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import type { RootState } from "../../../../store";
-import { logoutUser } from "../../../../store/slices/authSlice";
+import type { RootState } from "@src/store";
+import { logoutUser } from "@src/store/slices/authSlice";
 import styled from "styled-components";
 
 interface NavUserProps {

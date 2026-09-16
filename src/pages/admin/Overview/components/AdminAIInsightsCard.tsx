@@ -8,9 +8,9 @@ import {
   RiseOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../../store";
-import { fetchAdminInsightsRequest } from "../../../../store/slices/aiSlice";
-import type { AdminAIInsight } from "../../../../types/ai";
+import type { RootState } from "@src/store";
+import { fetchAdminInsightsRequest } from "@src/store/slices/aiSlice";
+import type { AdminAIInsight } from "@src/types/ai";
 
 const { Title, Text, Paragraph } = Typography;
 

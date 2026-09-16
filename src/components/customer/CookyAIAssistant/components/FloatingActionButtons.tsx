@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Tooltip, Badge } from "antd";
 import { ThunderboltOutlined, WhatsAppOutlined } from "@ant-design/icons";
-import { whatsappService } from "../../../../services/whatsapp/whatsappService";
+import { whatsappService } from "@src/services/whatsapp/whatsappService";
 
 import styled from "styled-components";
 

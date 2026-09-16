@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { type RootState } from "../../../store";
+import { type RootState } from "@src/store";
 import {
   type Order,
   trackOrderRequest,
   updateOrderStatusRequest,
   updateOrderStatusSuccess,
-} from "../../../store/slices/orderSlice";
-import { orderService } from "../../../services/supabase/orderService";
-import { whatsappService } from "../../../services/whatsapp/whatsappService";
+} from "@src/store/slices/orderSlice";
+import { orderService } from "@src/services/supabase/orderService";
+import { whatsappService } from "@src/services/whatsapp/whatsappService";
 import {
   Input,
   Steps,

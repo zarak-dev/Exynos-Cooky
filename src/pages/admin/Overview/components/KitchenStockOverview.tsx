@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Progress, Tag, Typography } from "antd";
-import type { Product } from "../../../../types/product";
+import type { Product } from "@src/types/product";
 import {
   StyledChartCard,
   StockListWrapper,
@@ -8,7 +8,7 @@ import {
   StockItemHeader,
   StockTagsWrapper,
   StockCountText,
-} from "../styles";
+} from "@src/pages/admin/Overview/styles";
 
 const { Text } = Typography;
 

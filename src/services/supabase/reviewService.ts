@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from "./client";
-import type { Review, ReviewInput } from "../../types/review";
+import type { Review, ReviewInput } from "@src/types/review";
 
 export const reviewService = {
   async fetchReviews(): Promise<Review[]> {

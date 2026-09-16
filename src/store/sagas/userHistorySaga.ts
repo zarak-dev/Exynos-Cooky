@@ -6,11 +6,11 @@ import {
   fetchUsersFailure,
   deleteUser,
   type UserHistoryRow,
-} from "../slices/userHistorySlice";
+} from "@src/store/slices/userHistorySlice";
 import {
   profileService,
   type CustomerHistoryItem,
-} from "../../services/supabase/profileService";
+} from "@src/services/supabase/profileService";
 
 function* handleFetchUsers(): Generator<unknown, void, CustomerHistoryItem[]> {
   try {

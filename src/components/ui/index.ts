@@ -1,6 +1,6 @@
-export { default as StyledPageHeader, default as PageHeader } from "../PageHeader";
-export { StyledButton } from "../StyledButton";
-export { StyledCard } from "../StyledCard";
-export { StyledInput } from "../StyledInput";
-export { StyledTitle } from "../StyledTitle";
-export { Wrapper } from "../Wrapper";
+export { default as StyledPageHeader, default as PageHeader } from "@src/components/PageHeader";
+export { StyledButton } from "@src/components/StyledButton";
+export { StyledCard } from "@src/components/StyledCard";
+export { StyledInput } from "@src/components/StyledInput";
+export { StyledTitle } from "@src/components/StyledTitle";
+export { Wrapper } from "@src/components/Wrapper";

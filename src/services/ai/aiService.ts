@@ -1,11 +1,11 @@
-import { supabase, isSupabaseConfigured } from "../supabase/client";
+import { supabase, isSupabaseConfigured } from "@src/services/supabase/client";
 import type {
   AIMessage,
   AIBoxRecommendation,
   AdminAIInsight,
   AIRecommendation,
-} from "../../types/ai";
-import { productService } from "../supabase/productService";
+} from "@src/types/ai";
+import { productService } from "@src/services/supabase/productService";
 
 interface AskAssistantParams {
   prompt: string;
@@ -28,7 +28,7 @@ interface AdminInsightsParams {
  * Intelligently scores and selects the most relevant available products
  * to feed into Grok AI prompt context (up to 40 products).
  */
-function getRelevantProductContext(products: Array<import("../../types/product").Product>, userQuery: string, maxItems = 40) {
+function getRelevantProductContext(products: Array<import("@src/types/product").Product>, userQuery: string, maxItems = 40) {
   const available = products.filter((p) => p.isAvailable && p.stock > 0);
   if (available.length <= maxItems) return available;
 

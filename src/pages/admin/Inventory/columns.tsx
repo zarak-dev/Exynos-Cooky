@@ -3,7 +3,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Text from "antd/es/typography/Text";
 import { CookieImage, StatusTag } from "./styles";
 import type { InventoryColumnsProps, InventoryColumns } from "./types";
-import type { Product } from "../../../types/product";
+import type { Product } from "@src/types/product";
 
 export const getInventoryColumns = ({
   onToggle,

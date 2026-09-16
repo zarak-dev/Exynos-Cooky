@@ -11,9 +11,9 @@ import {
   restoreSessionRequest,
   restoreSessionSuccess,
   logoutUser,
-} from "../slices/authSlice";
-import { authService } from "../../services/supabase/authService";
-import type { UserProfile } from "../../types/auth";
+} from "@src/store/slices/authSlice";
+import { authService } from "@src/services/supabase/authService";
+import type { UserProfile } from "@src/types/auth";
 
 function* handleLogin(
   action: PayloadAction<{ email: string; password?: string; name?: string }>,

@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../index";
+import type { RootState } from "@src/store/index";
 import {
   fetchReviewsRequest,
   fetchReviewsSuccess,
@@ -8,9 +8,9 @@ import {
   addReviewRequest,
   addReviewSuccess,
   addReviewFailure,
-} from "../slices/reviewSlice";
-import { reviewService } from "../../services/supabase/reviewService";
-import type { Review, ReviewInput } from "../../types/review";
+} from "@src/store/slices/reviewSlice";
+import { reviewService } from "@src/services/supabase/reviewService";
+import type { Review, ReviewInput } from "@src/types/review";
 
 function* handleFetchReviews(): Generator<unknown, void, unknown> {
   try {

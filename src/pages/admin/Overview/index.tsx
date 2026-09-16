@@ -1,12 +1,12 @@
 import React, { useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Row, Col } from "antd";
-import type { RootState } from "../../../store";
-import { fetchOrdersRequest } from "../../../store/slices/orderSlice";
-import { fetchInventoryRequest } from "../../../store/slices/inventorySlice";
-import { fetchUsersStart } from "../../../store/slices/userHistorySlice";
-import StyledPageHeader from "../../../components/PageHeader";
-import { Wrapper } from "../../../components/Wrapper";
+import type { RootState } from "@src/store";
+import { fetchOrdersRequest } from "@src/store/slices/orderSlice";
+import { fetchInventoryRequest } from "@src/store/slices/inventorySlice";
+import { fetchUsersStart } from "@src/store/slices/userHistorySlice";
+import StyledPageHeader from "@src/components/PageHeader";
+import { Wrapper } from "@src/components/Wrapper";
 import { AdminAIInsightsCard } from "./components/AdminAIInsightsCard";
 import { MetricCardsGrid } from "./components/MetricCardsGrid";
 import { FinancialPerformanceChart } from "./components/FinancialPerformanceChart";

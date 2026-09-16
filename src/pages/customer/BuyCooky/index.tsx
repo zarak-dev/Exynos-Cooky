@@ -11,24 +11,24 @@ import {
   ThunderboltOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import type { Cookie } from "../../../types/product";
-import { type RootState } from "../../../store";
-import { setBoxSize } from "../../../store/slices/cartSlice";
-import { StyledInput } from "../../../components/StyledInput";
-import { StyledTitle } from "../../../components/StyledTitle";
-import { BOX_SIZES } from "../../../constants/pricing";
-import { useDebounce } from "../../../hooks/useDebounce";
-import { AIBoxBuilderModal } from "../../../components/customer/AIBoxBuilderModal";
+import type { Cookie } from "@src/types/product";
+import { type RootState } from "@src/store";
+import { setBoxSize } from "@src/store/slices/cartSlice";
+import { StyledInput } from "@src/components/StyledInput";
+import { StyledTitle } from "@src/components/StyledTitle";
+import { BOX_SIZES } from "@src/constants/pricing";
+import { useDebounce } from "@src/hooks/useDebounce";
+import { AIBoxBuilderModal } from "@src/components/customer/AIBoxBuilderModal";
 import { CookieDetailModal } from "./components/CookieDetailModal";
 import { CookieCatalogGrid } from "./components/CookieCatalogGrid";
-import { ExploreSection } from "../Home/styles";
+import { ExploreSection } from "@src/pages/customer/Home/styles";
 import {
   MainContent,
   FilterBar,
   FilterGroup,
   CategoryNavWrapper,
 } from "./styles";
-import { addCookieWithFeedback } from "../../../utils/cartActions";
+import { addCookieWithFeedback } from "@src/utils/cartActions";
 
 const PAGE_SIZE = 12;
 

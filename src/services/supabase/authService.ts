@@ -1,6 +1,6 @@
 import { supabase, isSupabaseConfigured } from "./client";
-import type { UserProfile, UserRole } from "../../types/auth";
-import { ADMIN_EMAIL, ADMIN_DEFAULT_PASSWORD } from "../../constants/roles";
+import type { UserProfile, UserRole } from "@src/types/auth";
+import { ADMIN_EMAIL, ADMIN_DEFAULT_PASSWORD } from "@src/constants/roles";
 
 const LOCAL_ADMIN_SESSION_KEY = "exynos_admin_session";
 
@@ -37,24 +37,45 @@ export const authService = {
     // Default role for any new self-registration is strictly 'customer'
     const role: UserRole = "customer";
 
-    // Insert authoritative profile record
-    const { error: profileError } = await supabase.from("profiles").upsert({
-      id: data.user.id,
-      email: data.user.email || email.trim().toLowerCase(),
-      full_name: name?.trim() || "Valued Customer",
-      role,
-    });
-
-    if (profileError) {
-      throw new Error(`Profile setup failed: ${profileError.message}`);
+    // Authoritative profile row is created by PostgreSQL trigger on_auth_user_created.
+    // Client-side upsert synchronizes full_name and email safely without failing on RLS.
+    try {
+      const { error: profileError } = await supabase.from("profiles").upsert({
+        id: data.user.id,
+        email: data.user.email || email.trim().toLowerCase(),
+        full_name: name?.trim() || "Valued Customer",
+        role,
+      });
+      if (profileError) {
+        console.warn("Client profile upsert note:", profileError.message);
+      }
+    } catch (err) {
+      console.warn("Profile trigger handling active:", err);
     }
 
-    return {
-      id: data.user.id,
-      email: data.user.email || email.trim().toLowerCase(),
-      name: name?.trim() || "Valued Customer",
-      role,
-    };
+    // If session was returned immediately, user is authenticated
+    if (data.session) {
+      return {
+        id: data.user.id,
+        email: data.user.email || email.trim().toLowerCase(),
+        name: name?.trim() || "Valued Customer",
+        role,
+      };
+    }
+
+    // Attempt seamless login if auto-confirm is enabled
+    try {
+      const activeSessionUser = await this.signIn(email, password);
+      return activeSessionUser;
+    } catch {
+      // Return registered user profile
+      return {
+        id: data.user.id,
+        email: data.user.email || email.trim().toLowerCase(),
+        name: name?.trim() || "Valued Customer",
+        role,
+      };
+    }
   },
 
   async signIn(email: string, password?: string): Promise<UserProfile> {

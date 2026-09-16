@@ -1,5 +1,5 @@
 import type { ColumnsType } from "antd/es/table";
-import type { Product } from "../../../../types/product";
+import type { Product } from "@src/types/product";
 
 export type CookieItem = Product;
 

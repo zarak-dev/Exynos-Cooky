@@ -1,33 +1,33 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import MainLayout from "../components/layout/AppLayout/Main";
-import ScrollToTop from "../utils/scrollToTop";
+import MainLayout from "@src/components/layout/AppLayout/Main";
+import ScrollToTop from "@src/utils/scrollToTop";
 import ProtectedRoute from "./ProtectedRoute";
-import { PageLoader } from "../components/common/PageTransitionLoader";
+import { PageLoader } from "@src/components/common/PageTransitionLoader";
 
 // Lazy-loaded pages for optimal chunking and authentic network loading on Vercel
-const Home = lazy(() => import("../pages/customer/Home"));
-const AboutUs = lazy(() => import("../pages/customer/AboutUs"));
-const Careers = lazy(() => import("../pages/customer/Careers"));
-const CartPage = lazy(() => import("../pages/customer/Cart"));
+const Home = lazy(() => import("@src/pages/customer/Home"));
+const AboutUs = lazy(() => import("@src/pages/customer/AboutUs"));
+const Careers = lazy(() => import("@src/pages/customer/Careers"));
+const CartPage = lazy(() => import("@src/pages/customer/Cart"));
 const CheckoutPage = lazy(() =>
-  import("../pages/customer/Checkout").then((m) => ({ default: m.CheckoutPage })),
+  import("@src/pages/customer/Checkout").then((m) => ({ default: m.CheckoutPage })),
 );
-const TrackOrder = lazy(() => import("../pages/customer/TrackOrder"));
-const CustomerProfile = lazy(() => import("../pages/customer/Profile"));
-const BuyCooky = lazy(() => import("../pages/customer/BuyCooky"));
+const TrackOrder = lazy(() => import("@src/pages/customer/TrackOrder"));
+const CustomerProfile = lazy(() => import("@src/pages/customer/Profile"));
+const BuyCooky = lazy(() => import("@src/pages/customer/BuyCooky"));
 
 const AdminLayout = lazy(() =>
-  import("../components/layout/AdminLayout").then((m) => ({
+  import("@src/components/layout/AdminLayout").then((m) => ({
     default: m.AdminLayout,
   })),
 );
-const AdminOverview = lazy(() => import("../pages/admin/Overview/index"));
-const AdminInventory = lazy(() => import("../pages/admin/Inventory/index"));
-const AdminOrders = lazy(() => import("../pages/admin/Orders"));
-const UserHistory = lazy(() => import("../pages/admin/UserHistory"));
-const LoginPage = lazy(() => import("../pages/auth/LoginPage"));
-const SignupPage = lazy(() => import("../pages/auth/SignupPage"));
+const AdminOverview = lazy(() => import("@src/pages/admin/Overview/index"));
+const AdminInventory = lazy(() => import("@src/pages/admin/Inventory/index"));
+const AdminOrders = lazy(() => import("@src/pages/admin/Orders"));
+const UserHistory = lazy(() => import("@src/pages/admin/UserHistory"));
+const LoginPage = lazy(() => import("@src/pages/auth/LoginPage"));
+const SignupPage = lazy(() => import("@src/pages/auth/SignupPage"));
 
 const AppRoute = () => {
   return (

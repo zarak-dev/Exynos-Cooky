@@ -19,17 +19,17 @@ import {
   GiftOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../store";
+import type { RootState } from "@src/store";
 import {
   buildBoxRequest,
-} from "../../../store/slices/aiSlice";
+} from "@src/store/slices/aiSlice";
 import {
   setBoxSize,
   clearBox,
   addCookieToBox,
   setCartOpen,
-} from "../../../store/slices/cartSlice";
-import type { BoxSize } from "../../../types/cart";
+} from "@src/store/slices/cartSlice";
+import type { BoxSize } from "@src/types/cart";
 
 const { Text, Paragraph } = Typography;
 

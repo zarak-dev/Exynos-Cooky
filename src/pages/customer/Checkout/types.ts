@@ -1,4 +1,4 @@
-import type { PaymentMethod } from "../../../types/order";
+import type { PaymentMethod } from "@src/types/order";
 
 export interface FormValues {
   firstName: string;

@@ -9,7 +9,7 @@ import {
   Space,
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import type { Order } from "../../../../store/slices/orderSlice";
+import type { Order } from "@src/store/slices/orderSlice";
 import {
   CenteredContainer,
   SuccessCard,
@@ -18,7 +18,7 @@ import {
   TrackingLabel,
   TrackingNumber,
   TrackingSubtext,
-} from "../styles";
+} from "@src/pages/customer/Checkout/styles";
 import dayjs from "dayjs";
 
 const { Paragraph } = Typography;

@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Drawer, Button, Flex, Typography, message } from "antd";
 import { ThunderboltOutlined, ClearOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../store";
+import type { RootState } from "@src/store";
 import {
   askAIRequest,
   clearAIConversation,
   setAIAssistantOpen,
-} from "../../../store/slices/aiSlice";
-import { addCookieWithFeedback } from "../../../utils/cartActions";
-import { useMediaQuery } from "../../../hooks/useMediaQuery";
+} from "@src/store/slices/aiSlice";
+import { addCookieWithFeedback } from "@src/utils/cartActions";
+import { useMediaQuery } from "@src/hooks/useMediaQuery";
 import { FloatingActionButtons } from "./components/FloatingActionButtons";
 import { ChatMessagesList } from "./components/ChatMessagesList";
 import { ChatInputBar } from "./components/ChatInputBar";

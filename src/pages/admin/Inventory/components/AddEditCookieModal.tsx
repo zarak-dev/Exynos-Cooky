@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Modal, Form, Input, InputNumber, Select, Switch } from "antd";
-import type { Product, ProductCategory } from "../../../../types/product";
+import type { Product, ProductCategory } from "@src/types/product";
 
 interface AddEditCookieModalProps {
   open: boolean;

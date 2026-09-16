@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Form, Input, Switch } from "antd";
-import type { AddressInput } from "../../../../types/address";
+import type { AddressInput } from "@src/types/address";
 
 interface AddAddressModalProps {
   open: boolean;
