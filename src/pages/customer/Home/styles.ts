@@ -145,22 +145,27 @@ export const BestCarousel = styled(Carousel)`
   }
 
   .slick-slider,
-  .slick-list,
-  .slick-track {
+  .slick-list {
     touch-action: pan-y pinch-zoom;
   }
 
   .slick-track {
     display: flex !important;
-    align-items: stretch;
+    touch-action: pan-y pinch-zoom;
   }
 
   .slick-slide {
-    height: auto !important;
+    height: inherit !important;
+    display: flex !important;
+    flex-direction: column;
+    flex-shrink: 0 !important;
     background: transparent;
 
     > div {
       height: 100%;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
     }
   }
 
@@ -184,19 +189,33 @@ export const BestCarousel = styled(Carousel)`
   .slick-dots {
     position: relative;
     bottom: auto;
-    margin: 16px 0 0 0;
+    margin: 20px 0 0 0;
     padding: 0;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .slick-dots li {
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
   }
 
   .slick-dots li button {
-    background: #00009c;
-    opacity: 0.35;
-    border-radius: 4px;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 4px !important;
+    background: #cbd5e1 !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+    transition: all 0.3s ease !important;
   }
 
   .slick-dots li.slick-active button {
-    opacity: 1;
-    background: #00009c;
+    width: 24px !important;
+    background: #00009c !important;
   }
 `;
 export const BestCoverImage = styled(Image)`
@@ -472,9 +491,10 @@ export const ReviewSlide = styled.div`
   box-sizing: border-box;
   min-width: 0;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   touch-action: pan-y pinch-zoom;
-  user-select: none;
-  -webkit-user-select: none;
 
   .ant-card {
     width: 100%;
@@ -483,7 +503,7 @@ export const ReviewSlide = styled.div`
 
   @media (max-width: 640px) {
     padding: 0 12px 14px;
-    max-width: 380px;
+    max-width: 420px;
     margin: 0 auto;
   }
 `;
@@ -507,12 +527,14 @@ export const ReviewCard = styled(Card)`
   min-width: 0;
   word-break: break-word;
   height: 100%;
+  min-height: 195px;
   box-shadow: 0 4px 16px rgba(0, 0, 56, 0.06);
   border: 1px solid #eef2ff;
   transition: all 0.25s ease;
   touch-action: pan-y pinch-zoom;
-  user-select: none;
-  -webkit-user-select: none;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     box-shadow: 0 8px 24px rgba(0, 0, 156, 0.1);
@@ -525,12 +547,12 @@ export const ReviewCard = styled(Card)`
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    overflow: hidden;
+    gap: 12px;
     flex: 1;
+    justify-content: space-between;
 
     @media (max-width: 640px) {
-      padding: 20px 18px;
+      padding: 18px 16px;
       gap: 12px;
     }
   }
@@ -540,22 +562,18 @@ export const ReviewCard = styled(Card)`
   }
 `;
 
-export const ReviewText = styled(Paragraph)`
-  &.ant-typography {
-    font-size: 0.88rem;
-    color: #334155;
-    margin: 0;
-    font-style: italic;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    line-height: 1.55;
+export const ReviewText = styled.p`
+  font-size: 0.9rem;
+  color: #334155;
+  margin: 0;
+  font-style: italic;
+  line-height: 1.6;
+  word-break: break-word;
+  flex: 1;
 
-    @media (max-width: 640px) {
-      font-size: 0.92rem;
-      -webkit-line-clamp: 5;
-    }
+  @media (max-width: 640px) {
+    font-size: 0.94rem;
+    line-height: 1.6;
   }
 `;
 
@@ -571,10 +589,12 @@ export const ReviewerName = styled(Text)`
     display: block;
   }
 `;
+
 export const ReviewEmail = styled(Text)`
   &.ant-typography {
-    font-size: 0.75rem;
-    color: #888;
+    font-size: 0.76rem;
+    color: #059669;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -582,6 +602,7 @@ export const ReviewEmail = styled(Text)`
     display: block;
   }
 `;
+
 export const SectionBadge = styled(Tag)`
   &.ant-tag {
     border-radius: 20px;

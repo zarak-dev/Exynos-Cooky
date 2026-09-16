@@ -53,11 +53,42 @@ export const AdminOverview: React.FC = () => {
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count);
 
+    // Compute dynamic Month-over-Month growth
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+    let currentMonthRevenue = 0;
+    let lastMonthRevenue = 0;
+
+    for (const order of orders) {
+      if (order.status !== "Cancelled") {
+        const dStr = order.createdAt || order.timestamp;
+        if (dStr) {
+          const d = new Date(dStr);
+          if (!isNaN(d.getTime())) {
+            if (d.getFullYear() === currentYear && d.getMonth() === currentMonth) {
+              currentMonthRevenue += Number(order.totalPrice) || 0;
+            } else if (d.getFullYear() === lastMonthYear && d.getMonth() === lastMonth) {
+              lastMonthRevenue += Number(order.totalPrice) || 0;
+            }
+          }
+        }
+      }
+    }
+
+    const growth =
+      lastMonthRevenue > 0
+        ? Number((((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100).toFixed(2))
+        : (currentMonthRevenue > 0 ? 100 : 0);
+
     return {
       netRevenue,
       boxesSold: completedOrders,
       activeUsers,
-      growth: completedOrders > 0 ? 28.4 : 0,
+      growth,
       lowStockItems: lowStockItems.map((i) => ({ name: i.name, stock: i.stock })),
       topSellers,
     };

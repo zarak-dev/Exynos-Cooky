@@ -49,6 +49,8 @@ export const orderService = {
       paymentStatus: row.payment_status || "pending",
       status: row.status as OrderStatus,
       timestamp: row.timestamp || row.created_at,
+      createdAt: row.created_at || row.timestamp,
+      updatedAt: row.updated_at,
       items: (row.order_items || []).map(
         (item: {
           id?: string;

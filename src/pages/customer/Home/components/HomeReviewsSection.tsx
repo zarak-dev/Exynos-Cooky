@@ -26,7 +26,6 @@ const CAROUSEL_RESPONSIVE_SETTINGS = [
       swipe: true,
       draggable: true,
       touchMove: true,
-      swipeToSlide: true,
       touchThreshold: 10,
     },
   },
@@ -38,7 +37,6 @@ const CAROUSEL_RESPONSIVE_SETTINGS = [
       swipe: true,
       draggable: true,
       touchMove: true,
-      swipeToSlide: true,
       touchThreshold: 10,
     },
   },
@@ -52,7 +50,6 @@ const CAROUSEL_RESPONSIVE_SETTINGS = [
       swipe: true,
       draggable: true,
       touchMove: true,
-      swipeToSlide: true,
       touchThreshold: 10,
     },
   },
@@ -92,39 +89,37 @@ const HomeReviewsSectionComponent: React.FC<HomeReviewsSectionProps> = ({
             slidesToScroll={1}
             dots={true}
             arrows={!isMobileScreen}
-            infinite={reviews.length > slidesToShow}
+            infinite={reviews.length > 1}
             draggable={true}
             swipe={true}
             touchMove={true}
-            swipeToSlide={true}
             touchThreshold={10}
             responsive={CAROUSEL_RESPONSIVE_SETTINGS}
           >
             {reviews.map((review, i) => {
               const name = review.userName || "Verified Customer";
               const avatar = ("userAvatar" in review && review.userAvatar) || DEFAULT_AVATAR;
-              const email = review.userEmail || "";
               const rating = review.rating || 5;
               const comment = review.comment || "Delicious fresh-baked cookies!";
 
               return (
                 <ReviewSlide key={review.id || i}>
                   <ReviewCard>
-                    <Flex align="center" gap={10} style={{ minWidth: 0, width: "100%" }}>
+                    <Flex align="center" gap={12} style={{ minWidth: 0, width: "100%" }}>
                       <Avatar
-                        size={40}
+                        size={42}
                         src={avatar}
-                        style={{ background: "#e8eaff", flexShrink: 0 }}
+                        style={{ background: "#e8eaff", flexShrink: 0, border: "2px solid #e0e7ff" }}
                       />
                       <Flex vertical style={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
                         <ReviewerName>{name}</ReviewerName>
-                        {email && <ReviewEmail>{email}</ReviewEmail>}
+                        <ReviewEmail>✓ Verified Customer</ReviewEmail>
                       </Flex>
                     </Flex>
                     <Rate
                       disabled
                       value={rating}
-                      style={{ fontSize: 12, color: "#faad14" }}
+                      style={{ fontSize: 13, color: "#faad14" }}
                     />
                     <ReviewText>"{comment}"</ReviewText>
                   </ReviewCard>

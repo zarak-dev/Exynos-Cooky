@@ -21,17 +21,24 @@ export const FinancialPerformanceChart: React.FC<FinancialPerformanceChartProps>
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const monthlyMap = new Map<string, number>();
 
-    const currentMonth = new Date().getMonth();
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
     for (let i = 0; i <= currentMonth; i++) {
       monthlyMap.set(months[i], 0);
     }
 
     for (const order of orders) {
-      if (order.status !== "Cancelled" && order.createdAt) {
-        const orderDate = new Date(order.createdAt);
-        if (!isNaN(orderDate.getTime())) {
-          const m = months[orderDate.getMonth()];
-          monthlyMap.set(m, (monthlyMap.get(m) || 0) + (Number(order.totalPrice) || 0));
+      if (order.status !== "Cancelled") {
+        const dateStr = order.createdAt || order.timestamp;
+        if (dateStr) {
+          const orderDate = new Date(dateStr);
+          if (!isNaN(orderDate.getTime()) && orderDate.getFullYear() === currentYear) {
+            const m = months[orderDate.getMonth()];
+            if (monthlyMap.has(m)) {
+              monthlyMap.set(m, (monthlyMap.get(m) || 0) + (Number(order.totalPrice) || 0));
+            }
+          }
         }
       }
     }

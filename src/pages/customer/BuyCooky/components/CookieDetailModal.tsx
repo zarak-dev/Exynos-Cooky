@@ -37,6 +37,8 @@ export const CookieDetailModal: React.FC<CookieDetailModalProps> = ({
       footer={null}
       width={680}
       destroyOnHidden
+      closable={false}
+      maskClosable={true}
     >
       {cookie && (
         <ModalBodyWrapper>

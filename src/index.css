@@ -34,10 +34,9 @@ img {
   display: block;
 }
 
-/* Slick Carousel Touch and Drag Fixes */
+/* Slick Carousel */
 .slick-slider,
-.slick-list,
-.slick-track {
+.slick-list {
   max-width: 100%;
   touch-action: pan-y pinch-zoom;
   -webkit-tap-highlight-color: transparent;
@@ -45,13 +44,10 @@ img {
 
 .slick-list {
   overflow: hidden;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
 }
 
 .slick-track {
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
+  touch-action: pan-y pinch-zoom;
 }
 
 .slick-slide {
@@ -61,10 +57,6 @@ img {
 
 .slick-slide img {
   -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
   user-select: none;
 }
 

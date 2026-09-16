@@ -24,15 +24,19 @@ interface HomeCarouselProps {
 }
 
 const HomeCarousel: React.FC<HomeCarouselProps> = ({ cookies, onAdd }) => {
+  if (!cookies || cookies.length === 0) {
+    return null;
+  }
+
   return (
     <StyledCarousel
+      key={`home-hero-carousel-${cookies.length}`}
       autoplay
       autoplaySpeed={4000}
-      infinite
-      draggable
-      swipe
-      touchMove
-      swipeToSlide
+      infinite={cookies.length > 1}
+      draggable={true}
+      swipe={true}
+      touchMove={true}
       touchThreshold={10}
     >
       {cookies.map((cookie) => (
